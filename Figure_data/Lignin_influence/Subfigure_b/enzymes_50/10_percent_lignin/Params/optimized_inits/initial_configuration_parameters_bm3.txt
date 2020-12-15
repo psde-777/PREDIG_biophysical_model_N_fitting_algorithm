@@ -1,0 +1,2 @@
+100 100 100 100 100	1	0.39	0.1	0 0.8 0.5	0.3
+#init_EG >> init_CBH >> init_BGL >> init_XYL >> length_fibril >> pct_xyl >> pct_hemi >> pct_lign >> pct_acetyl_hemi >> pct_crystalline_cellu >> pct_crystalline_hemi >> r_monomer

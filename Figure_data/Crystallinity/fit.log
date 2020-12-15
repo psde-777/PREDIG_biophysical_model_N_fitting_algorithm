@@ -1,0 +1,432 @@
+
+
+*******************************************************************************
+Fri Dec 11 19:41:51 2020
+
+
+FIT:    data read from "Simulated_digestibility_vals.txt" u ($1):2
+        format = x:z
+        #datapoints = 10
+        residuals are weighted equally (unit weight)
+
+function used for fitting: sc_dot001(x)
+	sc_dot001(x) = a*x + b
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   a             b            
+   0 2.9381073679e+04   0.00e+00  3.78e+01    1.000000e+00   1.000000e+00
+   5 5.7785775083e+00  -1.82e-01  3.78e-04   -7.287653e-01   1.005179e+02
+
+After 5 iterations the fit converged.
+final sum of squares of residuals : 5.77858
+rel. change during last iteration : -1.82382e-06
+
+degrees of freedom    (FIT_NDF)                        : 8
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 0.849895
+variance of residuals (reduced chisquare) = WSSR/ndf   : 0.722322
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+a               = -0.728765        +/- 0.009357     (1.284%)
+b               = 100.518          +/- 0.4995       (0.497%)
+
+correlation matrix of the fit parameters:
+                a      b      
+a               1.000 
+b              -0.843  1.000 
+
+
+*******************************************************************************
+Fri Dec 11 19:41:51 2020
+
+
+FIT:    data read from "final_saccharification_high_digestibility.txt"
+        format = z
+        #datapoints = 5
+        residuals are weighted equally (unit weight)
+
+function used for fitting: sc_dot1(x)
+	sc_dot1(x) = c*x + d
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   c             d            
+   0 2.2490511386e+04   0.00e+00  3.15e+01    1.000000e+00   1.000000e+00
+   5 9.5768451378e-01  -6.73e-01  3.15e-04   -2.193088e-01   9.966540e+01
+
+After 5 iterations the fit converged.
+final sum of squares of residuals : 0.957685
+rel. change during last iteration : -6.73052e-06
+
+degrees of freedom    (FIT_NDF)                        : 3
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 0.565003
+variance of residuals (reduced chisquare) = WSSR/ndf   : 0.319228
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+c               = -0.219309        +/- 0.008802     (4.014%)
+d               = 99.6654          +/- 0.3917       (0.393%)
+
+correlation matrix of the fit parameters:
+                c      d      
+c               1.000 
+d              -0.764  1.000 
+
+
+*******************************************************************************
+Fri Dec 11 19:41:51 2020
+
+
+FIT:    data read from "final_saccharification_no_digestibility.txt"
+        format = z
+        #datapoints = 5
+        residuals are weighted equally (unit weight)
+
+function used for fitting: sc_0(x)
+	sc_0(x) = e*x + f
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   e             f            
+   0 2.0846477052e+04   0.00e+00  3.15e+01    1.000000e+00   1.000000e+00
+   5 3.6086079588e+00  -1.74e-01  3.15e-04   -1.009338e+00   9.832996e+01
+
+After 5 iterations the fit converged.
+final sum of squares of residuals : 3.60861
+rel. change during last iteration : -1.73867e-06
+
+degrees of freedom    (FIT_NDF)                        : 3
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 1.09675
+variance of residuals (reduced chisquare) = WSSR/ndf   : 1.20287
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+e               = -1.00934         +/- 0.01709      (1.693%)
+f               = 98.33            +/- 0.7603       (0.7732%)
+
+correlation matrix of the fit parameters:
+                e      f      
+e               1.000 
+f              -0.764  1.000 
+
+
+*******************************************************************************
+Fri Dec 11 19:41:51 2020
+
+
+FIT:    data read from "data_by_pena_et_al.txt"
+        format = z
+        #datapoints = 7
+        residuals are weighted equally (unit weight)
+
+function used for fitting: f_pena(x)
+	f_pena(x) = g*x + h
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   g             h            
+   0 1.5721510000e+04   0.00e+00  2.31e+01    1.000000e+00   1.000000e+00
+   5 1.6834686070e+02  -9.82e-03  2.31e-04   -1.014899e+00   1.055320e+02
+
+After 5 iterations the fit converged.
+final sum of squares of residuals : 168.347
+rel. change during last iteration : -9.82322e-08
+
+degrees of freedom    (FIT_NDF)                        : 5
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 5.80253
+variance of residuals (reduced chisquare) = WSSR/ndf   : 33.6694
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+g               = -1.0149          +/- 0.2113       (20.82%)
+h               = 105.532          +/- 6.89         (6.529%)
+
+correlation matrix of the fit parameters:
+                g      h      
+g               1.000 
+h              -0.948  1.000 
+
+
+*******************************************************************************
+Fri Dec 11 19:42:11 2020
+
+
+FIT:    data read from "Simulated_digestibility_vals.txt" u ($1):2
+        format = x:z
+        #datapoints = 10
+        residuals are weighted equally (unit weight)
+
+function used for fitting: sc_dot001(x)
+	sc_dot001(x) = a*x + b
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   a             b            
+   0 2.9381073679e+04   0.00e+00  3.78e+01    1.000000e+00   1.000000e+00
+   5 5.7785775083e+00  -1.82e-01  3.78e-04   -7.287653e-01   1.005179e+02
+
+After 5 iterations the fit converged.
+final sum of squares of residuals : 5.77858
+rel. change during last iteration : -1.82382e-06
+
+degrees of freedom    (FIT_NDF)                        : 8
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 0.849895
+variance of residuals (reduced chisquare) = WSSR/ndf   : 0.722322
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+a               = -0.728765        +/- 0.009357     (1.284%)
+b               = 100.518          +/- 0.4995       (0.497%)
+
+correlation matrix of the fit parameters:
+                a      b      
+a               1.000 
+b              -0.843  1.000 
+
+
+*******************************************************************************
+Fri Dec 11 19:42:11 2020
+
+
+FIT:    data read from "final_saccharification_high_digestibility.txt"
+        format = z
+        #datapoints = 5
+        residuals are weighted equally (unit weight)
+
+function used for fitting: sc_dot1(x)
+	sc_dot1(x) = c*x + d
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   c             d            
+   0 2.2490511386e+04   0.00e+00  3.15e+01    1.000000e+00   1.000000e+00
+   5 9.5768451378e-01  -6.73e-01  3.15e-04   -2.193088e-01   9.966540e+01
+
+After 5 iterations the fit converged.
+final sum of squares of residuals : 0.957685
+rel. change during last iteration : -6.73052e-06
+
+degrees of freedom    (FIT_NDF)                        : 3
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 0.565003
+variance of residuals (reduced chisquare) = WSSR/ndf   : 0.319228
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+c               = -0.219309        +/- 0.008802     (4.014%)
+d               = 99.6654          +/- 0.3917       (0.393%)
+
+correlation matrix of the fit parameters:
+                c      d      
+c               1.000 
+d              -0.764  1.000 
+
+
+*******************************************************************************
+Fri Dec 11 19:42:11 2020
+
+
+FIT:    data read from "final_saccharification_no_digestibility.txt"
+        format = z
+        #datapoints = 5
+        residuals are weighted equally (unit weight)
+
+function used for fitting: sc_0(x)
+	sc_0(x) = e*x + f
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   e             f            
+   0 2.0846477052e+04   0.00e+00  3.15e+01    1.000000e+00   1.000000e+00
+   5 3.6086079588e+00  -1.74e-01  3.15e-04   -1.009338e+00   9.832996e+01
+
+After 5 iterations the fit converged.
+final sum of squares of residuals : 3.60861
+rel. change during last iteration : -1.73867e-06
+
+degrees of freedom    (FIT_NDF)                        : 3
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 1.09675
+variance of residuals (reduced chisquare) = WSSR/ndf   : 1.20287
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+e               = -1.00934         +/- 0.01709      (1.693%)
+f               = 98.33            +/- 0.7603       (0.7732%)
+
+correlation matrix of the fit parameters:
+                e      f      
+e               1.000 
+f              -0.764  1.000 
+
+
+*******************************************************************************
+Fri Dec 11 19:42:11 2020
+
+
+FIT:    data read from "data_by_pena_et_al.txt"
+        format = z
+        #datapoints = 7
+        residuals are weighted equally (unit weight)
+
+function used for fitting: f_pena(x)
+	f_pena(x) = g*x + h
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   g             h            
+   0 1.5721510000e+04   0.00e+00  2.31e+01    1.000000e+00   1.000000e+00
+   5 1.6834686070e+02  -9.82e-03  2.31e-04   -1.014899e+00   1.055320e+02
+
+After 5 iterations the fit converged.
+final sum of squares of residuals : 168.347
+rel. change during last iteration : -9.82322e-08
+
+degrees of freedom    (FIT_NDF)                        : 5
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 5.80253
+variance of residuals (reduced chisquare) = WSSR/ndf   : 33.6694
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+g               = -1.0149          +/- 0.2113       (20.82%)
+h               = 105.532          +/- 6.89         (6.529%)
+
+correlation matrix of the fit parameters:
+                g      h      
+g               1.000 
+h              -0.948  1.000 
+
+
+*******************************************************************************
+Mon Dec 14 11:36:54 2020
+
+
+FIT:    data read from "Simulated_digestibility_vals.txt" u ($1):2
+        format = x:z
+        #datapoints = 10
+        residuals are weighted equally (unit weight)
+
+function used for fitting: sc_dot001(x)
+	sc_dot001(x) = a*x + b
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   a             b            
+   0 2.9381073679e+04   0.00e+00  3.78e+01    1.000000e+00   1.000000e+00
+   5 5.7785775083e+00  -1.82e-01  3.78e-04   -7.287653e-01   1.005179e+02
+
+After 5 iterations the fit converged.
+final sum of squares of residuals : 5.77858
+rel. change during last iteration : -1.82382e-06
+
+degrees of freedom    (FIT_NDF)                        : 8
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 0.849895
+variance of residuals (reduced chisquare) = WSSR/ndf   : 0.722322
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+a               = -0.728765        +/- 0.009357     (1.284%)
+b               = 100.518          +/- 0.4995       (0.497%)
+
+correlation matrix of the fit parameters:
+                a      b      
+a               1.000 
+b              -0.843  1.000 
+
+
+*******************************************************************************
+Mon Dec 14 11:36:54 2020
+
+
+FIT:    data read from "final_saccharification_high_digestibility.txt"
+        format = z
+        #datapoints = 5
+        residuals are weighted equally (unit weight)
+
+function used for fitting: sc_dot1(x)
+	sc_dot1(x) = c*x + d
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   c             d            
+   0 2.2490511386e+04   0.00e+00  3.15e+01    1.000000e+00   1.000000e+00
+   5 9.5768451378e-01  -6.73e-01  3.15e-04   -2.193088e-01   9.966540e+01
+
+After 5 iterations the fit converged.
+final sum of squares of residuals : 0.957685
+rel. change during last iteration : -6.73052e-06
+
+degrees of freedom    (FIT_NDF)                        : 3
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 0.565003
+variance of residuals (reduced chisquare) = WSSR/ndf   : 0.319228
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+c               = -0.219309        +/- 0.008802     (4.014%)
+d               = 99.6654          +/- 0.3917       (0.393%)
+
+correlation matrix of the fit parameters:
+                c      d      
+c               1.000 
+d              -0.764  1.000 
+
+
+*******************************************************************************
+Mon Dec 14 11:36:54 2020
+
+
+FIT:    data read from "final_saccharification_no_digestibility.txt"
+        format = z
+        #datapoints = 5
+        residuals are weighted equally (unit weight)
+
+function used for fitting: sc_0(x)
+	sc_0(x) = e*x + f
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   e             f            
+   0 2.0846477052e+04   0.00e+00  3.15e+01    1.000000e+00   1.000000e+00
+   5 3.6086079588e+00  -1.74e-01  3.15e-04   -1.009338e+00   9.832996e+01
+
+After 5 iterations the fit converged.
+final sum of squares of residuals : 3.60861
+rel. change during last iteration : -1.73867e-06
+
+degrees of freedom    (FIT_NDF)                        : 3
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 1.09675
+variance of residuals (reduced chisquare) = WSSR/ndf   : 1.20287
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+e               = -1.00934         +/- 0.01709      (1.693%)
+f               = 98.33            +/- 0.7603       (0.7732%)
+
+correlation matrix of the fit parameters:
+                e      f      
+e               1.000 
+f              -0.764  1.000 
+
+
+*******************************************************************************
+Mon Dec 14 11:36:54 2020
+
+
+FIT:    data read from "data_by_pena_et_al.txt"
+        format = z
+        #datapoints = 7
+        residuals are weighted equally (unit weight)
+
+function used for fitting: f_pena(x)
+	f_pena(x) = g*x + h
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   g             h            
+   0 1.5721510000e+04   0.00e+00  2.31e+01    1.000000e+00   1.000000e+00
+   5 1.6834686070e+02  -9.82e-03  2.31e-04   -1.014899e+00   1.055320e+02
+
+After 5 iterations the fit converged.
+final sum of squares of residuals : 168.347
+rel. change during last iteration : -9.82322e-08
+
+degrees of freedom    (FIT_NDF)                        : 5
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 5.80253
+variance of residuals (reduced chisquare) = WSSR/ndf   : 33.6694
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+g               = -1.0149          +/- 0.2113       (20.82%)
+h               = 105.532          +/- 6.89         (6.529%)
+
+correlation matrix of the fit parameters:
+                g      h      
+g               1.000 
+h              -0.948  1.000 

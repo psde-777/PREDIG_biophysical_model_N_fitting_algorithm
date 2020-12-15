@@ -1,0 +1,23 @@
+200000  200000  400000  100000	10  1  1  2  2  -1  1  1	-1  1000  2.9
+#20000  20000  400000  100000  1  1  1  1  1  1  1  100  1  0.0319  0.0099
+#20000  20000  400000  100000  1  1  1  1  1  1  1  20  1  0.0353  0.0117
+#20000  20000  400000  100000  1  1  1  1  1  1  1  20  1  0.0307  0.0110
+#20000	20000   400000   100000	1   1   1   1   1	1	1	20	1	0.031	0.011
+#ADD FLUIDITY FLAG
+#41 for vary_both, 21 for vary_xyl
+
+#T >> Transient >> Nbr_picts >> max_time >> pict_3D_freq  >> Run_number >> mode_code >> mode_hemi >> mode_lign >> mode_inhib >> mode_lignin_glue >> mode_hemi_structure >> mode_enzyme_size >> Nruns >> enzyme_radius
+#Transient : T+Transient = Max number of steps
+#Nbr_picts : maximum number of snapshots taken
+#max_time : maximum real_time value
+#Run_number : Currently unused
+#mode_code : Determines structure of microvibril (i.e. 24 vs 18 cellulose polymers / rectangular vs crystalline shape)
+#mode_hemi : Determines, on which sides hemicellulose can anchor
+#mode_lign : Determines, on which sides lignin can anchor
+#mode_inhib : Determines, whether inhibition is active (1) or inactive (-1)
+#mode_lignin_glue : Determines, whether the lignin gluing effect is active (1) or inactive (-1)
+#mode_hemi_structure : Determines, whether the initial hemicellulose distribution can have holes (1) or not (-1)
+#mode_enzyme_size : Determines, whether the enzyme size is included (1) or inactive (-1)
+#Nruns : Determines, how many simulation runs will be done
+#enzyme_radius : Denotes the radius of the enzyme in bonds
+
