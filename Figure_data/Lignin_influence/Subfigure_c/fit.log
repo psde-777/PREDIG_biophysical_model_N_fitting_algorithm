@@ -43478,3 +43478,299 @@ correlation matrix of the fit parameters:
                 s      t      
 s               1.000 
 t              -0.987  1.000 
+
+
+*******************************************************************************
+Fri Dec 18 15:59:56 2020
+
+
+FIT:    data read from "lignin_vs_final_yield_no_adhesion_no_structure.txt" u 1:2
+        format = x:z
+        x range restricted to [-1.00000 : 60.0000]
+        #datapoints = 8
+        residuals are weighted equally (unit weight)
+
+function used for fitting: f1(x)
+	f1(x) = a*x + b
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   a             b            
+   0 2.4959773251e+04   0.00e+00  1.99e+01    1.000000e+00   1.000000e+00
+   5 5.1361348577e-02  -8.98e-02  1.99e-04    2.671640e-03   7.845925e+01
+
+After 5 iterations the fit converged.
+final sum of squares of residuals : 0.0513613
+rel. change during last iteration : -8.98196e-07
+
+degrees of freedom    (FIT_NDF)                        : 6
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 0.0925215
+variance of residuals (reduced chisquare) = WSSR/ndf   : 0.00856022
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+a               = 0.00267164       +/- 0.002158     (80.79%)
+b               = 78.4592          +/- 0.06081      (0.0775%)
+
+correlation matrix of the fit parameters:
+                a      b      
+a               1.000 
+b              -0.843  1.000 
+
+
+*******************************************************************************
+Fri Dec 18 15:59:56 2020
+
+
+FIT:    data read from "lignin_vs_final_yield_adhesion_no_structure.txt" u 1:2 every ::0::4
+        format = x:z
+        x range restricted to [-1.00000 : 60.0000]
+        #datapoints = 5
+        residuals are weighted equally (unit weight)
+
+function used for fitting: f2(x)
+	f2(x) = c*x + d
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   c             d            
+   0 8.4096659086e+03   0.00e+00  1.16e+01    1.000000e+00   1.000000e+00
+   5 5.5873529829e+01  -3.40e-06  1.16e-04   -3.300193e+00   7.859165e+01
+
+After 5 iterations the fit converged.
+final sum of squares of residuals : 55.8735
+rel. change during last iteration : -3.39877e-11
+
+degrees of freedom    (FIT_NDF)                        : 3
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 4.31561
+variance of residuals (reduced chisquare) = WSSR/ndf   : 18.6245
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+c               = -3.30019         +/- 0.2244       (6.798%)
+d               = 78.5917          +/- 3.687        (4.691%)
+
+correlation matrix of the fit parameters:
+                c      d      
+c               1.000 
+d              -0.852  1.000 
+
+
+*******************************************************************************
+Fri Dec 18 15:59:56 2020
+
+
+FIT:    data read from "lignin_vs_final_yield_no_adhesion_structure.txt" u 1:2 every ::6::11
+        format = x:z
+        x range restricted to [-1.00000 : 60.0000]
+        #datapoints = 6
+        residuals are weighted equally (unit weight)
+
+function used for fitting: f3(x)
+	f3(x) = e*x + f
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   e             f            
+   0 3.9257614388e+03   0.00e+00  3.27e+01    1.000000e+00   1.000000e+00
+   6 1.0783749001e+02  -7.79e-05  3.27e-05   -4.246051e+00   2.260733e+02
+
+After 6 iterations the fit converged.
+final sum of squares of residuals : 107.837
+rel. change during last iteration : -7.78735e-10
+
+degrees of freedom    (FIT_NDF)                        : 4
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 5.19224
+variance of residuals (reduced chisquare) = WSSR/ndf   : 26.9594
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+e               = -4.24605         +/- 0.6002       (14.14%)
+f               = 226.073          +/- 27.79        (12.29%)
+
+correlation matrix of the fit parameters:
+                e      f      
+e               1.000 
+f              -0.997  1.000 
+
+
+*******************************************************************************
+Fri Dec 18 15:59:56 2020
+
+
+FIT:    data read from "lignin_vs_final_yield_both_effects.txt" u 1:2 every ::0::3
+        format = x:z
+        x range restricted to [-1.00000 : 60.0000]
+        #datapoints = 4
+        residuals are weighted equally (unit weight)
+
+function used for fitting: f4(x)
+	f4(x) = g*x + h
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   g             h            
+   0 6.1244016883e+03   0.00e+00  9.55e+00    1.000000e+00   1.000000e+00
+   5 2.0915698644e+01  -1.71e-06  9.55e-05   -3.652802e+00   7.183633e+01
+
+After 5 iterations the fit converged.
+final sum of squares of residuals : 20.9157
+rel. change during last iteration : -1.70511e-11
+
+degrees of freedom    (FIT_NDF)                        : 2
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 3.23386
+variance of residuals (reduced chisquare) = WSSR/ndf   : 10.4578
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+g               = -3.6528          +/- 0.2186       (5.986%)
+h               = 71.8363          +/- 2.944        (4.098%)
+
+correlation matrix of the fit parameters:
+                g      h      
+g               1.000 
+h              -0.836  1.000 
+
+
+*******************************************************************************
+Fri Dec 18 15:59:56 2020
+
+
+FIT:    data read from "Studer_et_al_data_high_S_to_G_ratio_untreated.csv" u 1:2
+        format = x:z
+        x range restricted to [-1.00000 : 60.0000]
+        #datapoints = 30
+        residuals are weighted equally (unit weight)
+
+function used for fitting: f_studer_high_s_to_g_untreated(x)
+	f_studer_high_s_to_g_untreated(x) = m*x + n
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   m             n            
+   0 8.7956381874e+03   0.00e+00  1.63e+01    1.000000e+00   1.000000e+00
+   5 4.6104533504e+02  -1.22e-04  1.63e-04   -1.000757e+00   3.103917e+01
+
+After 5 iterations the fit converged.
+final sum of squares of residuals : 461.045
+rel. change during last iteration : -1.2221e-09
+
+degrees of freedom    (FIT_NDF)                        : 28
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 4.05782
+variance of residuals (reduced chisquare) = WSSR/ndf   : 16.4659
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+m               = -1.00076         +/- 0.2855       (28.53%)
+n               = 31.0392          +/- 6.589        (21.23%)
+
+correlation matrix of the fit parameters:
+                m      n      
+m               1.000 
+n              -0.994  1.000 
+
+
+*******************************************************************************
+Fri Dec 18 15:59:56 2020
+
+
+FIT:    data read from "Studer_et_al_data_low_S_to_G_ratio_untreated.csv" u 1:2
+        format = x:z
+        x range restricted to [-1.00000 : 60.0000]
+        #datapoints = 15
+        residuals are weighted equally (unit weight)
+
+function used for fitting: f_studer_low_s_to_g_untreated(x)
+	f_studer_low_s_to_g_untreated(x) = o*x + p
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   o             p            
+   0 5.0290819699e+03   0.00e+00  1.57e+01    1.000000e+00   1.000000e+00
+   5 8.6590188963e+02  -1.70e-04  1.57e-04   -2.391981e+00   6.373100e+01
+
+After 5 iterations the fit converged.
+final sum of squares of residuals : 865.902
+rel. change during last iteration : -1.70327e-09
+
+degrees of freedom    (FIT_NDF)                        : 13
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 8.16136
+variance of residuals (reduced chisquare) = WSSR/ndf   : 66.6078
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+o               = -2.39198         +/- 0.5839       (24.41%)
+p               = 63.731           +/- 12.92        (20.27%)
+
+correlation matrix of the fit parameters:
+                o      p      
+o               1.000 
+p              -0.987  1.000 
+
+
+*******************************************************************************
+Fri Dec 18 15:59:56 2020
+
+
+FIT:    data read from "Studer_et_al_data_high_S_to_G_ratio_180_degrees.csv" u 1:2
+        format = x:z
+        x range restricted to [-1.00000 : 60.0000]
+        #datapoints = 30
+        residuals are weighted equally (unit weight)
+
+function used for fitting: f_studer_high_s_to_g_pretreated(x)
+	f_studer_high_s_to_g_pretreated(x) = q*x + r
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   q             r            
+   0 1.0097093853e+04   0.00e+00  1.64e+01    1.000000e+00   1.000000e+00
+   5 3.8456852639e+02  -5.96e-04  1.64e-04   -8.047764e-01   5.981995e+01
+
+After 5 iterations the fit converged.
+final sum of squares of residuals : 384.569
+rel. change during last iteration : -5.96161e-09
+
+degrees of freedom    (FIT_NDF)                        : 28
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 3.70602
+variance of residuals (reduced chisquare) = WSSR/ndf   : 13.7346
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+q               = -0.804776        +/- 0.2627       (32.64%)
+r               = 59.82            +/- 6.069        (10.15%)
+
+correlation matrix of the fit parameters:
+                q      r      
+q               1.000 
+r              -0.994  1.000 
+
+
+*******************************************************************************
+Fri Dec 18 15:59:56 2020
+
+
+FIT:    data read from "Studer_et_al_data_low_S_to_G_ratio_180_degrees.csv" u 1:2
+        format = x:z
+        x range restricted to [-1.00000 : 60.0000]
+        #datapoints = 15
+        residuals are weighted equally (unit weight)
+
+function used for fitting: f_studer_low_s_to_g_pretreated(x)
+	f_studer_low_s_to_g_pretreated(x) = s*x + t
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   s             t            
+   0 3.6434807391e+03   0.00e+00  1.57e+01    1.000000e+00   1.000000e+00
+   5 6.5227557743e+02  -4.17e-04  1.57e-04   -2.514850e+00   8.415786e+01
+
+After 5 iterations the fit converged.
+final sum of squares of residuals : 652.276
+rel. change during last iteration : -4.17478e-09
+
+degrees of freedom    (FIT_NDF)                        : 13
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 7.08343
+variance of residuals (reduced chisquare) = WSSR/ndf   : 50.175
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+s               = -2.51485         +/- 0.5095       (20.26%)
+t               = 84.1579          +/- 11.28        (13.41%)
+
+correlation matrix of the fit parameters:
+                s      t      
+s               1.000 
+t              -0.987  1.000 

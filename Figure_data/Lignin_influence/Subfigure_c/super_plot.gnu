@@ -128,7 +128,7 @@ set bmargin 1
 set tmargin 1
 set lmargin 3
 set rmargin 1
-set title "Chen et al (2007)" font "bold, 12"
+set title "Chen and Dixon (2007)" font "bold, 12"
 
 p[0:250] f_chen_untreated(x) lw 2 lt rgb "#BBBBBBBB" notitle,\
 [0:250] f_chen_pretreated(x) lw 2 lt rgb "#BBBBBBBB" notitle,\
