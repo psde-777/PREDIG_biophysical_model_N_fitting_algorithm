@@ -16,7 +16,7 @@ To run the code, first do the following:
 
 - Compile the source code via the terminal command 
 
-        g++ Code/code_4.cpp Code/functions.cpp -o code_4
+        ./compile.sh
 
   and copy the code executable "code_4" to the directory from which you want to run it
 
@@ -31,9 +31,22 @@ To run the code, first do the following:
     - "kinetic_parameters.txt"
     - "initial_configuration_parameters.txt"
     - "structural_parameters_1.txt"
-    - "hydro_parameters_inner_2_1.txt"
-    - "hydro_parameters_outer_2_1.txt"
-
+    - "structural_parameters_2.txt"
+    - "structural_parameters_3.txt"
+    - "structural_parameters_4.txt"
+    - "structural_parameters_5.txt"
+    - "hydro_parameters_2_1_layer_1.txt"
+    - "hydro_parameters_2_1_layer_2.txt"
+    - "hydro_parameters_2_1_layer_3.txt"
+    - "hydro_parameters_2_1_layer_4.txt"
+    - "hydro_parameters_2_2_layer_1.txt"
+    - "hydro_parameters_2_2_layer_2.txt"
+    - "hydro_parameters_2_2_layer_3.txt"
+    - "hydro_parameters_2_2_layer_4.txt"
+    - "hydro_parameters_2_5_layer_1.txt"
+    - "hydro_parameters_2_5_layer_2.txt"
+    - "hydro_parameters_2_5_layer_3.txt"
+    - "hydro_parameters_2_5_layer_4.txt"
 
 - Make sure that the "Output" folder contains the following subfolders:
 
@@ -44,6 +57,7 @@ To run the code, first do the following:
     - "enzyme_concentration"
     - "Nbr_reactions"
     - "saccharification"
+    - "expe_data"
 
 
 - You can now run the code via the terminal command
@@ -66,29 +80,31 @@ To run the code, first do the following:
 
 4.) Maximal value for the real time within the simulation, as calculated by the Gillespie algorithm.
 
-5.) Currently unused, but needs to be set to a positive integer value
+5.) Number of steps between system snapshots, if "-vid" command is used (see below). If this is set to 1, a snapshot is taken at every step of the Gillespie algorithm.
 
-6.) Number of steps between system snapshots, if "-vid" command is used (see below). If this is set to 1, a snapshot is taken at every step of the Gillespie algorithm.
+6.) Maximum number of hemicellulose/lignin layers around the cellulose core. Currently cannot be set above 4
 
-7.) mode_code: Determines the shape of the microfibril. Currently restricted to a value of 1
+7.) mode_code: Determines the shape of the microfibril. To use the 36 chain microfibril used by Ding et al., set this to 5
 
-8.) mode_hemi: Determines, on which sides of the microfibril hemicellulose can anchor
+8.) mode_hemi: Determines, on which sides of the microfibril hemicellulose can anchor. Currently to be kept at 2
 
-9.) mode_lign: Determines, on which sides of the microfibril lignin can anchor
+9.) mode_lign: Determines, on which sides of the microfibril lignin can anchor. Currently to be kept at 2
 
-10.) mode_inhib: Determines, whether inhibition is active (1) or inactive (-1)
+10.) mode_inhib: Determines, whether inhibition is active (1) or inactive (-1). Currently to be kept at -1
 
 11.) mode_lignin_glue: Determines, whether the lignin gluing effect is active (1) or inactive (-1)
 
-12.) Currently unused, but needs to be set to a positive integer value
+12.) Currently unused, and to be kept at a value of 1
 
-13.) mode_enzyme_size : Determines, whether the enzyme size is included (1) or inactive (-1).
+13.) mode_enzyme_size : Determines, whether the enzyme size is included for all enzymes (1) or only for CBH (-1).
 
 14.) Nruns: Determines the number of simulation runs
 
 15.) enzyme radius: Determines the radius of the enzymes
 
+16.) mu_lignin_covering: Determines the average fraction of lignin polymers which acts as a structural barrier. Set this to a value between 0 and 1
 
+17.) sigma_lignin_covering : Determines the standard deviation around mu_lignin_covering. Set this to a value between 0 and 1
 
 ### kinetic_parameters:
 
@@ -102,15 +118,17 @@ To run the code, first do the following:
 
 5.) Lignin rate of adhesion
 
-6.) binding affinity of cellobiose to EG
+6.) CBH rate of attachment
 
-7.) binding affinity of cellobiose to CBH
+7.) binding affinity of cellobiose to EG. Currently unused
 
-8.) binding affinity of glucose to BGL
+8.) binding affinity of cellobiose to CBH. Currently unused
 
-9.) ratio between digestibility of "crystalline" and "amorphous" cellulose
+9.) binding affinity of glucose to BGL. Currently unused
 
-10.) ratio between digestibility of "crystalline" and "amorphous" hemicellulose
+10.) ratio between digestibility of "crystalline" and "amorphous" cellulose
+
+11.) ratio between digestibility of "crystalline" and "amorphous" hemicellulose
 
 
 
@@ -132,13 +150,13 @@ To run the code, first do the following:
 
 8.) Percentage of lignin within the microfibril
 
-9.) Percentage of acetylated hemicellulose within the hemicellulose fraction; currently restricted to a value of 1
+9.) Percentage of acetylated hemicellulose within the hemicellulose fraction; currently restricted to a value of 0
 
 10.) Percentage of "crystalline" cellulose
 
 11.) Percentage of "crystalline" hemicellulose
 
-12.) Currently unused, set to 0.3 per default
+12.) radius around which each bond location is checked for neighbors. To be kept at 0.6
 
 
 
@@ -159,21 +177,32 @@ To run the code, first do the following:
     
     **the file "initial_parameters_example.txt" is loaded. This also leads to a change in the name of the output files:**
     **the files in the saccharification folder for example will be named "saccharification_example_1.txt", "saccharification_example_2.txt", etc. (the number represents the number of the individual simulation run).**
-    **If there are no command line arguments, the default "initial_configuration_parameters.txt" file is loaded instead, and the output files will simply be called "saccharification_1.txt", "saccharification_2.txt", etc.**
+    **If there are no command line arguments, the default "initial_configuration_parameters.txt" file is loaded instead, and the output files will simply be called "saccharification_1.txt", "saccharification_2.txt", etc. Alternatively, if you want to use command line arguments, but do not want a file suffix, use the command line argument "no_suffix" first**
 
     The currently available command line arguments are as follows:
-    
+
+    "-no_suffix": If used, this should be the first command line argument. It will suppress the use of a suffix on the output files, and the file "initial_configuration_parameters.txt" will be used 
 
     "-verbose": This will cause more detailed information of what is happening during the individual simulation runs to be written to the terminal.
 
-    "-heatmap": this will enable the Output of files documenting the distribution of glucose within cellulose polymers of all lengths within the "DP_distrib" folder.
+    "-heatmap": this enables the Output of files documenting the distribution of glucose within cellulose polymers of all lengths within the "DP_distrib" folder.
     As this is somewhat computationally expensive, it was chosen as an optional component
 
-    "-vid": This will cause the first simulation run to document the 3D positioning of all cellulose, hemicellulose and lignin bonds at step intervals, which are determined by a parameter in "simulation_parameters.txt" (see above).
+    "-vid": This causes the first simulation run to document the 3D positioning of all cellulose, hemicellulose and lignin bonds at step intervals, which are determined by a parameter in "simulation_parameters.txt" (see above).
     They are saved in the folder "3D" and can be used to create a visualization of the microfibril digestion
 
-    "-fixed_seed": This will fix the seed of the pseudo-random number generator used within the simulation. The seed which will be set is currently specified within the source code, in the file "code_4.cpp"
+    "-fixed_seed": This fixes the seed of the pseudo-random number generator used within the simulation. The seed which will be set is currently specified within the source code, in the file "code_4.cpp"
     
+    "-parallel": This specifies, how many cores should be used by the program, and needs to be followed by an integer greater than or equal to 1. The default number of cores is 1
+    
+    "-print_polys": This enables the output of remaining bonds after each simulation run (if there are any)
+
+    "-print_ends_blocked": This enables the output of the average number of ends blocked by CBH enzymes over the simulation"
+
+    "-print_CBH_positions": This enables tracking the positions of each attached CBH enzyme over the course of the simulation
+
+    "-toy_model": This disables structural features of the model: the polymers will be located far from each other and therefore be treated as being fully in solution
+
     "-suppress_output": This will suppress all data output from the simulations. It is mainly used for debugging
     
     "-timer": This leads to the output of files which document the the average computation time taken for the individual enzyme reactions. This is still in development
@@ -278,9 +307,9 @@ Alternatively, the raw data can also be used directly, depending on preference.
 
 ### Averaging heatmap data
 
-There is another python script within the "Output" folder, which ist called "calc_mean_heatmap.py". Use it via the terminal command
+There is a C++ program within the "Output" folder, which is called "calc_mean_heatmap.cpp", as well as its compiled version "calc_mean_heatmap". Use it via the terminal command
 
-    python3 calc_mean_heatmap.py N_files common_name outputfilename N_points length_fibril
+    ./calc_mean_heatmap N_files common_name outputfilename N_points length_fibril half_point_divider
     
 Here,
 
@@ -294,13 +323,14 @@ Here,
 
 - length_fibril denotes the length of the microfibril within the simulations leading to the raw data
 
+- half_point_divider sets the resolution of the averaged file over the simulated time. For the maximum simulated time t_end, 0.5*N_points will be used below half_point_divider*t_end, and the other half will be used above. This means that only if half_point_divider is set to 0.5, the time within the averaged file will be an even grid
+
+
 As an example, this would be the command used to calculate the average over 100 DP_distribution data files:
 
-    python3 calc_mean_heatmap.py 100 DP_distrib/DP_distrib_ mean_DP_distrib.txt 2000 100
+    ./calc_mean_heatmap 100 DP_distrib/DP_distrib_ mean_DP_distrib.txt 2000 100 0.5
     
 The averaged files are structured in the same way as the raw data (see above).
-
-
 
 
 # Code structure
@@ -311,28 +341,16 @@ The simulation code is split into multiple files:
 - code_4.cpp
 - functions.cpp
 - functions.hpp
-- structs.hpp
+- params.hpp
+- bList.hpp
+- TList.hpp
+- DPList.hpp
+- CBH_enzyme.hpp
+- neighborList.hpp
+- tuple_hash.hpp
 
 Each of them is summarized briefly below. See the files themselves for further documentation
 
-
-## structs.hpp
-
-This file stores two classes and two structs:
-
-- class bList is used to generate polymer objects for cellulose, hemicellulose and lignin.
-
-- class DPList is used to record the distribution of glucose within cellulose polymers
-
-- struct TList is used to generate reaction table objects to be used for the enzymatic reactions within the Gillespie algorithm
-
-- struct params is used to generate an object containing those system parameters which are common to each individual simulation run.
-  They are then easier to pass between functions.
-
-
-## functions.cpp and functions.hpp
-
-These files store all functions within the code except for the functions main() and run(). The task of each function is summarized within the code files.
 
 ## code_4.cpp
 
@@ -340,6 +358,42 @@ This file contains the main() function, as well as a function run(). Within the 
 and the data generated by the individual simulation runs is transferred to output files.
 An individual simulation run is carried out within the function run().
 These are further documented within their source code
+
+## functions.cpp and functions.hpp
+
+These files store all functions within the code except for the functions main() and run(). The task of each function is briefly summarized within the code files.
+
+## params.hpp
+
+The struct params is used to generate an object containing those system parameters which are common to each individual simulation run. They are then easier to pass between functions.
+
+## bList.hpp
+
+The class bList is used to generate polymer objects for cellulose, hemicellulose and lignin.
+
+## TList.hpp
+
+The struct TList is used to generate reaction table objects to be used for the enzymatic reactions within the Gillespie algorithm
+
+## DPList.hpp
+
+The class DPList is used to record the distribution of glucose within cellulose polymers
+
+## CBH_enzyme.hpp
+
+The class CBH_enzyme defines the properties of CBH enzymes within the simulation
+
+## neighborList.hpp
+
+The class neighborList is used to record the neighbors of each polymer bond
+
+## tuple_hash
+
+This defines a hash function for tuples, which are used as keys for unordered maps of neighborList objects in the code.
+
+
+
+
 
 
 
