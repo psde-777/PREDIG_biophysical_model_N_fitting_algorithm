@@ -10,7 +10,7 @@
 (./evo_create_folders.sh $1 1 $3)
 PROCESSID=$!
 wait $PROCESSID
-(python3 rando_kin_specs.py 1 $3 $4 best_candidate_specs.txt $1)
+(python3 rando_specs.py 1 $3 $4 $1)
 PROCESSID=$!
 wait $PROCESSID
 (echo "Running")
@@ -18,14 +18,7 @@ wait $PROCESSID
 PROCESSID=$!
 wait $PROCESSID
 (echo "Averaging")
-(./evo_average.sh $1 1 $3 $5)
-PROCESSID=$!
-wait $PROCESSID
-(./evo_fitfunc.sh $1 1 $3 $5)
-PROCESSID=$!
-wait $PROCESSID
-(echo "Printing variance")
-(./evo_print_variance.sh $1 1 $3 $5)
+(./evo_average_fit_and_print_variance.sh $1 1 $3 $5)
 PROCESSID=$!
 wait $PROCESSID
 (rm vars.txt)
@@ -58,7 +51,7 @@ do
 	./evo_create_folders.sh $1 ${i} $3
 	PROCESSID=$!
 	wait $PROCESSID
-	(python3 rando_kin_specs.py $i $3 $4 best_candidate_specs.txt $1)
+	(python3 rando_specs.py $i $3 $4 $1)
 	PROCESSID=$!
 	wait $PROCESSID
     (echo "Running")
@@ -66,14 +59,7 @@ do
 	PROCESSID=$!
 	wait $PROCESSID
     (echo "Averaging")
-    	./evo_average.sh $1 $i $3 $5
-	PROCESSID=$!
-	wait $PROCESSID
-	./evo_fitfunc.sh $1 $i $3 $5
-	PROCESSID=$!
-	wait $PROCESSID
-    (echo "Printing variance")
-	./evo_print_variance.sh $1 $i $3 $5
+	./evo_average_fit_and_print_variance.sh $1 $i $3 $5
 	PROCESSID=$!
 	wait $PROCESSID
 	rm vars.txt

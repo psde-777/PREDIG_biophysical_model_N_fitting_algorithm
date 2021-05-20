@@ -1,0 +1,2 @@
+1	0	1	1	1	1	0	0	0	1	1
+#If set to 0, the corresponding value in kinetic_parameters.txt will not be varied during the algorithm
