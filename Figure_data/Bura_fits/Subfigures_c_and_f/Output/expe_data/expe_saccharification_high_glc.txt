@@ -1,0 +1,9 @@
+# Composition: 56.9% Glucan, 5.3% Xylan, 31.1% Lignin
+#hours	#Cellulose to glucose conversion (%)
+0	0
+3.08	26.4
+8.4	50.2
+12	63.3
+26	90.7
+52	95.7
+72	100
