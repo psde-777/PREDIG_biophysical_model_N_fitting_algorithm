@@ -2,6 +2,12 @@
 
 This README provides instructions on how to run the simulation code, and a brief documentation of its structure.
 
+## System requirements
+
+The "code_4" binary was compiled using GCC version 7.4.0 on 64-bit linux, so it can be run as is on such systems.
+
+For windows and mac you need to recompile the source code (see below). Please be aware that in this case, file paths in the source code may need to be updated in order to comply with the respective system (e.g. "\" vs "/" for windows vs linux).
+
 ## TLDR
 
 You can run the code by executing code_4 via the terminal command
@@ -10,18 +16,23 @@ You can run the code by executing code_4 via the terminal command
 
 ## Compiling, setup and first run
 
-(You can skip the first step, if you already have a file named "code_4")
+You can skip the compiling step, if you are using 64-bit linux and already have a file named "code_4"
 
-To run the code, first do the following:
+### Compiling on Linux
 
-- Compile the source code via the terminal command 
+- Run compile.sh via the terminal command. 
 
         ./compile.sh
 
-  and copy the code executable "code_4" to the directory from which you want to run it
+### Compiling on windows or mac
 
-- Alternatively, copy the already existing executable "code_4"
+- compile.sh contains a single command that uses GCC to build the executable from the source files within the "Code" directory. Depending on which compiler you want to use, this command needs to be adjusted accordingly.
 
+- As said above, file paths in the source code may need to be updated for operating systems other than linux.
+
+### Further setup 
+
+- Copy the code executable "code_4" to the directory from which you want to run it.
 
 - Next, copy the folders "Params" and "Output" into the same directory as the executable
 
