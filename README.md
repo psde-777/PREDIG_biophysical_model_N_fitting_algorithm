@@ -1,4 +1,4 @@
-# Plant Cell Wall Saccharification Model (PCWSM)
+# PREDIG: Lignocellulose Enzymatic Digestion Model (forked from Plant Cell Wall Saccharification Model (PCWSM))
 
 
 Within this repository, you can find the code of our model for the saccharification of a lignocellulosic plant cell wall sub-unit, composed of a cellulose microfibril surrounded by hemicellulose and lignin.
