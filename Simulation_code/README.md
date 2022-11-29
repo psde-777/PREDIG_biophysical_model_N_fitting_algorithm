@@ -85,89 +85,98 @@ You can skip the compiling step, if you are using 64-bit linux and already have 
 ### simulation_parameters:
 
 1.) and 2.) sum up to yield the maximum number of steps (there are two parameters for this in case of possible future added effects).
-    Example: the first parameter is set to 10000, the second is set to 5000. Then, no more than 15000 Gillespie algorithm steps can be performed
+    Example: the first parameter is set to 10000, the second is set to 5000. Then, no more than 15000 Gillespie algorithm steps can be performed [These parameters are used in the code_4.cpp to set the maximum sumber of Gillespie steps (current value: 200000 + 200000 = 400000) but are not varied and can be fixed in the interface.]
 
-3.) Maximal number of snapshots which may be taken for the purpose of creating animation data.
+3.) Maximal number of snapshots which may be taken for the purpose of creating animation data. [This is used in the code to limit the maxmimum number of snapshots. This can be fixed in the interface too.]
 
-4.) Maximal value for the real time within the simulation, as calculated by the Gillespie algorithm.
+4.) Maximal value for the real time within the simulation, as calculated by the Gillespie algorithm. [This is the maximum real time for the simulation to run, calculated by Gillespie algorithm. If this is set to a high value, the simulation runs until all digestible substrate has been digested. Else it can be set to lower value by the user to match the duration of the experimental saccharification time-course data available.]
 
 5.) Number of steps between system snapshots, if "-vid" command is used (see below). If this is set to 1, a snapshot is taken at every step of the Gillespie algorithm.
 
-6.) Maximum number of hemicellulose/lignin layers around the cellulose core. Currently cannot be set above 4
+6.) Maximum number of hemicellulose/lignin layers around the cellulose core. Currently cannot be set above 4. (This can be fixed to 4 in the interface. The user doesn't need to change it in the majority of the scenario.)
 
-7.) mode_code: Determines the shape of the microfibril. To use the 36 chain microfibril used by Ding et al., set this to 5
+7.) mode_code: Determines the shape of the microfibril. To use the 36 chain microfibril used by Ding et al., set this to 5 (Mung beans, 18 polymers, mode_code = 3 or 4; Spruce wood, 24 polymers, mode_code = 1 or 2; Maize, 36 polymers, mode_code = 5)
 
-8.) mode_hemi: Determines, on which sides of the microfibril hemicellulose can anchor. Currently to be kept at 2
+8.) mode_hemi: Determines, on which sides of the microfibril hemicellulose can anchor. Currently to be kept at 2. [User doesn't need to vary it. Can be fixed at 2 in the interface.]
 
-9.) mode_lign: Determines, on which sides of the microfibril lignin can anchor. Currently to be kept at 2
+9.) mode_lign: Determines, on which sides of the microfibril lignin can anchor. Currently to be kept at 2. [User doesn't need to vary it. Can be fixed at 2 in the interface.]
 
-10.) mode_inhib: Determines, whether inhibition is active (1) or inactive (-1). Currently to be kept at -1
+10.) mode_inhib: Determines, whether inhibition is active (1) or inactive (-1). [For user, value 1 is reccommended as end-product inhibition is real.] 
 
-11.) mode_lignin_glue: Determines, whether the lignin gluing effect is active (1) or inactive (-1)
+11.) mode_lignin_glue: Determines, whether the lignin gluing effect is active (1) or inactive (-1). [For user, value 1 is recommended, as Lignin gluing is a known phenomena.]
 
-12.) Currently unused, and to be kept at a value of 1
+12.) mode_enzyme_size : Determines, whether the enzyme size is included for all enzymes (1) or only for CBH (-1). [This can be fixed to 1 in the interface for now.]
 
-13.) mode_enzyme_size : Determines, whether the enzyme size is included for all enzymes (1) or only for CBH (-1).
+13.) Nruns: Determines the number of simulation runs. [10 runs are good enough for getting a smooth average saccharification curve.]
 
-14.) Nruns: Determines the number of simulation runs
+14.) mu_lignin_covering: Determines the average fraction of lignin polymers which acts as a structural barrier. Set this to a value between 0 and 1. [Needs some literature survey before fixing.]
 
-15.) enzyme radius: Determines the radius of the enzymes
+15.) sigma_lignin_covering : Determines the standard deviation around mu_lignin_covering. Set this to a value between 0 and 1. [Needs some literature survey before fixing.]
 
-16.) mu_lignin_covering: Determines the average fraction of lignin polymers which acts as a structural barrier. Set this to a value between 0 and 1
-
-17.) sigma_lignin_covering : Determines the standard deviation around mu_lignin_covering. Set this to a value between 0 and 1
 
 ### kinetic_parameters:
 
-1.) EG rate of reaction
+1.) EG rate of reaction [Needs a range. 10-2000. But needs to be calculated for further precision.]
 
-2.) CBH rate of reaction
+2.) CBH rate of reaction [Needs a range. 10-2000. But needs to be calculated for further precision.]
 
-3.) BGL rate of reaction
+3.) BGL rate of reaction [Needs a range. 10-5000. But needs to be calculated for further precision.]
 
-4.) XYL rate of reaction
+4.) XYL rate of reaction [Needs a range. 0.001-1. But needs to be calculated for further precision.]
 
-5.) Lignin rate of adhesion
+5.) Lignin rate of adhesion [Needs a range. 150-350 is good.]
 
-6.) CBH rate of attachment
+6.) CBH rate of attachment [Needs a range. 0.001-1 is good for now.]
 
-7.) binding affinity of cellobiose to EG. Currently unused
+7.) Inhibition factor. Binding affinity of cellobiose to EG. [Range should be 0.0-1.0]
 
-8.) binding affinity of cellobiose to CBH. Currently unused
+8.) Inhibition factor. Binding affinity of cellobiose to CBH. [Range should be 0.0-1.0]
 
-9.) binding affinity of glucose to BGL. Currently unused
+9.) Inhibition factor. Binding affinity of glucose to EG. [Range should be 0.0-1.0]
 
-10.) ratio between digestibility of "crystalline" and "amorphous" cellulose
+10.) Inhibition factor. Binding affinity of glucose to CBH. [Range should be 0.0-1.0]
 
-11.) ratio between digestibility of "crystalline" and "amorphous" hemicellulose
+11.) Inhibition factor. Binding affinity of glucose to BGL. [Range should be 0.0-1.0]
+
+12.) ratio between digestibility of "crystalline" and "amorphous" cellulose. [Range should be 0.00001-0.001]
+
+13.) ratio between digestibility of "crystalline" and "amorphous" hemicellulose. [Range should be 0.00001-0.001]
+
+14.) enzyme radius: Determines the radius of the enzymes. [Range can be 1-10. But can be changed later.]
 
 
 
 ### initial_configuration_parameters:
  
-1.) initial EG concentration
+1.) initial EG concentration. [Needs some calculation to fixed. Currently set to value used in paper by Eric.]
 
-2.) initial CBH concentration
+2.) initial CBH concentration. [Needs some calculation to fixed. Currently set to value used in paper by Eric.]
 
-3.) initial BGL concentration
+3.) initial BGL concentration. [Needs some calculation to fixed. Currently set to value used in paper by Eric.]
 
-4.) initial XYL concentration
+4.) initial XYL concentration. [Needs some calculation to fixed. Currently set to value used in paper by Eric.]
 
-5.) Length of the microfibril in bonds 
+5.) Length of the microfibril in bonds. [Currently set to 200. But can be increased to 400-500 at the expense of simulation time being longer.]
 
-6.) Percentage of xylose in hemicellulose; currently restricted to a value of 1
+6.) Boolean for hemicellulose. Xylose or MLG. [If set to 1, there is Xylans in Hemicellulose (xylose released). If set to 0, there is Mixed-Linkage Glucans (glucose released)]
 
-7.) Percentage of hemicellulose within the microfibril
+7.) Percentage of xylose in hemicellulose; currently restricted to a value of 1. [Should be fixed at 1 for now. But can be usedful later when other hemicellulose sugars are implemented simultaneously.]
 
-8.) Percentage of lignin within the microfibril
+8.) Percentage of hemicellulose within the microfibril. [Comes from composition data. User should input. Range 0-1.]
 
-9.) Percentage of acetylated hemicellulose within the hemicellulose fraction; currently restricted to a value of 0
+9.) Percentage of lignin within the microfibril. [Comes from composition data. User should input. Range 0-1.]
 
-10.) Percentage of "crystalline" cellulose
+10.) Percentage of acetylated hemicellulose within the hemicellulose fraction; currently restricted to a value of 0. [Can be left at 0 for now. Will consult Holger about acetylation effects & could be be useful after that.]
 
-11.) Percentage of "crystalline" hemicellulose
+11.) Percentage of "crystalline" cellulose. [Fitting parameter. Can also come from user data, if available. Range 0-1.]
 
-12.) radius around which each bond location is checked for neighbors. To be kept at 0.6
+12.) Percentage of "crystalline" hemicellulose. [Fitting parameter. Can also come from user data, if available. Range 0-1.]
+
+13.) Mean size of defect/damaged section of Crystalline cellulose. [Currently only implemented for Mode_Code:5 in simulation_parameters. Should be kept 0 for others, until fixed for all.]
+
+14.) Number of defects/damaged sections of Crystalline cellulose. [Currently only implemented for Mode_Code:5 in simulation_parameters. Should be kept 0 for others, until fixed for all.]
+
+15.) Radius around which each bond location is checked for neighbors. To be kept at 0.6 [Fixed for now. No need to vary]
 
 
 
@@ -344,6 +353,11 @@ As an example, this would be the command used to calculate the average over 100 
 The averaged files are structured in the same way as the raw data (see above).
 
 
+### Creating Animated GIF of microfibril digestion
+
+This is done using the script Gifmaker.sh. It uses gnuplot(must be present on the system) to create the frames from the datafiles generated in Output/3D, when the code is run with command line arguement "-vid". It uses ffmpeg to create the animated GIF from the frames.
+
+
 # Code structure
 
 
@@ -401,7 +415,6 @@ The class neighborList is used to record the neighbors of each polymer bond
 ## tuple_hash
 
 This defines a hash function for tuples, which are used as keys for unordered maps of neighborList objects in the code.
-
 
 
 
