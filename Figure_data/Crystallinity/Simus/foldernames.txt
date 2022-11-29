@@ -1,4 +1,0 @@
-high_digestibility
-low_digestibility
-no_digestibility
-fitted_digestibility

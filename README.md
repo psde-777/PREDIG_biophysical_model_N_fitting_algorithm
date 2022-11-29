@@ -14,7 +14,3 @@ This folder contains the newest version of our model's code, written in C++. It 
 ### Folder "Optimization_algorithm"
 
 This folder contains our algorithm for fitting the kinetic parameters of the model, as well as a README for running it. 
-
-### Folder "Figure_data"
-
-This folder contains the data, plotting scripts and figures which we use in the paper connected to this repository.
