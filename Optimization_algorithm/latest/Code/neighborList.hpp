@@ -34,10 +34,10 @@ class neighborList {//This stores the positions of each neighboring bond within 
         double dx_mid, dy_mid, dz_mid; //Distance vector components between center of microfibril
         double d_mid; //Actual distance from center of microfibril
         int N_neighbors;//Number of neighbors
-        double V_enzyme;//Volume of a single enzyme
-        double V_free;//Free volume around bond in radius enzyme
+        double V_enzyme;//Volume of a single enzyme CURRENTLY HAS NO INFLUENCE
+        double V_free;//Free volume around bond in radius enzyme CURRENTLY HAS NO INFLUENCE
         double r_sphere;//Radius around which neighbors are investigated
-        double alpha_max;
+        double alpha_max; //Maximal average scalar product
         double r_monomer;//Radius of a monomer
         bool outer_bond;//Set to true if this is an outer bond
 
@@ -90,10 +90,10 @@ class neighborList {//This stores the positions of each neighboring bond within 
             this->V_enzyme = 4.*M_PI*r_sphere*r_sphere*r_sphere/3.;
             this->V_free = V_enzyme;
             this->alpha_max = -0.1;
-            double x_check= 0;
-            double y_check = 0;
-            double z_check = 0;
-            double epsilon = 0.001*this->r_sphere;
+            double x_check= 0; // Placeholder for the x coordinate of polymer bonds being checked for neighbor-status
+            double y_check = 0; // Placeholder for the y coordinate of polymer bonds being checked for neighbor-status
+            double z_check = 0; // Placeholder for the u coordinate of polymer bonds being checked for neighbor-status
+            double epsilon = 0.001*this->r_sphere; //Used to ensure that we don't add a bond as its own neighbor
 
             int material = 1;//Check cellu neighbors
             for(int i=0;i<celluList.size();i++){
@@ -105,7 +105,7 @@ class neighborList {//This stores the positions of each neighboring bond within 
                     double dy = this->y - y_check;
                     double dz = this->z - z_check;
                     double d = sqrt(dx*dx + dy*dy + dz*dz);
-                    if(d < (this->r_monomer + this->r_sphere) and d > epsilon){
+                    if(d < (this->r_monomer + this->r_sphere) and d > epsilon){ 
                         //std::cout << "d = " << d << std::endl;
                         add_neighbor(x_check,y_check,z_check,material);
                     }

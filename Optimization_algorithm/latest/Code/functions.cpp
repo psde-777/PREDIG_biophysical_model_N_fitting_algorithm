@@ -44,7 +44,7 @@ void initTList(TList& list, int index)
     list.nbr_element = 0;
     list.index_poly = index;
     // The vectors do not need to be initialized because the default constructor already provides an empty vector, which we want
-//End of function    
+//End of function
 }
 
 //======================== Functions ========================================
@@ -66,7 +66,7 @@ void addbond(
     list.crystalline.push_back(crystalline);
     list.covering.push_back(1);
     list.len_poly++;
-//End of function    
+//End of function
 }
 
 //Erase the end of the polymer, until digested bond
@@ -99,9 +99,9 @@ void taylorOldPoly(bList& list,int bond_num)
         list.bond_type.clear();
         list.N_blocked_positions.clear();
         list.crystalline.clear();
-        list.len_poly = 0;        
+        list.len_poly = 0;
     }
-//End of function    
+//End of function
 }
 
 //Erase the begining of the polymer, from digested bond
@@ -125,7 +125,7 @@ void taylorNewPoly(bList& list,int bond_num)
             list.bond_type.erase(list.bond_type.begin(), list.bond_type.begin() + bond_num+1);
             list.N_blocked_positions.erase(list.N_blocked_positions.begin(), list.N_blocked_positions.begin()+bond_num+1);
             list.crystalline.erase(list.crystalline.begin(), list.crystalline.begin()+bond_num+1);
-            list.len_poly = list.len_poly - bond_num - 1;            
+            list.len_poly = list.len_poly - bond_num - 1;
         }
     }
     else{
@@ -134,19 +134,19 @@ void taylorNewPoly(bList& list,int bond_num)
         list.bond_type.erase(list.bond_type.begin());
         list.N_blocked_positions.erase(list.N_blocked_positions.begin());
         list.crystalline.erase(list.crystalline.begin());
-        list.len_poly = 0;  
+        list.len_poly = 0;
     }
 
 
-    
-//End of function    
+
+//End of function
 }
 
 //Adds the new possible reaction to the reactions Table... if confidence == false, the table is checked for the existence of the reaction before it is added
 void addreaction(params& par, bool confidence, std::vector<TList>& list,int poly,int bond_num,int mat,int act2,double prope, bool crystalline_bool){
 
     if(mat != 1 and mat != 2){
-        cout << "In function addreaction: mat != 1 and mat != 2. This should not occur. Stopping" << endl; 
+        cout << "In function addreaction: mat != 1 and mat != 2. This should not occur. Stopping" << endl;
         exit(1);
     }
 //    if(act2 == 6){
@@ -164,7 +164,7 @@ void addreaction(params& par, bool confidence, std::vector<TList>& list,int poly
 /*                if (test == 1 and  *list[poly].prop_uninhib[i] != prope){
                     if(crystalline_bool == true){
                         list[poly].liste_prop[i] = &par.crystal_propensities[act2-1];
-                        list[poly].prop_uninhib[i] = &par.crystal_propensities[act2-1];                        
+                        list[poly].prop_uninhib[i] = &par.crystal_propensities[act2-1];
                     }
                     else{
                         list[poly].liste_prop[i] = &par.propensities[act2-1];
@@ -212,13 +212,13 @@ void addreaction(params& par, bool confidence, std::vector<TList>& list,int poly
             list[poly].crystalline.push_back(crystalline_bool);
             list[poly].covered.push_back(false);
             list[poly].addProp(prope);
-            list[poly].nbr_element++;                
+            list[poly].nbr_element++;
 //            cout << "added; liste[poly].nbr_element = " << list[poly].nbr_element << endl;
         }
     }
 
 
-//End of function    
+//End of function
 }
 
 
@@ -237,7 +237,7 @@ void clear_table(params& par, std::vector<TList>& allTables, int table){
 
 
 //Fills the reaction table of a newly created polymer
-void fill_table(params& par, vector<TList>& allTables, vector<bList>& polyList, int poly_selected, int substrate, bool& error, vector<double>& chem_entities){
+void fill_table(params& par, vector<TList>& allTables, vector<bList>& polyList, int poly_selected, int substrate, bool& error, vector<double>& chem_entities, int& nbr_Glc_pdt, int& nbr_cellobiose){
     int leftBond = 0;
     int rightBond = 0;
     double propensite = 0;
@@ -252,7 +252,7 @@ void fill_table(params& par, vector<TList>& allTables, vector<bList>& polyList, 
         }
         else if(polyList[poly_selected].len_poly == 1){
             reaction_type = 3;
-            propensite = prop(par, reaction_type, chem_entities);
+            propensite = prop(par, reaction_type, chem_entities,nbr_Glc_pdt,nbr_cellobiose);
             crystal_propensite = par.crystal_modifier_cellu*propensite;
 
             if(propensite > 0 and polyList[poly_selected].status[0] == 1){
@@ -264,7 +264,7 @@ void fill_table(params& par, vector<TList>& allTables, vector<bList>& polyList, 
         }
         else if(polyList[poly_selected].len_poly > 1){
             reaction_type = 1;
-            propensite = prop(par, reaction_type, chem_entities);
+            propensite = prop(par, reaction_type, chem_entities,nbr_Glc_pdt,nbr_cellobiose);
             crystal_propensite = par.crystal_modifier_cellu*propensite;
 //            cout << propensite << "\t" << crystal_propensite << endl;
 
@@ -281,7 +281,7 @@ void fill_table(params& par, vector<TList>& allTables, vector<bList>& polyList, 
                             if(polyList[poly_selected].crystalline[1] == false)
                                 addreaction(par, false, allTables,poly_selected,1,substrate,reaction_type,propensite,0);
                             else
-                                addreaction(par, false, allTables,poly_selected,1,substrate,reaction_type,crystal_propensite,1);                        
+                                addreaction(par, false, allTables,poly_selected,1,substrate,reaction_type,crystal_propensite,1);
                     }
                     if(polyList[poly_selected].status[2] == 1){
                             if(polyList[poly_selected].crystalline[2] == false)
@@ -299,12 +299,12 @@ void fill_table(params& par, vector<TList>& allTables, vector<bList>& polyList, 
                             else
                                 addreaction(par, false, allTables,poly_selected,i,substrate,reaction_type,crystal_propensite,1);
                         }
-                    }   
+                    }
                 }
             }
             //CBH REACTION ADDING IS DONE IN FUNCTION CBH_ATTACHMENT()
             /*reaction_type = 2;
-            propensite = prop(par, reaction_type, chem_entities);
+            propensite = prop(par, reaction_type, chem_entities,nbr_Glc_pdt,nbr_cellobiose);
             crystal_propensite = par.crystal_modifier_cellu*propensite;
             propensite = 0;
             if(propensite > 0){
@@ -314,26 +314,26 @@ void fill_table(params& par, vector<TList>& allTables, vector<bList>& polyList, 
                 }
                 else if(polyList[poly_selected].len_poly > 2){
                     leftBond = 1;
-                    rightBond = polyList[poly_selected].len_poly-2;   
+                    rightBond = polyList[poly_selected].len_poly-2;
                 }
                 if(polyList[poly_selected].status[leftBond] == 1){
                     if(polyList[poly_selected].crystalline[leftBond] == false){
                         addreaction(par, false, allTables,poly_selected,leftBond,substrate,reaction_type,propensite,enzyme_index);
-                        
+
                     }
                     else{
                         addreaction(par, false, allTables,poly_selected,leftBond,substrate,reaction_type,crystal_propensite,enzyme_index);
-                        
+
                     }
                 }
                 if(polyList[poly_selected].status[rightBond] == 1 and par.N_free_CBH > 0){
                     if(polyList[poly_selected].crystalline[rightBond] == false){
                         addreaction(par, false, allTables,poly_selected,rightBond,substrate,reaction_type,propensite,enzyme_index);
-                        
+
                     }
                     else{
                         addreaction(par, false, allTables,poly_selected,rightBond,substrate,reaction_type,crystal_propensite,enzyme_index);
-                        
+
                     }
                 }
             }*/
@@ -343,25 +343,36 @@ void fill_table(params& par, vector<TList>& allTables, vector<bList>& polyList, 
             if(polyList[poly_selected].len_poly != 2 and (allTables[poly_selected].num_bond[i] == 0 or allTables[poly_selected].num_bond[i] == polyList[poly_selected].len_poly-1) and (allTables[poly_selected].indic_action[i] == 1 or allTables[poly_selected].indic_action[i] == 2)){
                 cout << "Filling of cellu tables is making problems: " << endl;
                 exit(1);
-                return; 
+                return;
             }
         }
     }
-    else if(substrate == 2){
+    else if(substrate == 2){    // changed bond_type in hemi to 1: partho
         reaction_type = 4;
-        propensite = prop(par, reaction_type, chem_entities);
+        propensite = prop(par, reaction_type, chem_entities,nbr_Glc_pdt,nbr_cellobiose);
         crystal_propensite = par.crystal_modifier_hemi*propensite;
-        
+
         for(int i=0;i<polyList[poly_selected].len_poly;i++){
-            if(polyList[poly_selected].bond_type[i] == 4 and propensite > 0 and polyList[poly_selected].status[i] == 1){
-                if(polyList[poly_selected].crystalline[i] == false)
-                    addreaction(par, false,allTables,poly_selected,i,substrate,reaction_type,propensite,0);
-                else
-                    addreaction(par, false,allTables,poly_selected,i,substrate,reaction_type,crystal_propensite,1);
+
+            if (par.xyl_or_mlg == true){ // partho added check for MLG or XYL
+                if(polyList[poly_selected].bond_type[i] == 4 and propensite > 0 and polyList[poly_selected].status[i] == 1){    //bond type = 1 for mlg, 4 for xyl partho change
+                    if(polyList[poly_selected].crystalline[i] == false)
+                        addreaction(par, false,allTables,poly_selected,i,substrate,reaction_type,propensite,0);
+                    else
+                        addreaction(par, false,allTables,poly_selected,i,substrate,reaction_type,crystal_propensite,1);
+                }                
+            }
+            else if (par.xyl_or_mlg == false){  // partho added check for MLG or XYL
+                if(polyList[poly_selected].bond_type[i] == 1 and propensite > 0 and polyList[poly_selected].status[i] == 1){    //bond type = 1 for mlg, 4 for xyl partho change
+                    if(polyList[poly_selected].crystalline[i] == false)
+                        addreaction(par, false,allTables,poly_selected,i,substrate,reaction_type,propensite,0);
+                    else
+                        addreaction(par, false,allTables,poly_selected,i,substrate,reaction_type,crystal_propensite,1);
+                }
             }
         }
     }
-//End of function    
+//End of function
 }
 
 //Deletes the reaction labelled "action_target" for the polymer "poly" for its bond "bond_target" of the material "mat" in the list of reactions
@@ -388,7 +399,7 @@ void deletereaction(TList& list,vector<TList>& Table,int mat,int poly,int bond_t
     }
     if(Table[poly].liste_prop.size() == 0)
         Table[poly].prop_sum = 0;
-//End of function    
+//End of function
 }
 
 
@@ -411,7 +422,7 @@ void delete_specific_reaction(vector<TList>& Table, int table_selected, int i){
 
     if(Table[table_selected].liste_prop.size() == 0)
         Table[table_selected].prop_sum = 0;
-//End of function    
+//End of function
 }
 
 //Deletes ALL reactions for the bond "bond_target" from the polymer "poly" of the material "mat" in the list of reactions
@@ -437,62 +448,142 @@ void deleteAllreaction(TList& list,vector<TList>& Table,int mat,int poly,int bon
 
             i -= 1;//To be sure we scan the right hand side neighbor in the list that just shift from 1 rank
         }
-    }    
+    }
     if(Table[poly].liste_prop.size() == 0)
         Table[poly].prop_sum = 0;
 
-//End of function    
+//End of function
 }
 
 
 //Computes the propensity for each reaction to take place
-double prop(params& par, double act, vector<double> chem_entities)//For now hemicellulose and cellulose are digested with same rates, but could easily change
-{
+double prop(params& par, double act, vector<double> chem_entities, int& nbr_Glc_pdt, int& nbr_cellobiose)//For now hemicellulose and cellulose are digested with same rates, but could easily change
+{	// partho changes in propensity for inhibition
+    //calculating inhib values for EG, CBH and BGL
+//    double inhib_nr_EG = par.inhib_cellobiose_EG * chem_entities[0]* nbr_cellobiose / (chem_entities[0] + chem_entities[1] + nbr_cellobiose); //old inhibition	//EG inhibit by cellobiose
+//    double inhib_nr_CBH = par.inhib_cellobiose_CBH * chem_entities[1]* nbr_cellobiose / (chem_entities[0] + chem_entities[1] + nbr_cellobiose); //old inhibition	//CBH inhibit by cellobiose
+//    double inhib_nr_BGL =  par.inhib_glucose_BGL * chem_entities[2] * nbr_Glc_pdt / (chem_entities[2] + nbr_Glc_pdt);   //old inhibition				//BGL inhibit by glucose
+  //No inhibition of XYL
+    double inhib_nr_EG = par.inhib_cellobiose_EG * chem_entities[0] * nbr_cellobiose / (chem_entities[0] + chem_entities[1] + nbr_cellobiose)    +   par.inhib_glucose_EG * chem_entities[0]* nbr_Glc_pdt / (chem_entities[0] + chem_entities[1] + chem_entities[2] + nbr_Glc_pdt);      //partho: EG inhbit by glucose & cellobiose
+    double inhib_nr_CBH = par.inhib_cellobiose_CBH * chem_entities[1] * nbr_cellobiose / (chem_entities[0] + chem_entities[1] + nbr_cellobiose)  +   par.inhib_glucose_CBH * chem_entities[1]*nbr_Glc_pdt / (chem_entities[0] + chem_entities[1] + chem_entities[2] + nbr_Glc_pdt);      //partho: CBH inhbit by glucose & cellobiose
+    double inhib_nr_BGL =  par.inhib_glucose_BGL * chem_entities[2] * nbr_Glc_pdt / (chem_entities[0] + chem_entities[1] + chem_entities[2] + nbr_Glc_pdt);       //partho: BGL only inhibited by glucose
+  //No Inhibiton of XYL
+
+/*
+//  Inhibtion of XYL by Glc
+    double inhib_nr_EG = par.inhib_cellobiose_EG * chem_entities[0] * nbr_cellobiose / (chem_entities[0] + chem_entities[1] + nbr_cellobiose)    +   par.inhib_glucose_EG * chem_entities[0]* nbr_Glc_pdt / (chem_entities[0] + chem_entities[1] + chem_entities[2] + chem_entities[3] + nbr_Glc_pdt);      //partho: EG inhbit by glucose & cellobiose
+    double inhib_nr_CBH = par.inhib_cellobiose_CBH * chem_entities[1] * nbr_cellobiose / (chem_entities[0] + chem_entities[1] + nbr_cellobiose)  +   par.inhib_glucose_CBH * chem_entities[1]*nbr_Glc_pdt / (chem_entities[0] + chem_entities[1] + chem_entities[2] + chem_entities[3] + nbr_Glc_pdt);      //partho: CBH inhbit by glucose & cellobiose
+    double inhib_nr_BGL =  par.inhib_glucose_BGL * chem_entities[2] * nbr_Glc_pdt / (chem_entities[0] + chem_entities[1] + chem_entities[2] + chem_entities[3] + nbr_Glc_pdt);       //partho: BGL only inhibited by glucose
+    double inhib_nr_XYL = par.inhib_XYL * chem_entities[3] * nbr_Glc_pdt / (chem_entities[0] + chem_entities[1] + chem_entities[2] + chem_entities[3] + nbr_Glc_pdt);       //partho: XYL inhbit by glucose for MLG
+*/
+
+
+//    cout <<"------------------------------------------------------------------------"<<endl;
+//    cout << "partho--->"<< "inhib_nr_EG="<< inhib_nr_EG << "--inhib_nr_CBH=" << inhib_nr_CBH <<"--inhib_nr_BGL="<< inhib_nr_BGL<< "---Number of CelloBiose="<< nbr_cellobiose<< "---Number of Glucose="<< nbr_Glc_pdt<<endl;
+//    cout <<"========================================================================"<<endl;
+
 
     double propens;
 
-    if(act == 1)//Degradation by EG
-        propens=par.k1*chem_entities.at(0);
-    else if(act == 2){//Degradation by CBH
-        propens = par.k2;//Processive enzyme --> does not care about concentration once it is attached
-        //propens=par.k2*chem_entities.at(1);
+    if (par.mode_inhib == -1){
+           if(act == 1)//Degradation by EG
+               propens=par.k1*chem_entities.at(0);
+           else if(act == 2){//Degradation by CBH
+               propens = par.k2;//Processive enzyme --> does not care about concentration once it is attached
+               //propens=par.k2*chem_entities.at(1);
+           }
+           else if(act == 3)//Degradation by BGL
+               propens = par.k3*chem_entities.at(2);
+           else if(act==4)//Degradation of hemi by XYL
+               propens = par.k4*chem_entities.at(3);
+           else if(act == 5)//Degradation of hemi by XYL
+           if (par.mode_lignin_glue == 1){
+               propens = par.k5*chem_entities.at(4)*(chem_entities[0]+chem_entities[1]+chem_entities[2]+chem_entities[3]);
+           }
+           else{
+               propens = 0;
+           }
+           else if(act == 6){
+           //        propens = par.k6*par.N_free_CBH;
+               if(par.N_free_ends == 0){
+                   propens = 0.;
+               }
+               else{
+                   propens = par.k6*par.N_free_CBH*(1.- double((par.CBH_enzymes.size()-par.N_free_CBH)*par.ends_blocked_per_CBH)/double(par.N_free_ends));//*(1.-tanh(par.ends_blocked_per_CBH*(par.CBH_enzymes.size()-par.N_free_CBH)));
+                   if (propens < 0){
+                       propens = 0.;
+                   }
+               }
+           }
+           else{
+               cout << "In function prop(): variable 'act' does not correspond to any of the enzymes included in this simulation; act = " << act << endl;
+           return 0;
+           }
+           if (par.verbose==true){
+            //    cout <<"partho:--     action:-->     "<< act<< "      ----propens:-->  "<<propens<< endl;
+           }
+
     }
-    else if(act == 3)//Degradation by BGL
-        propens = par.k3*chem_entities.at(2);
-    else if(act==4)//Degradation of hemi by XYL
-        propens = par.k4*chem_entities.at(3);
-    else if(act == 5)//Degradation of hemi by XYL
-        if (par.mode_lignin_glue == 1){
-            propens = par.k5*chem_entities.at(4)*(chem_entities[0]+chem_entities[1]+chem_entities[2]+chem_entities[3]);
-        }
-        else{
-            propens = 0;
-        }
-    else if(act == 6){
-//        propens = par.k6*par.N_free_CBH;
-        if(par.N_free_ends == 0){
-            propens = 0.;
-        }
-        else{
-            propens = par.k6*par.N_free_CBH*(1.- double((par.CBH_enzymes.size()-par.N_free_CBH)*par.ends_blocked_per_CBH)/double(par.N_free_ends));//*(1.-tanh(par.ends_blocked_per_CBH*(par.CBH_enzymes.size()-par.N_free_CBH)));
-            if (propens < 0){
-                propens = 0.;
+    else if (par.mode_inhib == 1 and nbr_Glc_pdt >=0 and nbr_cellobiose>=0){
+            if(act == 1){//Degradation by EG
+            propens=par.k1*(chem_entities.at(0) - inhib_nr_EG); // reduced EG propensity partho
+//                cout <<"partho :----  action:-->    "<< act<<"--   propens=  "<<par.k1*chem_entities.at(0) << " ---propens_inhib="<< propens<< endl;
             }
-        }
+            else if(act == 2){//Degradation by CBH
+                propens = par.k2;//Processive enzyme --> does not care about concentration once it is attached
+                //propens=par.k2*chem_entities.at(1);
+            }
+            else if(act == 3){//Degradation by BGL
+                propens = par.k3*(chem_entities.at(2) - inhib_nr_BGL);
+//                cout <<"partho :----  action:-->    "<< act<<"--   propens=  "<<par.k3*chem_entities.at(2) << " ---propens_inhib="<< propens<< endl;
+            } // reduced BGL propensity partho
+
+            else if(act==4){//Degradation of hemi by XYL
+ //               propens = par.k4*(chem_entities.at(3) - inhib_nr_XYL);
+                propens = par.k4*chem_entities.at(3);
+//                cout <<"partho :----  action:-->    "<< act<<"--   propens=  "<<par.k4*chem_entities.at(3) << " ---propens_inhib="<< propens<< endl;
+            }
+            else if(act == 5)//Lignin Glueing
+            if (par.mode_lignin_glue == 1){
+                propens = par.k5*chem_entities.at(4)*(chem_entities[0]+chem_entities[1]+chem_entities[2]+chem_entities[3]);
+            }
+            else{
+                propens = 0;
+            }
+            else if(act == 6){
+            //        propens = par.k6*par.N_free_CBH;
+                if(par.N_free_ends == 0){
+                    propens = 0.;
+                }
+                else{
+                    propens = par.k6*(par.N_free_CBH - inhib_nr_CBH)*(1.- double((par.CBH_enzymes.size()-par.N_free_CBH)*par.ends_blocked_per_CBH)/double(par.N_free_ends));//*(1.-tanh(par.ends_blocked_per_CBH*(par.CBH_enzymes.size()-par.N_free_CBH)));  //reduced CBH attachment propensity partho
+                    if (propens < 0){
+                        propens = 0.;
+                    }
+//                    cout <<"partho :----  action:-->    "<< act<<"--   propens=  "<<par.k6*(par.N_free_CBH)*(1.- double((par.CBH_enzymes.size()-par.N_free_CBH)*par.ends_blocked_per_CBH)/double(par.N_free_ends)) << " ---propens_inhib="<< propens<< endl;
+                }
+            }
+            else{
+                cout << "In function prop(): variable 'act' does not correspond to any of the enzymes included in this simulation; act = " << act << endl;
+            return 0;
+            }
+            if (par.verbose==true){
+            //    cout <<"partho:--     action:-->    "<< act<< "      ----propens:-->  "<<propens<< endl;
+            }
     }
-    else{
-        cout << "In function prop(): variable 'act' does not correspond to any of the enzymes included in this simulation; act = " << act << endl;
-        return 0;
-    }
+
+
 //    cout << "In function prop(): act = " << act << "; propens = " << propens << endl;
+//    cout<< endl;
+//    cout <<"partho:--       Inhibitionmode:-->  "<<par.mode_inhib<<endl;
     return propens;
-//End of function    
+//End of function
 }
 
 //Counts the amount of glucose in the vector list. Depending on the substrate type (cellulose or hemicellulose), xylose and glucose need to be distinguished
 double countGlc(const vector<bList>& list, const int substrate){
     int count = 0;
-    if(substrate == 1){    
+    if(substrate == 1){
         for(int i = 0; i < list.size(); i++){
             if(list[i].len_poly > 0){
                 count+= (list[i].len_poly+1);
@@ -502,10 +593,10 @@ double countGlc(const vector<bList>& list, const int substrate){
     else if(substrate == 2){
         for(int i = 0; i < list.size();i++){
             if(list[i].len_poly > 0){
-                if(list[i].bond_type[0] == 1 or list[i].bond_type[0] == 3)
+                if(list[i].bond_type[0] == 1 or list[i].bond_type[0] == 3 or list[i].bond_type[0] == 5) // Partho new bond
                     count++;
                 for(int j=0;j < list[i].bond_type.size();j++){
-                    if(list[i].bond_type[j] == 1 or list[i].bond_type[j] == 2){
+                    if(list[i].bond_type[j] == 1 or list[i].bond_type[j] == 2 or list[i].bond_type[j] == 5){   //Partho new bond
                         count++;
                     }
                 }
@@ -513,7 +604,7 @@ double countGlc(const vector<bList>& list, const int substrate){
         }
     }
     return count;
-//End of function    
+//End of function
 }
 
 
@@ -532,7 +623,7 @@ double countXyl(const vector<bList>& list){
         }
     }
     return count ;
-//End of function    
+//End of function
 }
 
 double countLign(const std::vector<bList>& list){
@@ -541,7 +632,7 @@ double countLign(const std::vector<bList>& list){
         count += list[i].len_poly;
     }
     return count;
-//End of function    
+//End of function
 }
 
 int countCellobiose(const vector<bList>& list){
@@ -551,7 +642,7 @@ int countCellobiose(const vector<bList>& list){
             count ++;
     }
     return count;
-//End of function    
+//End of function
 }
 
 int countReactions(TList& list, int poly_selected, bool& error){
@@ -562,7 +653,7 @@ int countReactions(TList& list, int poly_selected, bool& error){
         exit(1);
         return 0;
     }
-//End of function    
+//End of function
 }
 
 
@@ -584,7 +675,7 @@ void drawPolys(std::vector<bList>& list){
     }
 
     cout << " ====== Done drawing polymers ====== " << endl;
-//End of function    
+//End of function
 }
 
 
@@ -626,7 +717,7 @@ void pick_reaction(params& par,
     else{
         if(Table_cellu.size() > 0){
             substrate = 1;
-            suma += Table_cellu[j].prop_sum; 
+            suma += Table_cellu[j].prop_sum;
 
             while(test>suma)
             {
@@ -680,7 +771,7 @@ void pick_reaction(params& par,
 
         if(substrate == 1){
             if(par.verbose == true){
-                cout << "substrate = 1" << endl;            
+                cout << "substrate = 1" << endl;
             }
             mu1 = findIndex(Table_cellu[table_selected], suma, test);//Index of the reaction chosen
             if(mu1 == -1){
@@ -694,7 +785,7 @@ void pick_reaction(params& par,
                 tau = -1.;
                 return;
 
-            } 
+            }
 /*                else if(mu1 == Table_cellu[table_selected].nbr_element-1){
                 N_last++;
             }*/
@@ -746,7 +837,7 @@ void pick_reaction(params& par,
             poly_selected=Table_hemi[table_selected].index_poly;//Corresponding polymer
             bond_selected=Table_hemi[table_selected].num_bond[mu1];//Returns the index = position of the bond in the Glc list of thepoly it belongs to
             //substrate=Table_hemi[table_selected].material[mu1];//Corresponding material: 1= cellulose; 2= hemicellulose
-            action_mu1=Table_hemi[table_selected].indic_action[mu1];//Corresponding reaction            
+            action_mu1=Table_hemi[table_selected].indic_action[mu1];//Corresponding reaction
 
         }
         else if(substrate != 1 and substrate != 2)
@@ -792,12 +883,12 @@ int findIndex(const TList& list, double suma, double test){
 //        cout << "Stopping" << endl;
 //        exit(1);
     }
-//End of function    
+//End of function
 }
 
 
 void EG_digest(params& par, vector<TList>& allTables, vector<bList>& polyList, int& nbr_poly, int& nbr_xyl_pdt, int& nbr_Glc_pdt,const int bond_selected,const int poly_selected, int len_polyLoopStart, int& nbr_cellobiose, vector<double>& chem_entities, const int substrate,unordered_map<std::tuple<double,double,int>, neighborList>& bond_neighbors_cellu, unordered_map<std::tuple<double,double,int>, neighborList>& bond_neighbors_hemi, const bool verbose, bool& error){//EG digestion as single function
-    
+
     if(bond_selected == 0 and polyList[poly_selected].len_poly != 2){
         cout << "EG action on first bond. This should be disabled!" << endl;
         exit(1);
@@ -840,7 +931,7 @@ void EG_digest(params& par, vector<TList>& allTables, vector<bList>& polyList, i
     int test1; //Used for finding specific reactions in a table
     int indic_cut;//
     int new_poly_index = -1;
-    int minSize_BGL = 8;//DP at which BGL starts digesting 
+    int minSize_BGL = 8;//DP at which BGL starts digesting
     int x_bond,y_bond,z_bond;// For later freeing of lower bonds
     int enzyme_index = -1;
 
@@ -874,19 +965,19 @@ void EG_digest(params& par, vector<TList>& allTables, vector<bList>& polyList, i
         exit(1);
 /*
         if(bond_selected==0)// If the cut was at the beginning of the polymer
-        {                        
+        {
             if(par.free_poly_ends.find(cantor_pair_two(poly_selected,bond_selected)) != par.free_poly_ends.end()){
                 par.free_poly_ends.erase(cantor_pair_two(poly_selected,bond_selected));
             }
             taylorNewPoly(polyList[poly_selected],bond_selected);//Shift the indices by one to the left
             clear_table(par,allTables,poly_selected);
-            
+
 
             reaction_type = 3;
-            propensite = prop(par,reaction_type,chem_entities);
+            propensite = prop(par,reaction_type,chem_entities,nbr_Glc_pdt,nbr_cellobiose);
             crystal_propensite = par.crystal_modifier_cellu*propensite;
             if(propensite > 0 and polyList[poly_selected].status[0] == 1 and polyList[poly_selected].len_poly == 1){
-                
+
                 addreaction(par, false, allTables,poly_selected,0,substrate,reaction_type,propensite,enzyme_index);
             }
 
@@ -901,7 +992,7 @@ void EG_digest(params& par, vector<TList>& allTables, vector<bList>& polyList, i
             clear_table(par,allTables,poly_selected);
 
             reaction_type = 3;
-            propensite = prop(par,reaction_type,chem_entities);
+            propensite = prop(par,reaction_type,chem_entities,nbr_Glc_pdt,nbr_cellobiose);
             crystal_propensite = par.crystal_modifier_cellu*propensite;
             if(propensite > 0 and polyList[poly_selected].status[0] == 1 and polyList[poly_selected].len_poly == 1){
                 if(polyList[poly_selected].crystalline[0]==false)
@@ -909,8 +1000,8 @@ void EG_digest(params& par, vector<TList>& allTables, vector<bList>& polyList, i
                 else
                     addreaction(par, false, allTables,poly_selected,0,substrate,reaction_type,crystal_propensite,enzyme_index);
             }
-    
-            nbr_Glc_pdt++;//We release a Glc            
+
+            nbr_Glc_pdt++;//We release a Glc
         }
 */
     }
@@ -924,7 +1015,7 @@ void EG_digest(params& par, vector<TList>& allTables, vector<bList>& polyList, i
         //====================== CREATE AND INITIALIZE THE NEW POLYMER AND ITS REACTION TABLE =========================0
 
             polyList.push_back(bList());
-            nbr_poly++;            
+            nbr_poly++;
             new_poly_index = polyList.size()-1;
             newPolyFlag = true;
 
@@ -935,7 +1026,7 @@ void EG_digest(params& par, vector<TList>& allTables, vector<bList>& polyList, i
             polyList[new_poly_index].set_z(bond_selected+1);
 
             allTables.push_back(TList());//Make the new reaction list associated to the new polymer;
-            initTList(allTables[new_poly_index], new_poly_index);//Initialize it                        
+            initTList(allTables[new_poly_index], new_poly_index);//Initialize it
 
             for(int i=0; i<polyList[poly_selected].len_poly; i++)//Make the new polymer into a copy of the old one before tayloring
             {
@@ -961,19 +1052,19 @@ void EG_digest(params& par, vector<TList>& allTables, vector<bList>& polyList, i
             indic_cut = 0;//In this function, the old poly is always the one on the left, and the new one on the right
 
             clear_table(par,allTables,poly_selected);
-            fill_table(par,allTables,polyList,poly_selected,substrate,error,chem_entities);
+            fill_table(par,allTables,polyList,poly_selected,substrate,error,chem_entities,nbr_Glc_pdt,nbr_cellobiose);
 
             //Fill new table
-            fill_table(par,allTables, polyList, new_poly_index, substrate, error,chem_entities);
+            fill_table(par,allTables, polyList, new_poly_index, substrate, error,chem_entities,nbr_Glc_pdt,nbr_cellobiose);
 
             if(insert_new_end == true and polyList[new_poly_index].len_poly > 1){//We do not need to check whether the status of the bond is equal to 1, because we already know that a free poly end was found there
                 if(par.free_poly_ends.find(cantor_pair_two(new_poly_index,polyList[new_poly_index].len_poly-2)) == par.free_poly_ends.end()){
                     if(polyList[new_poly_index].len_poly-2 >= 0 and CBH_enzyme_attached(par,new_poly_index,polyList[new_poly_index].len_poly-2 == false)){
                         par.free_poly_ends.insert({cantor_pair_two(new_poly_index,polyList[new_poly_index].len_poly-2),std::make_tuple(new_poly_index,polyList[new_poly_index].len_poly-2)});
                         if(true){
-                            addreaction(par, false,allTables,new_poly_index,polyList[new_poly_index].len_poly-2,1,6,prop(par,6,chem_entities),polyList[new_poly_index].crystalline[polyList[new_poly_index].len_poly-2]);
+                            addreaction(par, false,allTables,new_poly_index,polyList[new_poly_index].len_poly-2,1,6,prop(par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),polyList[new_poly_index].crystalline[polyList[new_poly_index].len_poly-2]);
                         }
-                        par.N_free_ends++;                        
+                        par.N_free_ends++;
                     }
                 }
             }
@@ -984,7 +1075,7 @@ void EG_digest(params& par, vector<TList>& allTables, vector<bList>& polyList, i
                     if(polyList[poly_selected].len_poly-2 >= 0 and CBH_enzyme_attached(par, poly_selected, polyList[poly_selected].len_poly-2) == false){
                         par.free_poly_ends.insert({cantor_pair_two(poly_selected,polyList[poly_selected].len_poly-2),make_tuple(poly_selected,polyList[poly_selected].len_poly-2)});
                         if(true){
-                            addreaction(par, false,allTables,poly_selected,polyList[poly_selected].len_poly-2,1,6,prop(par,6,chem_entities),polyList[poly_selected].crystalline[polyList[poly_selected].len_poly-2]);
+                            addreaction(par, false,allTables,poly_selected,polyList[poly_selected].len_poly-2,1,6,prop(par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),polyList[poly_selected].crystalline[polyList[poly_selected].len_poly-2]);
                         }
                         par.N_free_ends++;
                     }
@@ -995,7 +1086,7 @@ void EG_digest(params& par, vector<TList>& allTables, vector<bList>& polyList, i
                     if(par.free_poly_ends.find(cantor_pair_two(new_poly_index,1)) == par.free_poly_ends.end() and CBH_enzyme_attached(par,new_poly_index,1) == false){
                         par.free_poly_ends.insert({cantor_pair_two(new_poly_index,1),make_tuple(new_poly_index,1)});
                         if(true){
-                            addreaction(par, false,allTables,new_poly_index,1,1,6,prop(par,6,chem_entities),polyList[new_poly_index].crystalline[1]);
+                            addreaction(par, false,allTables,new_poly_index,1,1,6,prop(par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),polyList[new_poly_index].crystalline[1]);
                         }
                         par.N_free_ends++;
                     }
@@ -1010,7 +1101,7 @@ void EG_digest(params& par, vector<TList>& allTables, vector<bList>& polyList, i
             if(par.CBH_enzymes[i].attached == true and par.CBH_enzymes[i].poly_attached == poly_selected and par.CBH_enzymes[i].bond_attached == 1){
                 if(polyList[poly_selected].len_poly != 1){
                     CBH_found++;
-                    addreaction(par, false, allTables,poly_selected,1,1,2,prop(par,2,chem_entities),polyList[poly_selected].crystalline[1]);
+                    addreaction(par, false, allTables,poly_selected,1,1,2,prop(par,2,chem_entities,nbr_Glc_pdt,nbr_cellobiose),polyList[poly_selected].crystalline[1]);
                 }
                 else{
                     par.CBH_enzymes[i].detach();
@@ -1045,12 +1136,12 @@ void EG_digest(params& par, vector<TList>& allTables, vector<bList>& polyList, i
                                 par.N_free_CBH++;
                             }
                             else{
-                                addreaction(par, false, allTables,new_poly_index,polyList[new_poly_index].len_poly-2,1,2,prop(par,2,chem_entities),polyList[new_poly_index].crystalline[polyList[new_poly_index].len_poly-2]);    
+                                addreaction(par, false, allTables,new_poly_index,polyList[new_poly_index].len_poly-2,1,2,prop(par,2,chem_entities,nbr_Glc_pdt,nbr_cellobiose),polyList[new_poly_index].crystalline[polyList[new_poly_index].len_poly-2]);
                             }
                             //There can only be one poly attached to bond 1
                         }
                         else{
-                            addreaction(par, false, allTables,new_poly_index,polyList[new_poly_index].len_poly-2,1,2,prop(par,2,chem_entities),polyList[new_poly_index].crystalline[polyList[new_poly_index].len_poly-2]);
+                            addreaction(par, false, allTables,new_poly_index,polyList[new_poly_index].len_poly-2,1,2,prop(par,2,chem_entities,nbr_Glc_pdt,nbr_cellobiose),polyList[new_poly_index].crystalline[polyList[new_poly_index].len_poly-2]);
                         }
                     }
                 }
@@ -1091,7 +1182,7 @@ void EG_digest(params& par, vector<TList>& allTables, vector<bList>& polyList, i
             deletereaction(allTables[poly_selected], allTables, 1, poly_selected, 1, 6);//Delete the reaction that will now be carried out
             par.N_free_ends--;
         }
-        addreaction(par, false, allTables,poly_selected,0,1,3,prop(par,3,chem_entities),polyList[poly_selected].crystalline[0]);
+        addreaction(par, false, allTables,poly_selected,0,1,3,prop(par,3,chem_entities,nbr_Glc_pdt,nbr_cellobiose),polyList[poly_selected].crystalline[0]);
         nbr_cellobiose++;
     }
     if(newPolyFlag == true){
@@ -1114,7 +1205,7 @@ void EG_digest(params& par, vector<TList>& allTables, vector<bList>& polyList, i
                 }
 
             }
-            addreaction(par, false, allTables,new_poly_index,0,1,3,prop(par,3,chem_entities),polyList[new_poly_index].crystalline[0]);
+            addreaction(par, false, allTables,new_poly_index,0,1,3,prop(par,3,chem_entities,nbr_Glc_pdt,nbr_cellobiose),polyList[new_poly_index].crystalline[0]);
             nbr_cellobiose++;
         }
     }
@@ -1126,31 +1217,31 @@ void EG_digest(params& par, vector<TList>& allTables, vector<bList>& polyList, i
             //cout << "In function EG_digest(): adding attachment reaction for length 3 polymer (old poly)" << endl;
             par.free_poly_ends.insert({cantor_pair_two(poly_selected,1),make_tuple(poly_selected,1)});
             if(true){
-                addreaction(par, false,allTables,poly_selected,1,1,6,prop(par,6,chem_entities),polyList[poly_selected].crystalline[1]);
+                addreaction(par, false,allTables,poly_selected,1,1,6,prop(par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),polyList[poly_selected].crystalline[1]);
             }
             par.N_free_ends++;
         }
         else if(par.free_poly_ends.find(cantor_pair_two(poly_selected,1)) == par.free_poly_ends.end() and CBH_enzyme_attached(par, poly_selected,1) == true){
-            addreaction(par, false,allTables,poly_selected,1,1,2,prop(par,2,chem_entities), polyList[poly_selected].crystalline[1]);
+            addreaction(par, false,allTables,poly_selected,1,1,2,prop(par,2,chem_entities,nbr_Glc_pdt,nbr_cellobiose), polyList[poly_selected].crystalline[1]);
         }
         else if(par.free_poly_ends.find(cantor_pair_two(poly_selected,1)) != par.free_poly_ends.end()){
-            addreaction(par, false,allTables,poly_selected,1,1,6,prop(par,6,chem_entities),polyList[poly_selected].crystalline[1]);
-        }        
+            addreaction(par, false,allTables,poly_selected,1,1,6,prop(par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),polyList[poly_selected].crystalline[1]);
+        }
         //Second end
         if(par.free_poly_ends.find(cantor_pair_two(poly_selected,polyList[poly_selected].len_poly-2)) == par.free_poly_ends.end() and CBH_enzyme_attached(par, poly_selected,polyList[poly_selected].len_poly-2) == false){
             //cout << "In function EG_digest(): adding attachment reaction for length 3 polymer (old poly)" << endl;
             par.free_poly_ends.insert({cantor_pair_two(poly_selected,polyList[poly_selected].len_poly-2),make_tuple(poly_selected,polyList[poly_selected].len_poly-2)});
             if(true){
-                addreaction(par, false,allTables,poly_selected,polyList[poly_selected].len_poly-2,1,6,prop(par,6,chem_entities),polyList[poly_selected].crystalline[polyList[poly_selected].len_poly-2]);
+                addreaction(par, false,allTables,poly_selected,polyList[poly_selected].len_poly-2,1,6,prop(par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),polyList[poly_selected].crystalline[polyList[poly_selected].len_poly-2]);
             }
             par.N_free_ends++;
         }
         else if(par.free_poly_ends.find(cantor_pair_two(poly_selected,polyList[poly_selected].len_poly-2)) == par.free_poly_ends.end() and CBH_enzyme_attached(par, poly_selected,polyList[poly_selected].len_poly-2) == true){
-            addreaction(par, false,allTables,poly_selected,polyList[poly_selected].len_poly-2,1,2,prop(par,2,chem_entities), polyList[poly_selected].crystalline[polyList[poly_selected].len_poly-2]);
+            addreaction(par, false,allTables,poly_selected,polyList[poly_selected].len_poly-2,1,2,prop(par,2,chem_entities,nbr_Glc_pdt,nbr_cellobiose), polyList[poly_selected].crystalline[polyList[poly_selected].len_poly-2]);
         }
         else if(par.free_poly_ends.find(cantor_pair_two(poly_selected,polyList[poly_selected].len_poly-2)) != par.free_poly_ends.end()){
-            addreaction(par, false,allTables,poly_selected,polyList[poly_selected].len_poly-2,1,6,prop(par,6,chem_entities),polyList[poly_selected].crystalline[polyList[poly_selected].len_poly-2]);
-        }        
+            addreaction(par, false,allTables,poly_selected,polyList[poly_selected].len_poly-2,1,6,prop(par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),polyList[poly_selected].crystalline[polyList[poly_selected].len_poly-2]);
+        }
 
     }
     else if(polyList[poly_selected].len_poly == 3){
@@ -1168,15 +1259,15 @@ void EG_digest(params& par, vector<TList>& allTables, vector<bList>& polyList, i
             //cout << "In function EG_digest(): adding attachment reaction for length 3 polymer (old poly)" << endl;
             par.free_poly_ends.insert({cantor_pair_two(poly_selected,1),make_tuple(poly_selected,1)});
             if(true){
-                addreaction(par, false,allTables,poly_selected,1,1,6,prop(par,6,chem_entities),polyList[poly_selected].crystalline[1]);
+                addreaction(par, false,allTables,poly_selected,1,1,6,prop(par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),polyList[poly_selected].crystalline[1]);
             }
             par.N_free_ends++;
         }
         else if(par.free_poly_ends.find(cantor_pair_two(poly_selected,1)) == par.free_poly_ends.end() and CBH_enzyme_attached(par, poly_selected,1) == true){
-            addreaction(par, false,allTables,poly_selected,1,1,2,prop(par,2,chem_entities), polyList[poly_selected].crystalline[1]);
+            addreaction(par, false,allTables,poly_selected,1,1,2,prop(par,2,chem_entities,nbr_Glc_pdt,nbr_cellobiose), polyList[poly_selected].crystalline[1]);
         }
         else if(par.free_poly_ends.find(cantor_pair_two(poly_selected,1)) != par.free_poly_ends.end()){
-            addreaction(par, false,allTables,poly_selected,1,1,6,prop(par,6,chem_entities),polyList[poly_selected].crystalline[1]);
+            addreaction(par, false,allTables,poly_selected,1,1,6,prop(par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),polyList[poly_selected].crystalline[1]);
         }
     }
     else if(polyList[poly_selected].len_poly == 2){
@@ -1184,8 +1275,8 @@ void EG_digest(params& par, vector<TList>& allTables, vector<bList>& polyList, i
             //cout << "In function EG_digest(): adding attachment reaction at position 0 for length 2 polymer (old poly)" << endl;
             par.free_poly_ends.insert({cantor_pair_two(poly_selected,0),make_tuple(poly_selected,0)});
             if(true){
-                
-                addreaction(par, false,allTables,poly_selected,0,1,6,prop(par,6,chem_entities),polyList[poly_selected].crystalline[0]);
+
+                addreaction(par, false,allTables,poly_selected,0,1,6,prop(par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),polyList[poly_selected].crystalline[0]);
             }
             par.N_free_ends++;
         }
@@ -1193,7 +1284,7 @@ void EG_digest(params& par, vector<TList>& allTables, vector<bList>& polyList, i
             //cout << "In function EG_digest(): adding attachment reaction at position 1 for length 2 polymer (old poly)" << endl;
             par.free_poly_ends.insert({cantor_pair_two(poly_selected,1),make_tuple(poly_selected,1)});
             if(true){
-                addreaction(par, false,allTables,poly_selected,1,1,6,prop(par,6,chem_entities),polyList[poly_selected].crystalline[1]);
+                addreaction(par, false,allTables,poly_selected,1,1,6,prop(par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),polyList[poly_selected].crystalline[1]);
             }
             par.N_free_ends++;
         }
@@ -1206,31 +1297,31 @@ void EG_digest(params& par, vector<TList>& allTables, vector<bList>& polyList, i
                 //cout << "In function EG_digest(): adding attachment reaction for length 3 polymer (old poly)" << endl;
                 par.free_poly_ends.insert({cantor_pair_two(new_poly_index,1),make_tuple(new_poly_index,1)});
                 if(true){
-                    addreaction(par, false,allTables,new_poly_index,1,1,6,prop(par,6,chem_entities),polyList[new_poly_index].crystalline[1]);
+                    addreaction(par, false,allTables,new_poly_index,1,1,6,prop(par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),polyList[new_poly_index].crystalline[1]);
                 }
                 par.N_free_ends++;
             }
             else if(par.free_poly_ends.find(cantor_pair_two(new_poly_index,1)) == par.free_poly_ends.end() and CBH_enzyme_attached(par, new_poly_index,1) == true){
-                addreaction(par, false,allTables,new_poly_index,1,1,2,prop(par,2,chem_entities), polyList[new_poly_index].crystalline[1]);
+                addreaction(par, false,allTables,new_poly_index,1,1,2,prop(par,2,chem_entities,nbr_Glc_pdt,nbr_cellobiose), polyList[new_poly_index].crystalline[1]);
             }
             else if(par.free_poly_ends.find(cantor_pair_two(new_poly_index,1)) != par.free_poly_ends.end()){
-                addreaction(par, false,allTables,new_poly_index,1,1,6,prop(par,6,chem_entities),polyList[new_poly_index].crystalline[1]);
-            }        
+                addreaction(par, false,allTables,new_poly_index,1,1,6,prop(par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),polyList[new_poly_index].crystalline[1]);
+            }
             //Second end
             if(par.free_poly_ends.find(cantor_pair_two(new_poly_index,polyList[new_poly_index].len_poly-2)) == par.free_poly_ends.end() and CBH_enzyme_attached(par, new_poly_index,polyList[new_poly_index].len_poly-2) == false){
                 //cout << "In function EG_digest(): adding attachment reaction for length 3 polymer (old poly)" << endl;
                 par.free_poly_ends.insert({cantor_pair_two(new_poly_index,polyList[new_poly_index].len_poly-2),make_tuple(new_poly_index,polyList[new_poly_index].len_poly-2)});
                 if(true){
-                    addreaction(par, false,allTables,new_poly_index,polyList[new_poly_index].len_poly-2,1,6,prop(par,6,chem_entities),polyList[new_poly_index].crystalline[polyList[new_poly_index].len_poly-2]);
+                    addreaction(par, false,allTables,new_poly_index,polyList[new_poly_index].len_poly-2,1,6,prop(par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),polyList[new_poly_index].crystalline[polyList[new_poly_index].len_poly-2]);
                 }
                 par.N_free_ends++;
             }
             else if(par.free_poly_ends.find(cantor_pair_two(new_poly_index,polyList[new_poly_index].len_poly-2)) == par.free_poly_ends.end() and CBH_enzyme_attached(par, new_poly_index,polyList[new_poly_index].len_poly-2) == true){
-                addreaction(par, false,allTables,new_poly_index,polyList[new_poly_index].len_poly-2,1,2,prop(par,2,chem_entities), polyList[new_poly_index].crystalline[polyList[new_poly_index].len_poly-2]);
+                addreaction(par, false,allTables,new_poly_index,polyList[new_poly_index].len_poly-2,1,2,prop(par,2,chem_entities,nbr_Glc_pdt,nbr_cellobiose), polyList[new_poly_index].crystalline[polyList[new_poly_index].len_poly-2]);
             }
             else if(par.free_poly_ends.find(cantor_pair_two(new_poly_index,polyList[new_poly_index].len_poly-2)) != par.free_poly_ends.end()){
-                addreaction(par, false,allTables,new_poly_index,polyList[new_poly_index].len_poly-2,1,6,prop(par,6,chem_entities),polyList[new_poly_index].crystalline[polyList[new_poly_index].len_poly-2]);
-            }        
+                addreaction(par, false,allTables,new_poly_index,polyList[new_poly_index].len_poly-2,1,6,prop(par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),polyList[new_poly_index].crystalline[polyList[new_poly_index].len_poly-2]);
+            }
 
         }
         else if(polyList[new_poly_index].len_poly == 3){
@@ -1248,15 +1339,15 @@ void EG_digest(params& par, vector<TList>& allTables, vector<bList>& polyList, i
                 //cout << "In function EG_digest(): adding attachment reaction for length 3 polymer (new poly)" << endl;
                 par.free_poly_ends.insert({cantor_pair_two(new_poly_index,1),make_tuple(new_poly_index,1)});
                 if(true){
-                    addreaction(par, false,allTables,new_poly_index,1,1,6,prop(par,6,chem_entities),polyList[new_poly_index].crystalline[1]);
+                    addreaction(par, false,allTables,new_poly_index,1,1,6,prop(par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),polyList[new_poly_index].crystalline[1]);
                 }
                 par.N_free_ends++;
             }
             else if(par.free_poly_ends.find(cantor_pair_two(new_poly_index,1)) == par.free_poly_ends.end() and CBH_enzyme_attached(par, new_poly_index,1) == true){
-                addreaction(par, false,allTables,new_poly_index,1,1,2,prop(par,2,chem_entities), polyList[new_poly_index].crystalline[1]);
+                addreaction(par, false,allTables,new_poly_index,1,1,2,prop(par,2,chem_entities,nbr_Glc_pdt,nbr_cellobiose), polyList[new_poly_index].crystalline[1]);
             }
             else if(par.free_poly_ends.find(cantor_pair_two(new_poly_index,1)) != par.free_poly_ends.end()){
-                addreaction(par, false,allTables,new_poly_index,1,1,6,prop(par,6,chem_entities),polyList[new_poly_index].crystalline[1]);
+                addreaction(par, false,allTables,new_poly_index,1,1,6,prop(par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),polyList[new_poly_index].crystalline[1]);
             }
         }
         else if(polyList[new_poly_index].len_poly == 2){
@@ -1264,7 +1355,7 @@ void EG_digest(params& par, vector<TList>& allTables, vector<bList>& polyList, i
                 //cout << "In function EG_digest(): adding attachment reaction at position 0 for length 2 polymer (new poly)" << endl;
                 par.free_poly_ends.insert({cantor_pair_two(new_poly_index,0),make_tuple(new_poly_index,0)});
                 if(true){
-                    addreaction(par, false,allTables,new_poly_index,0,1,6,prop(par,6,chem_entities),polyList[new_poly_index].crystalline[0]);
+                    addreaction(par, false,allTables,new_poly_index,0,1,6,prop(par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),polyList[new_poly_index].crystalline[0]);
                 }
                 par.N_free_ends++;
             }
@@ -1272,7 +1363,7 @@ void EG_digest(params& par, vector<TList>& allTables, vector<bList>& polyList, i
                 //cout << "In function EG_digest(): adding attachment reaction at position 1 for length 2 polymer (new poly)" << endl;
                 par.free_poly_ends.insert({cantor_pair_two(new_poly_index,1),make_tuple(new_poly_index,1)});
                 if(true){
-                    addreaction(par, false,allTables,new_poly_index,1,1,6,prop(par,6,chem_entities),polyList[new_poly_index].crystalline[1]);
+                    addreaction(par, false,allTables,new_poly_index,1,1,6,prop(par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),polyList[new_poly_index].crystalline[1]);
                 }
                 par.N_free_ends++;
             }
@@ -1281,7 +1372,7 @@ void EG_digest(params& par, vector<TList>& allTables, vector<bList>& polyList, i
     if(par.verbose == true){
         cout << "Done with EG reaction" << endl;
     }
-//End of function    
+//End of function
 }
 
 void CBH_digest(params& par, vector<TList>& allTables, vector<bList>& polyList, int& nbr_poly, int& nbr_xyl_pdt, int& nbr_Glc_pdt,const int bond_selected,const int poly_selected, int len_polyLoopStart, int& nbr_cellobiose,vector<double>& chem_entities, const int substrate, unordered_map<std::tuple<double,double,int>, neighborList>& bond_neighbors_cellu, unordered_map<std::tuple<double,double,int>, neighborList>& bond_neighbors_hemi,const bool verbose, bool& error){
@@ -1315,7 +1406,7 @@ void CBH_digest(params& par, vector<TList>& allTables, vector<bList>& polyList, 
     int test1;
     int indic_cut;
     int new_poly_index = -1;//index of new polymer, if cellobiose is created
-        
+
 
     int reaction_type = 0;
     double propensite;
@@ -1363,7 +1454,7 @@ void CBH_digest(params& par, vector<TList>& allTables, vector<bList>& polyList, 
             polyList[new_poly_index].bond_type[0]=polyList[poly_selected].bond_type[0];
             polyList[new_poly_index].N_blocked_positions[0] = polyList[poly_selected].N_blocked_positions[0];
             polyList[new_poly_index].crystalline[0] = polyList[poly_selected].crystalline[0];
-            
+
             //add one free bond at the beginning and use taylorNewPoly on old poly
             taylorNewPoly(polyList[poly_selected],bond_selected);//Erase the beginning of the polymer, until digested bond
 
@@ -1384,18 +1475,18 @@ void CBH_digest(params& par, vector<TList>& allTables, vector<bList>& polyList, 
         //Clear old table
         clear_table(par,allTables,poly_selected);
         //Fill old table
-        fill_table(par,allTables,polyList,poly_selected,substrate,error,chem_entities);
+        fill_table(par,allTables,polyList,poly_selected,substrate,error,chem_entities,nbr_Glc_pdt,nbr_cellobiose);
 
 
         //Fill new table
-        fill_table(par,allTables, polyList, new_poly_index, substrate, error,chem_entities);
+        fill_table(par,allTables, polyList, new_poly_index, substrate, error,chem_entities,nbr_Glc_pdt,nbr_cellobiose);
 
         if(free_end_bool == true){
             if(par.free_poly_ends.find(cantor_pair_two(poly_selected,polyList[poly_selected].len_poly-2)) == par.free_poly_ends.end() and CBH_enzyme_attached(par,poly_selected,polyList[poly_selected].len_poly-2) == false){
                 if(polyList[poly_selected].len_poly-2 >= 0){
                     par.free_poly_ends.insert({cantor_pair_two(poly_selected,polyList[poly_selected].len_poly-2),std::make_tuple(poly_selected,polyList[poly_selected].len_poly-2)});
                     if(true){
-                        addreaction(par, false,allTables,poly_selected,polyList[poly_selected].len_poly-2,1,6,prop(par,6,chem_entities),polyList[poly_selected].crystalline[polyList[poly_selected].len_poly-2]);
+                        addreaction(par, false,allTables,poly_selected,polyList[poly_selected].len_poly-2,1,6,prop(par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),polyList[poly_selected].crystalline[polyList[poly_selected].len_poly-2]);
                     }
                     par.N_free_ends++;
                 }
@@ -1408,12 +1499,12 @@ void CBH_digest(params& par, vector<TList>& allTables, vector<bList>& polyList, 
                 CBH_count++;
                 if(polyList[poly_selected].len_poly > 1){
 //                    (BOND_ATTACHED AND POLY_ATTACHED DO NOT NEED TO BE CHANGED)
-                    if(indic_cut == 0){//Cut was at beginning, meaning that the enzyme needs to move up 
-                        addreaction(par, false, allTables,poly_selected,1,1,2,prop(par,2,chem_entities),polyList[poly_selected].crystalline[1]);
+                    if(indic_cut == 0){//Cut was at beginning, meaning that the enzyme needs to move up
+                        addreaction(par, false, allTables,poly_selected,1,1,2,prop(par,2,chem_entities,nbr_Glc_pdt,nbr_cellobiose),polyList[poly_selected].crystalline[1]);
                     }
                     else if(indic_cut == 1){//Cut was at end. The CBH reaction needs to be re-added, because we cleared the table
-                        addreaction(par, false, allTables,poly_selected,1,1,2,prop(par,2,chem_entities),polyList[poly_selected].crystalline[1]);
-                    }                    
+                        addreaction(par, false, allTables,poly_selected,1,1,2,prop(par,2,chem_entities,nbr_Glc_pdt,nbr_cellobiose),polyList[poly_selected].crystalline[1]);
+                    }
                 }
                 else{
                     par.CBH_enzymes[i].detach();
@@ -1431,7 +1522,7 @@ void CBH_digest(params& par, vector<TList>& allTables, vector<bList>& polyList, 
                             exit(1);
                         }
                         else{
-                            addreaction(par, false, allTables,poly_selected,par.CBH_enzymes[i].bond_attached,1,2,prop(par,2,chem_entities),polyList[poly_selected].crystalline[par.CBH_enzymes[i].bond_attached]);
+                            addreaction(par, false, allTables,poly_selected,par.CBH_enzymes[i].bond_attached,1,2,prop(par,2,chem_entities,nbr_Glc_pdt,nbr_cellobiose),polyList[poly_selected].crystalline[par.CBH_enzymes[i].bond_attached]);
                         }
                     }
                     else if(indic_cut == 1 and polyList[poly_selected].len_poly != 3){//Cut was at end
@@ -1441,7 +1532,7 @@ void CBH_digest(params& par, vector<TList>& allTables, vector<bList>& polyList, 
                             exit(1);
                         }
                         else{
-                            addreaction(par, false, allTables,poly_selected,par.CBH_enzymes[i].bond_attached,1,2,prop(par,2,chem_entities),polyList[poly_selected].crystalline[par.CBH_enzymes[i].bond_attached]);
+                            addreaction(par, false, allTables,poly_selected,par.CBH_enzymes[i].bond_attached,1,2,prop(par,2,chem_entities,nbr_Glc_pdt,nbr_cellobiose),polyList[poly_selected].crystalline[par.CBH_enzymes[i].bond_attached]);
                         }
                     }
                     else{
@@ -1477,8 +1568,8 @@ void CBH_digest(params& par, vector<TList>& allTables, vector<bList>& polyList, 
         if(polyList[poly_selected].len_poly == 1){
             cout << "CBH action on cellobiose. This should currently be turned off! Stopping..." << endl;
             exit(1);
-            return;        
-        }        
+            return;
+        }
         else if(polyList[poly_selected].len_poly > 2){
             cout << "CBH action on last bond. This should currently be turned off! Stopping..." << endl;
             exit(1);
@@ -1487,19 +1578,19 @@ void CBH_digest(params& par, vector<TList>& allTables, vector<bList>& polyList, 
         else{
 
             taylorOldPoly(polyList[poly_selected],bond_selected);//Erase the end of the polymer, until digested bond
-            clear_table(par,allTables,poly_selected); 
+            clear_table(par,allTables,poly_selected);
 
-            if(prop(par,3,chem_entities) > 0 and polyList[poly_selected].len_poly == 1){
-                polyList[poly_selected].status[0] = 1; 
+            if(prop(par,3,chem_entities,nbr_Glc_pdt,nbr_cellobiose) > 0 and polyList[poly_selected].len_poly == 1){
+                polyList[poly_selected].status[0] = 1;
                 reaction_type = 3;
-                propensite = prop(par,reaction_type,chem_entities);                        
+                propensite = prop(par,reaction_type,chem_entities,nbr_Glc_pdt,nbr_cellobiose);
                 crystal_propensite = par.crystal_modifier_cellu*propensite;
                 if(polyList[poly_selected].crystalline[0] == false)
                     addreaction(par, false, allTables,poly_selected,0,substrate,reaction_type,propensite,0);
                 else
                     addreaction(par, false, allTables,poly_selected,0,substrate,reaction_type,crystal_propensite,1);
             }
-    
+
             nbr_Glc_pdt++;//We release a Glc
         }
 
@@ -1512,21 +1603,21 @@ void CBH_digest(params& par, vector<TList>& allTables, vector<bList>& polyList, 
         if(polyList[poly_selected].len_poly == 1){
             cout << "CBH action on cellobiose. This should currently be turned off! Stopping..." << endl;
             exit(1);
-            return;        
+            return;
         }
         else if(polyList[poly_selected].len_poly > 2){
             cout << "CBH action on first bond. This should currently be turned off! Stopping..." << endl;
             exit(1);
-            return;                    
+            return;
         }
         else{
             taylorNewPoly(polyList[poly_selected],bond_selected);//Shift the indices by one to the left
-            clear_table(par,allTables,poly_selected);   
+            clear_table(par,allTables,poly_selected);
 
-            if(prop(par,3,chem_entities) > 0 and polyList[poly_selected].len_poly == 1){
+            if(prop(par,3,chem_entities,nbr_Glc_pdt,nbr_cellobiose) > 0 and polyList[poly_selected].len_poly == 1){
                 polyList[poly_selected].status[0] = 1;
                 reaction_type = 3;
-                propensite = prop(par,reaction_type,chem_entities);                        
+                propensite = prop(par,reaction_type,chem_entities,nbr_Glc_pdt,nbr_cellobiose);
                 crystal_propensite = par.crystal_modifier_cellu*propensite;
                 if(polyList[poly_selected].crystalline[0] == false)
                     addreaction(par, false, allTables,poly_selected,0,substrate,reaction_type,propensite,0);
@@ -1549,7 +1640,7 @@ void CBH_digest(params& par, vector<TList>& allTables, vector<bList>& polyList, 
         }
         else if(polyList[new_poly_index].len_poly <= 0){
              cout << "In function CBH_digest(): a newly generated polymer has zero length. This should not happen. Stopping." << endl;
-             exit(1);   
+             exit(1);
         }
     }
 
@@ -1561,31 +1652,31 @@ void CBH_digest(params& par, vector<TList>& allTables, vector<bList>& polyList, 
             //cout << "In function EG_digest(): adding attachment reaction for length 3 polymer (old poly)" << endl;
             par.free_poly_ends.insert({cantor_pair_two(poly_selected,1),make_tuple(poly_selected,1)});
             if(true){
-                addreaction(par, false,allTables,poly_selected,1,1,6,prop(par,6,chem_entities),polyList[poly_selected].crystalline[1]);
+                addreaction(par, false,allTables,poly_selected,1,1,6,prop(par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),polyList[poly_selected].crystalline[1]);
             }
             par.N_free_ends++;
         }
         else if(par.free_poly_ends.find(cantor_pair_two(poly_selected,1)) == par.free_poly_ends.end() and CBH_enzyme_attached(par, poly_selected,1) == true){
-            addreaction(par, false,allTables,poly_selected,1,1,2,prop(par,2,chem_entities), polyList[poly_selected].crystalline[1]);
+            addreaction(par, false,allTables,poly_selected,1,1,2,prop(par,2,chem_entities,nbr_Glc_pdt,nbr_cellobiose), polyList[poly_selected].crystalline[1]);
         }
         else if(par.free_poly_ends.find(cantor_pair_two(poly_selected,1)) != par.free_poly_ends.end()){
-            addreaction(par, false,allTables,poly_selected,1,1,6,prop(par,6,chem_entities),polyList[poly_selected].crystalline[1]);
-        }        
+            addreaction(par, false,allTables,poly_selected,1,1,6,prop(par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),polyList[poly_selected].crystalline[1]);
+        }
         //Second end
         if(par.free_poly_ends.find(cantor_pair_two(poly_selected,polyList[poly_selected].len_poly-2)) == par.free_poly_ends.end() and CBH_enzyme_attached(par, poly_selected,polyList[poly_selected].len_poly-2) == false){
             //cout << "In function EG_digest(): adding attachment reaction for length 3 polymer (old poly)" << endl;
             par.free_poly_ends.insert({cantor_pair_two(poly_selected,polyList[poly_selected].len_poly-2),make_tuple(poly_selected,polyList[poly_selected].len_poly-2)});
             if(true){
-                addreaction(par, false,allTables,poly_selected,polyList[poly_selected].len_poly-2,1,6,prop(par,6,chem_entities),polyList[poly_selected].crystalline[polyList[poly_selected].len_poly-2]);
+                addreaction(par, false,allTables,poly_selected,polyList[poly_selected].len_poly-2,1,6,prop(par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),polyList[poly_selected].crystalline[polyList[poly_selected].len_poly-2]);
             }
             par.N_free_ends++;
         }
         else if(par.free_poly_ends.find(cantor_pair_two(poly_selected,polyList[poly_selected].len_poly-2)) == par.free_poly_ends.end() and CBH_enzyme_attached(par, poly_selected,polyList[poly_selected].len_poly-2) == true){
-            addreaction(par, false,allTables,poly_selected,polyList[poly_selected].len_poly-2,1,2,prop(par,2,chem_entities), polyList[poly_selected].crystalline[polyList[poly_selected].len_poly-2]);
+            addreaction(par, false,allTables,poly_selected,polyList[poly_selected].len_poly-2,1,2,prop(par,2,chem_entities,nbr_Glc_pdt,nbr_cellobiose), polyList[poly_selected].crystalline[polyList[poly_selected].len_poly-2]);
         }
         else if(par.free_poly_ends.find(cantor_pair_two(poly_selected,polyList[poly_selected].len_poly-2)) != par.free_poly_ends.end()){
-            addreaction(par, false,allTables,poly_selected,polyList[poly_selected].len_poly-2,1,6,prop(par,6,chem_entities),polyList[poly_selected].crystalline[polyList[poly_selected].len_poly-2]);
-        }        
+            addreaction(par, false,allTables,poly_selected,polyList[poly_selected].len_poly-2,1,6,prop(par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),polyList[poly_selected].crystalline[polyList[poly_selected].len_poly-2]);
+        }
 
     }
     else if(polyList[poly_selected].len_poly == 3){
@@ -1601,14 +1692,14 @@ void CBH_digest(params& par, vector<TList>& allTables, vector<bList>& polyList, 
         }
         if(par.free_poly_ends.find(cantor_pair_two(poly_selected,1)) == par.free_poly_ends.end() and CBH_enzyme_attached(par, poly_selected,1) == false){
             par.free_poly_ends.insert({cantor_pair_two(poly_selected,1),make_tuple(poly_selected,1)});
-            addreaction(par, false,allTables,poly_selected,1,1,6,prop(par,6,chem_entities), polyList[poly_selected].crystalline[1]);
+            addreaction(par, false,allTables,poly_selected,1,1,6,prop(par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose), polyList[poly_selected].crystalline[1]);
             par.N_free_ends++;
         }
         else if(par.free_poly_ends.find(cantor_pair_two(poly_selected,1)) == par.free_poly_ends.end() and CBH_enzyme_attached(par, poly_selected,1) == true){
-            addreaction(par, false,allTables,poly_selected,1,1,2,prop(par,2,chem_entities), polyList[poly_selected].crystalline[1]);
+            addreaction(par, false,allTables,poly_selected,1,1,2,prop(par,2,chem_entities,nbr_Glc_pdt,nbr_cellobiose), polyList[poly_selected].crystalline[1]);
         }
         else if(par.free_poly_ends.find(cantor_pair_two(poly_selected,1)) != par.free_poly_ends.end()){
-            addreaction(par, false,allTables,poly_selected,1,1,6,prop(par,6,chem_entities),polyList[poly_selected].crystalline[1]);
+            addreaction(par, false,allTables,poly_selected,1,1,6,prop(par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),polyList[poly_selected].crystalline[1]);
         }
     }
     else if(polyList[poly_selected].len_poly == 2){
@@ -1616,7 +1707,7 @@ void CBH_digest(params& par, vector<TList>& allTables, vector<bList>& polyList, 
 //            cout << "In function CBH_digest(): adding attachment reaction at position 0 for length 2 polymer" << endl;
             par.free_poly_ends.insert({cantor_pair_two(poly_selected,0),make_tuple(poly_selected,0)});
             if(true){
-                addreaction(par, false,allTables,poly_selected,0,1,6,prop(par,6,chem_entities),polyList[poly_selected].crystalline[0]);
+                addreaction(par, false,allTables,poly_selected,0,1,6,prop(par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),polyList[poly_selected].crystalline[0]);
             }
             par.N_free_ends++;
         }
@@ -1624,7 +1715,7 @@ void CBH_digest(params& par, vector<TList>& allTables, vector<bList>& polyList, 
 //            cout << "In function CBH_digest(): adding attachment reaction at position 1 for length 2 polymer" << endl;
             par.free_poly_ends.insert({cantor_pair_two(poly_selected,1),make_tuple(poly_selected,1)});
             if(true){
-                addreaction(par, false,allTables,poly_selected,1,1,6,prop(par,6,chem_entities),polyList[poly_selected].crystalline[1]);
+                addreaction(par, false,allTables,poly_selected,1,1,6,prop(par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),polyList[poly_selected].crystalline[1]);
             }
             par.N_free_ends++;
         }
@@ -1640,7 +1731,7 @@ void CBH_digest(params& par, vector<TList>& allTables, vector<bList>& polyList, 
             deletereaction(allTables[poly_selected], allTables, 1, poly_selected, 1, 6);//Delete the reaction
             par.N_free_ends--;
         }
-        addreaction(par, false, allTables,poly_selected,0,1,3,prop(par,3,chem_entities),polyList[poly_selected].crystalline[0]);
+        addreaction(par, false, allTables,poly_selected,0,1,3,prop(par,3,chem_entities,nbr_Glc_pdt,nbr_cellobiose),polyList[poly_selected].crystalline[0]);
         nbr_cellobiose++;
         int count_CBHs = 0;
         for(int i=0;i<par.CBH_enzymes.size();i++){
@@ -1670,7 +1761,7 @@ void CBH_digest(params& par, vector<TList>& allTables, vector<bList>& polyList, 
                 deletereaction(allTables[new_poly_index], allTables, 1, new_poly_index, 1, 6);//Delete the reaction
                 par.N_free_ends--;
             }
-            addreaction(par, false, allTables,new_poly_index,0,1,3,prop(par,3,chem_entities),polyList[new_poly_index].crystalline[0]);
+            addreaction(par, false, allTables,new_poly_index,0,1,3,prop(par,3,chem_entities,nbr_Glc_pdt,nbr_cellobiose),polyList[new_poly_index].crystalline[0]);
             nbr_cellobiose++;
             int count_CBHs = 0;
             for(int i=0;i<par.CBH_enzymes.size();i++){
@@ -1689,7 +1780,7 @@ void CBH_digest(params& par, vector<TList>& allTables, vector<bList>& polyList, 
     if(par.verbose == true){
         cout << "Done with CBH reaction" << endl;
     }
-//End of function    
+//End of function
 }
 
 
@@ -1762,7 +1853,7 @@ void BGL_digest(params& par, vector<TList>& allTables, vector<bList>& polyList, 
     if(par.verbose == true){
         cout << "Done with BGL reaction" << endl;
     }
-//End of function    
+//End of function
 }
 
 //Digestion by Xylanase
@@ -1793,13 +1884,13 @@ void XYL_digest(params& par, vector<TList>& allTables, vector<TList>& allCelluTa
 
     if(par.enzyme_radius > 0){
         check_radius = 2*par.enzyme_radius;//Number of bonds which are checked around each position
-    }    
+    }
     int len_poly_before = polyList[poly_selected].len_poly;
     int cut_applicate = polyList[poly_selected].z[bond_selected];
     int test1; //Used for finding specific reactions in a table
     int indic_cut;//
     int new_poly_index = -1;
-    int minSize_BGL = 8;//DP at which BGL starts digesting 
+    int minSize_BGL = 8;//DP at which BGL starts digesting
 
 
     double propensite; //
@@ -1823,44 +1914,74 @@ void XYL_digest(params& par, vector<TList>& allTables, vector<TList>& allCelluTa
     else if(polyList[poly_selected].len_poly == 1){
         polyList[poly_selected].status[bond_selected]=0;
         polyList[poly_selected].len_poly=0;
-        nbr_xyl_pdt += +2;
+
+        if (par.xyl_or_mlg == true){
+            nbr_xyl_pdt += +2;  // partho count xylose release since Xylans in Hemi
+        }
+        else if (par.xyl_or_mlg == false){
+            nbr_Glc_pdt += +2;  // partho counts glucose release since MLG present   
+        }
+        
         allTables[poly_selected].prop_sum = 0;
     }
     else if(polyList[poly_selected].len_poly==2)
     {
 
         if(bond_selected==0)// If the cut was at the beginning of the polymer
-        {                        
+        {
             taylorNewPoly(polyList[poly_selected],bond_selected);//Shift the indices by one to the left
-            clear_table(par,allTables,poly_selected);          
+            clear_table(par,allTables,poly_selected);
 
             reaction_type = 4;
-            propensite = prop(par,reaction_type,chem_entities);                        
+            propensite = prop(par,reaction_type,chem_entities,nbr_Glc_pdt,nbr_cellobiose);
             crystal_propensite = par.crystal_modifier_hemi*propensite;
-            if(propensite > 0 and polyList[poly_selected].status[0] == 1 and polyList[poly_selected].len_poly == 1 and polyList[poly_selected].bond_type[0] == 4){
+            
+            if (par.xyl_or_mlg == true){    //partho Xylose in hemi... so bondtype 4
+                if(propensite > 0 and polyList[poly_selected].status[0] == 1 and polyList[poly_selected].len_poly == 1 and polyList[poly_selected].bond_type[0] == 4){  //bond type = 1 for mlg, 4 for xyl      partho
                 if(polyList[poly_selected].crystalline[0] == false)
                     addreaction(par, false, allTables,poly_selected,0,substrate,reaction_type,propensite,0);
                 else
                     addreaction(par, false, allTables,poly_selected,0,substrate,reaction_type,crystal_propensite,1);
+                }
+                nbr_xyl_pdt++;  //  partho release a Xylose since xylan present in hemi 
             }
-
-            nbr_xyl_pdt++;//We release a Xyl
+            else if (par.xyl_or_mlg == false){  //  partho MLG in hemi... so bondtype 1
+                if(propensite > 0 and polyList[poly_selected].status[0] == 1 and polyList[poly_selected].len_poly == 1 and polyList[poly_selected].bond_type[0] == 1){  //bond type = 1 for mlg, 4 for xyl      partho
+                if(polyList[poly_selected].crystalline[0] == false)
+                    addreaction(par, false, allTables,poly_selected,0,substrate,reaction_type,propensite,0);
+                else
+                    addreaction(par, false, allTables,poly_selected,0,substrate,reaction_type,crystal_propensite,1);
+                }
+                nbr_Glc_pdt++;  //  partho release a Glucose since MLG present in hemi
+            }
         }
         else if(bond_selected == 1){
             taylorOldPoly(polyList[poly_selected],bond_selected);//Erase the end of the polymer, until digested bond
-            clear_table(par,allTables,poly_selected);       
+            clear_table(par,allTables,poly_selected);
 
             reaction_type = 4;
-            propensite = prop(par,reaction_type,chem_entities);                        
+            propensite = prop(par,reaction_type,chem_entities,nbr_Glc_pdt,nbr_cellobiose);
             crystal_propensite = par.crystal_modifier_hemi*propensite;
-            if(propensite > 0 and polyList[poly_selected].status[0] == 1 and polyList[poly_selected].len_poly == 1 and polyList[poly_selected].bond_type[0] == 4){
+
+            if (par.xyl_or_mlg == true){    //  partho Xylose in hemi... so bondtype 4
+                if(propensite > 0 and polyList[poly_selected].status[0] == 1 and polyList[poly_selected].len_poly == 1 and polyList[poly_selected].bond_type[0] == 4){  //bond type = 1 for mlg, 4 for xyl      partho
                 if(polyList[poly_selected].crystalline[0] == false)
                     addreaction(par, false, allTables,poly_selected,0,substrate,reaction_type,propensite,0);
                 else
                     addreaction(par, false, allTables,poly_selected,0,substrate,reaction_type,crystal_propensite,1);
+                }
+                nbr_xyl_pdt++;  // partho release a Xylose
             }
-
-            nbr_xyl_pdt++;//We release a Xyl           
+            else if (par.xyl_or_mlg == false){  //partho MLG in hemi... so bondtype 1
+                if(propensite > 0 and polyList[poly_selected].status[0] == 1 and polyList[poly_selected].len_poly == 1 and polyList[poly_selected].bond_type[0] == 1){  //bond type = 1 for mlg, 4 for xyl      partho
+                if(polyList[poly_selected].crystalline[0] == false)
+                    addreaction(par, false, allTables,poly_selected,0,substrate,reaction_type,propensite,0);
+                else
+                    addreaction(par, false, allTables,poly_selected,0,substrate,reaction_type,crystal_propensite,1);
+                }
+                nbr_Glc_pdt++;  //  partho release a Glucose
+            }
+		    
         }
     }
     else if(polyList[poly_selected].len_poly>2){
@@ -1880,14 +2001,14 @@ void XYL_digest(params& par, vector<TList>& allTables, vector<TList>& allCelluTa
             polyList[new_poly_index].set_z(bond_selected+1);
 
             allTables.push_back(TList());//Make the new reaction list associated to the new polymer;
-            initTList(allTables[new_poly_index], new_poly_index);//Initialize it                        
+            initTList(allTables[new_poly_index], new_poly_index);//Initialize it
 
             for(int i=0; i<polyList[poly_selected].len_poly; i++)//Make the new polymer into a copy of the old one before tayloring
             {
                 addbond(polyList[new_poly_index],i,1,polyList[poly_selected].bond_type[i],false);
                 polyList[new_poly_index].z[i]=polyList[poly_selected].z[i];
                 polyList[new_poly_index].N_blocked_positions[i] = polyList[poly_selected].N_blocked_positions[i];
-                polyList[new_poly_index].crystalline[i] = polyList[poly_selected].crystalline[i];                
+                polyList[new_poly_index].crystalline[i] = polyList[poly_selected].crystalline[i];
 
             }
 
@@ -1899,29 +2020,39 @@ void XYL_digest(params& par, vector<TList>& allTables, vector<TList>& allCelluTa
             //============================== Transfer the indices of polymer and bond position from the Old to the New polymer in the Reaction Table
             //Adjust old table
             clear_table(par,allTables,poly_selected);
-            fill_table(par,allTables,polyList,poly_selected,substrate,error,chem_entities);
+            fill_table(par,allTables,polyList,poly_selected,substrate,error,chem_entities,nbr_Glc_pdt,nbr_cellobiose);
 
             //Fill new table
-            fill_table(par,allTables, polyList, new_poly_index, substrate, error,chem_entities);
+            fill_table(par,allTables, polyList, new_poly_index, substrate, error,chem_entities,nbr_Glc_pdt,nbr_cellobiose);
 
 
             nbr_poly++;
         }
         else if(bond_selected == 0){
-            taylorNewPoly(polyList[poly_selected],bond_selected);//Erase the begining of the new polymer, from digested bond            
+            taylorNewPoly(polyList[poly_selected],bond_selected);//Erase the begining of the new polymer, from digested bond
             //Adjust old table
             clear_table(par,allTables,poly_selected);
-            fill_table(par,allTables,polyList,poly_selected,substrate,error,chem_entities);
-            nbr_xyl_pdt++;
+            fill_table(par,allTables,polyList,poly_selected,substrate,error,chem_entities,nbr_Glc_pdt,nbr_cellobiose);
+
+            if (par.xyl_or_mlg == true){
+                nbr_xyl_pdt++;  //partho xylose released since only xylan in hemi
+            }
+            if (par.xyl_or_mlg == false){
+                nbr_Glc_pdt++;  //partho glucose released since only MLG in hemi 
+            }
         }
         else if(bond_selected == polyList[poly_selected].len_poly-1){
             taylorOldPoly(polyList[poly_selected],bond_selected);//Erase the end of the polymer, until digested bond
             //Adjust old table
             clear_table(par,allTables,poly_selected);
-            fill_table(par,allTables,polyList,poly_selected,substrate,error,chem_entities);            
-            nbr_xyl_pdt++;
+            fill_table(par,allTables,polyList,poly_selected,substrate,error,chem_entities,nbr_Glc_pdt,nbr_cellobiose);
+            if (par.xyl_or_mlg == true){
+                nbr_xyl_pdt++;  //partho xylose released since only xylan in hemi
+            }
+            if (par.xyl_or_mlg == false){
+                nbr_Glc_pdt++;  //partho glucose released since only MLG in hemi 
+            }
         }
-
     }
 
 
@@ -1953,7 +2084,7 @@ void XYL_digest(params& par, vector<TList>& allTables, vector<TList>& allCelluTa
     }
     else if(polyList[poly_selected].len_poly+1 != len_poly_before){
             cout << "In function XYL_digest(): Xylose number is not conserved. Stopping" << endl;
-            exit(1);        
+            exit(1);
     }
 
     if(verbose == true){
@@ -1973,7 +2104,7 @@ void XYL_digest(params& par, vector<TList>& allTables, vector<TList>& allCelluTa
     if(par.verbose == true){
         cout << "Done with XYL reaction" << endl;
     }
-//End of function    
+//End of function
 }
 
 void CBH_attachment(params& par, std::vector<TList>& allTables,
@@ -1986,7 +2117,8 @@ void CBH_attachment(params& par, std::vector<TList>& allTables,
                     std::vector<double>& chem_entities,
                     const int substrate,
                     std::unordered_map<std::tuple<double,double,int>,neighborList>& bond_neighbors_cellu,
-                    std::unordered_map<std::tuple<double,double,int>,neighborList>& bond_neighbors_hemi
+                    std::unordered_map<std::tuple<double,double,int>,neighborList>& bond_neighbors_hemi,
+                    int& nbr_Glc_pdt, int& nbr_cellobiose
                     )
 {
     if(par.k6 <= 0.0){
@@ -2001,7 +2133,7 @@ void CBH_attachment(params& par, std::vector<TList>& allTables,
 
 
 /*
-    for(int k=0;k<par.CBH_enzymes.size();k++){                    
+    for(int k=0;k<par.CBH_enzymes.size();k++){
         if(par.CBH_enzymes[k].attached == true){
             poly_attached = par.CBH_enzymes[k].poly_attached;
             bond_attached = par.CBH_enzymes[k].bond_attached;
@@ -2031,7 +2163,7 @@ void CBH_attachment(params& par, std::vector<TList>& allTables,
                     par.free_poly_ends.erase(cantor_pair_two(poly_selected,bond_selected));
                     par.N_free_ends--;
                     int reaction_type = 2;
-                    double propensite = prop(par, reaction_type,chem_entities);
+                    double propensite = prop(par, reaction_type,chem_entities,nbr_Glc_pdt,nbr_cellobiose);
                     //Add the new digestion reaction for the attached CBH
                     addreaction(par, false, allTables, poly_selected, bond_selected, 1, reaction_type, propensite,celluList[poly_selected].crystalline[bond_selected]);
                     //Propensity update of attachment reaction is done in the function update_CBH_attachment_reactions()
@@ -2056,7 +2188,7 @@ void CBH_attachment(params& par, std::vector<TList>& allTables,
 
 
 //Updates reaction tables after a digestion reaction. Called at each step that is not a lignin adhesion step
-void update_reactiontables(std::vector<bList>& cellu, std::vector<bList>& hemi, std::vector<bList>& lign, std::vector<TList>& Table_cellu, std::vector<TList>& Table_hemi, params& par, std::vector<double>& chem_entities, std::unordered_map<std::tuple<double,double,int>, neighborList>& bond_neighbors_cellu, std::unordered_map<std::tuple<double,double,int>, neighborList>& bond_neighbors_hemi, double x, double y, int z, int substrate, int poly_selected, int bond_selected){
+void update_reactiontables(std::vector<bList>& cellu, std::vector<bList>& hemi, std::vector<bList>& lign, std::vector<TList>& Table_cellu, std::vector<TList>& Table_hemi, params& par, std::vector<double>& chem_entities, std::unordered_map<std::tuple<double,double,int>, neighborList>& bond_neighbors_cellu, std::unordered_map<std::tuple<double,double,int>, neighborList>& bond_neighbors_hemi, double x, double y, int z, int substrate, int poly_selected, int bond_selected, int& nbr_Glc_pdt, int& nbr_cellobiose){
     std::tuple<double,double,int> bond_key = std::make_tuple(x,y,z);//Used to find the neighborList object associated to the previously digested bond at coordinates x,y,z
     std::tuple<double,double,int> neighbor_key = std::make_tuple(0.,0.,0);
     int current_poly = 0;
@@ -2095,7 +2227,7 @@ void update_reactiontables(std::vector<bList>& cellu, std::vector<bList>& hemi, 
                                                     par.free_poly_ends.insert({cantor_pair_two(current_poly,1),std::make_tuple(current_poly,1)});
                                                     par.N_free_ends++;
                                                     if(true){
-                                                        addreaction(par, false,Table_cellu,current_poly,current_bond,current_substrate,6,prop(par,6,chem_entities),cellu[current_poly].crystalline[current_bond]);
+                                                        addreaction(par, false,Table_cellu,current_poly,current_bond,current_substrate,6,prop(par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),cellu[current_poly].crystalline[current_bond]);
                                                     }
                                                 }
                                             }
@@ -2107,7 +2239,7 @@ void update_reactiontables(std::vector<bList>& cellu, std::vector<bList>& hemi, 
                                                 if(par.free_poly_ends.find(cantor_pair_two(current_poly,cellu[current_poly].len_poly-2)) == par.free_poly_ends.end() and CBH_enzyme_attached(par,current_poly,cellu[current_poly].len_poly-2) == false){
                                                     par.free_poly_ends.insert({cantor_pair_two(current_poly,cellu[current_poly].len_poly-2),std::make_tuple(current_poly,cellu[current_poly].len_poly-2)});
                                                     if(true){
-                                                        addreaction(par, false,Table_cellu,current_poly,current_bond,current_substrate,6,prop(par,6,chem_entities),cellu[current_poly].crystalline[current_bond]);
+                                                        addreaction(par, false,Table_cellu,current_poly,current_bond,current_substrate,6,prop(par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),cellu[current_poly].crystalline[current_bond]);
                                                     }
                                                     par.N_free_ends++;
                                                 }
@@ -2116,7 +2248,7 @@ void update_reactiontables(std::vector<bList>& cellu, std::vector<bList>& hemi, 
                                     }
                                     if(cellu[current_poly].len_poly == 1){
                                         reaction_type = 3;
-                                        propensite = prop(par,reaction_type,chem_entities);
+                                        propensite = prop(par,reaction_type,chem_entities,nbr_Glc_pdt,nbr_cellobiose);
                                         crystal_propensite = par.crystal_modifier_cellu * propensite;
                                         if(propensite > 0){
                                             if(cellu[current_poly].crystalline[current_bond] == false){
@@ -2130,27 +2262,27 @@ void update_reactiontables(std::vector<bList>& cellu, std::vector<bList>& hemi, 
                                     //CBH REACTION ADDING IS DONE IN FUNCTION CBH_ATTACHMENT()
 /*                                    else if(cellu[current_poly].len_poly == 2){
                                         reaction_type = 2;
-                                        propensite = prop(par,reaction_type,chem_entities);
+                                        propensite = prop(par,reaction_type,chem_entities,nbr_Glc_pdt,nbr_cellobiose);
                                         crystal_propensite = par.crystal_modifier_cellu * propensite;
 
                                         propensite = 0;
                                         if(propensite > 0){
                                            if(cellu[current_poly].crystalline[current_bond] == false){
                                                 addreaction(par, false, Table_cellu,current_poly, current_bond,1, reaction_type,propensite,enzyme_index);
-                                                
+
                                             }
                                             else{
                                                 addreaction(par, false, Table_cellu,current_poly, current_bond,1, reaction_type,crystal_propensite,enzyme_index);
-                                                
-                                            }                            
+
+                                            }
                                         }
                                     }*/
                                     else if(cellu[current_poly].len_poly > 2){
-                                        
+
                                         reaction_type = 1;
-                                        propensite = prop(par,reaction_type,chem_entities);
+                                        propensite = prop(par,reaction_type,chem_entities,nbr_Glc_pdt,nbr_cellobiose);
                                         crystal_propensite = par.crystal_modifier_cellu * propensite;
-                                        
+
                                         if(current_bond > 1 and current_bond < cellu[current_poly].len_poly-2){
                                             if(propensite > 0){
                                                if(cellu[current_poly].crystalline[current_bond] == false){
@@ -2158,7 +2290,7 @@ void update_reactiontables(std::vector<bList>& cellu, std::vector<bList>& hemi, 
                                                 }
                                                 else{
                                                     addreaction(par, false, Table_cellu,current_poly, current_bond,1, reaction_type,crystal_propensite,1);
-                                                }                            
+                                                }
                                             }
 
                                         }
@@ -2171,7 +2303,7 @@ void update_reactiontables(std::vector<bList>& cellu, std::vector<bList>& hemi, 
                                                     }
                                                     else{
                                                         addreaction(par, false, Table_cellu,current_poly, current_bond,1, reaction_type,crystal_propensite,1);
-                                                    }                            
+                                                    }
                                                 }
                                             }
                                         */
@@ -2179,18 +2311,18 @@ void update_reactiontables(std::vector<bList>& cellu, std::vector<bList>& hemi, 
                                     //CBH REACTION ADDING IS DONE IN FUNCTION CBH_ATTACHMENT()
                                         /*if(current_bond == 1 or current_bond == cellu[current_poly].len_poly-2){
                                             reaction_type = 2;
-                                            propensite = prop(par,reaction_type,chem_entities);
+                                            propensite = prop(par,reaction_type,chem_entities,nbr_Glc_pdt,nbr_cellobiose);
                                             crystal_propensite = par.crystal_modifier_cellu * propensite;
                                             propensite = 0;
                                             if(propensite > 0){
                                                if(cellu[current_poly].crystalline[current_bond] == false){
                                                     addreaction(par, false, Table_cellu,current_poly, current_bond,1, reaction_type,propensite,enzyme_index);
-                                                    
+
                                                 }
                                                 else{
                                                     addreaction(par, false, Table_cellu,current_poly, current_bond,1, reaction_type,crystal_propensite,enzyme_index);
-                                                    
-                                                }                            
+
+                                                }
                                             }
                                         }*/
 
@@ -2222,16 +2354,16 @@ void update_reactiontables(std::vector<bList>& cellu, std::vector<bList>& hemi, 
                                     hemi[current_poly].status[current_bond] = 1;
                                     hemi[current_poly].status[current_bond] = 1;
                                     reaction_type = 4;
-                                    propensite = prop(par,reaction_type,chem_entities);
+                                    propensite = prop(par,reaction_type,chem_entities,nbr_Glc_pdt,nbr_cellobiose);
                                     crystal_propensite = par.crystal_modifier_hemi * propensite;
-                                    
+
                                     if(propensite > 0 and current_bond < hemi[current_poly].len_poly){
                                        if(hemi[current_poly].crystalline[current_bond] == false){
                                             addreaction(par, false, Table_hemi,current_poly, current_bond,2, reaction_type,propensite,0);
                                         }
                                         else{
                                             addreaction(par, false, Table_hemi,current_poly, current_bond,2, reaction_type,crystal_propensite,1);
-                                        }                            
+                                        }
                                     }
                                 }
                             }
@@ -2276,7 +2408,7 @@ void update_reactiontables(std::vector<bList>& cellu, std::vector<bList>& hemi, 
                                                     par.free_poly_ends.insert({cantor_pair_two(current_poly,1),std::make_tuple(current_poly,1)});
                                                     par.N_free_ends++;
                                                     if(true){
-                                                        addreaction(par, false,Table_cellu,current_poly,1,current_substrate,6,prop(par,6,chem_entities),cellu[current_poly].crystalline[1]);
+                                                        addreaction(par, false,Table_cellu,current_poly,1,current_substrate,6,prop(par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),cellu[current_poly].crystalline[1]);
                                                     }
                                                 }
                                             }
@@ -2287,9 +2419,9 @@ void update_reactiontables(std::vector<bList>& cellu, std::vector<bList>& hemi, 
                                             if(CBH_enzyme_attached(par,current_poly,cellu[current_poly].len_poly-2) == false){
                                                 if(par.free_poly_ends.find(cantor_pair_two(current_poly,cellu[current_poly].len_poly-2)) == par.free_poly_ends.end()){
                                                     par.free_poly_ends.insert({cantor_pair_two(current_poly,cellu[current_poly].len_poly-2),std::make_tuple(current_poly,cellu[current_poly].len_poly-2)});
-                                                    par.N_free_ends++;                                                    
+                                                    par.N_free_ends++;
                                                     if(true){
-                                                        addreaction(par, false,Table_cellu,current_poly,cellu[current_poly].len_poly-2,current_substrate,6,prop(par,6,chem_entities),cellu[current_poly].crystalline[cellu[current_poly].len_poly-2]);
+                                                        addreaction(par, false,Table_cellu,current_poly,cellu[current_poly].len_poly-2,current_substrate,6,prop(par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),cellu[current_poly].crystalline[cellu[current_poly].len_poly-2]);
                                                     }
                                                 }
                                             }
@@ -2297,7 +2429,7 @@ void update_reactiontables(std::vector<bList>& cellu, std::vector<bList>& hemi, 
                                     }
                                     if(cellu[current_poly].len_poly == 1){
                                         reaction_type = 3;
-                                        propensite = prop(par,reaction_type,chem_entities);
+                                        propensite = prop(par,reaction_type,chem_entities,nbr_Glc_pdt,nbr_cellobiose);
                                         crystal_propensite = par.crystal_modifier_cellu * propensite;
                                         if(propensite > 0){
                                             if(cellu[current_poly].crystalline[current_bond] == false){
@@ -2311,26 +2443,26 @@ void update_reactiontables(std::vector<bList>& cellu, std::vector<bList>& hemi, 
                                     //CBH REACTION ADDING IS DONE IN FUNCTION CBH_ATTACHMENT()
 /*                                    else if(cellu[current_poly].len_poly == 2){
                                         reaction_type = 2;
-                                        propensite = prop(par,reaction_type,chem_entities);
+                                        propensite = prop(par,reaction_type,chem_entities,nbr_Glc_pdt,nbr_cellobiose);
                                         crystal_propensite = par.crystal_modifier_cellu * propensite;
                                         propensite = 0;
                                         if(propensite > 0){
                                            if(cellu[current_poly].crystalline[current_bond] == false){
                                                 addreaction(par, false, Table_cellu,current_poly, current_bond,1, reaction_type,propensite,enzyme_index);
-                                                
+
                                             }
                                             else{
                                                 addreaction(par, false, Table_cellu,current_poly, current_bond,1, reaction_type,crystal_propensite,enzyme_index);
-                                                
-                                            }                            
+
+                                            }
                                         }
                                     }*/
                                     else if(cellu[current_poly].len_poly > 2){
 
                                         reaction_type = 1;
-                                        propensite = prop(par,reaction_type,chem_entities);
+                                        propensite = prop(par,reaction_type,chem_entities,nbr_Glc_pdt,nbr_cellobiose);
                                         crystal_propensite = par.crystal_modifier_cellu * propensite;
-                                        
+
                                         if(current_bond > 1 and current_bond < cellu[current_poly].len_poly-2){
                                             if(propensite > 0){
                                                if(cellu[current_poly].crystalline[current_bond] == false){
@@ -2338,7 +2470,7 @@ void update_reactiontables(std::vector<bList>& cellu, std::vector<bList>& hemi, 
                                                 }
                                                 else{
                                                     addreaction(par, false, Table_cellu,current_poly, current_bond,1, reaction_type,crystal_propensite,1);
-                                                }                            
+                                                }
                                             }
 
                                         }
@@ -2351,7 +2483,7 @@ void update_reactiontables(std::vector<bList>& cellu, std::vector<bList>& hemi, 
                                                     }
                                                     else{
                                                         addreaction(par, false, Table_cellu,current_poly, current_bond,1, reaction_type,crystal_propensite,1);
-                                                    }                            
+                                                    }
                                                 }
                                             }
                                             */
@@ -2359,18 +2491,18 @@ void update_reactiontables(std::vector<bList>& cellu, std::vector<bList>& hemi, 
                                     //CBH REACTION ADDING IS DONE IN FUNCTION CBH_ATTACHMENT()
                                         /*if(current_bond == 1 or current_bond == cellu[current_poly].len_poly-2){
                                             reaction_type = 2;
-                                            propensite = prop(par,reaction_type,chem_entities);
+                                            propensite = prop(par,reaction_type,chem_entities,nbr_Glc_pdt,nbr_cellobiose);
                                             crystal_propensite = par.crystal_modifier_cellu * propensite;
                                             propensite = 0;
                                             if(propensite > 0){
                                                if(cellu[current_poly].crystalline[current_bond] == false){
                                                     addreaction(par, false, Table_cellu,current_poly, current_bond,1, reaction_type,propensite,enzyme_index);
-                                                    
+
                                                 }
                                                 else{
                                                     addreaction(par, false, Table_cellu,current_poly, current_bond,1, reaction_type,crystal_propensite,enzyme_index);
-                                                    
-                                                }                            
+
+                                                }
                                             }
                                         }*/
 
@@ -2401,16 +2533,16 @@ void update_reactiontables(std::vector<bList>& cellu, std::vector<bList>& hemi, 
                                 if(hemi[current_poly].status[current_bond] == -1){
                                     hemi[current_poly].status[current_bond] = 1;
                                     reaction_type = 4;
-                                    propensite = prop(par,reaction_type,chem_entities);
+                                    propensite = prop(par,reaction_type,chem_entities,nbr_Glc_pdt,nbr_cellobiose);
                                     crystal_propensite = par.crystal_modifier_hemi * propensite;
-                                    
+
                                     if(propensite > 0 and current_bond < hemi[current_poly].len_poly and current_bond >= 0){
                                        if(hemi[current_poly].crystalline[current_bond] == false){
                                             addreaction(par, false, Table_hemi,current_poly, current_bond,2, reaction_type,propensite,0);
                                         }
                                         else{
                                             addreaction(par, false, Table_hemi,current_poly, current_bond,2, reaction_type,crystal_propensite,1);
-                                        }                            
+                                        }
                                     }
                                 }
                             }
@@ -2421,7 +2553,7 @@ void update_reactiontables(std::vector<bList>& cellu, std::vector<bList>& hemi, 
         }
         bond_neighbors_hemi.erase(bond_key);
     }
-//    remove_neighbor_from_vector(x,y,z,bond_neighbors_cellu,bond_neighbors_hemi);    
+//    remove_neighbor_from_vector(x,y,z,bond_neighbors_cellu,bond_neighbors_hemi);
 }
 
 
@@ -2476,7 +2608,7 @@ void update_reactiontables_inhib(vector<TList>& Table_cellu, vector<bList>& cell
         Table_cellu[i].calcTableProp();
     }
 */
-//End of function 
+//End of function
 }
 
 
@@ -2491,10 +2623,10 @@ void chain_length_distribution(vector<bList>& polyList, vector<DPList>& chain_di
 
 
 //HEAT MAP!!!
-//End of function    
+//End of function
 }
 
-//Checks whether all bonds with status = 1 have reactions associated to them 
+//Checks whether all bonds with status = 1 have reactions associated to them
 bool check_reactions(vector<TList>& allTables, vector<bList>& polyList, params& par){
     bool checker = true;
     int test = 0;
@@ -2516,7 +2648,7 @@ bool check_reactions(vector<TList>& allTables, vector<bList>& polyList, params& 
     }
 
 return checker;
-//End of function    
+//End of function
 }
 
 //Returns the bond type according to the type of left bond l and right bond r. Used for bond_type distribution on hemicellulose
@@ -2558,7 +2690,7 @@ int find_bond_type(int l, int r){
         cout << "In function find_bond_type(): l is not 1,2,3 or 4; l = " << l << endl;
         return 42;
     }
-//End of function    
+//End of function
 }
 
 
@@ -2637,29 +2769,9 @@ bool find_specific_bond(const vector<bList>& celluList, const vector<bList>& hem
 //End of function
 }
 
-//Returns the largest number of uninterrupted "true" elements of free_positions 
-int largest_gap(bool *free_positions, int size, int& gap_start){
-    int gap_size = 0;
-    int max_gap_size = 0;
-    int i=0;
-    while(i<size){
-        if(gap_size == 0)
-            gap_start = i;
-        if(free_positions[i] == true){
-            gap_size++;
-
-            max_gap_size = findmax(gap_size,max_gap_size);
-        }
-        else{
-            gap_size = 0;
-        }
-        i++;
-    }
-    return gap_size;
-}
 
 
-//Looks through all reaction tables and looks at the relative fraction of reactions associated to each enzyme 
+//Looks through all reaction tables and looks at the relative fraction of reactions associated to each enzyme
 void check_reaction_table_distribution(const std::vector<TList>& Table_cellu, const std::vector<TList>& Table_hemi, TList& Table_lign, params& par){
     double a0 = 0;
     double EG_fraction = 0;
@@ -2679,7 +2791,7 @@ void check_reaction_table_distribution(const std::vector<TList>& Table_cellu, co
                 BGL_fraction+=*Table_cellu[i].liste_prop[j];
             else if(Table_cellu[i].indic_action[j] != 6){
                 cout << "In function check_reaction_table_distribution: Table_cellu contains reactions not associated to EG, CBH or BGL" << endl;
-            }            
+            }
         }
     }
     for(int i=0;i<Table_hemi.size();i++){
@@ -2708,9 +2820,9 @@ void check_reaction_table_distribution(const std::vector<TList>& Table_cellu, co
     par.lign_fraction.push_back(lign_fraction);
     if(par.time_mean.size() > 0)
         par.timestamp.push_back(par.time_mean[par.time_mean.size()-1]);
-    else 
+    else
         par.timestamp.push_back(0);
-//End of function    
+//End of function
 }
 
 //Returns the smaller of a and b
@@ -2725,7 +2837,7 @@ int findmin(int a, int b){
         cout << "In function findmin: neither a<b, a>b, or a== b are true" << endl;
         return 0;
     }
-//End of function    
+//End of function
 }
 
 //Returns the larger of a and b
@@ -2740,7 +2852,7 @@ int findmax(int a, int b){
         cout << "In function findmin: neither a<b, a>b, or a== b are true" << endl;
         return 0;
     }
-//End of function    
+//End of function
 }
 
 
@@ -2750,7 +2862,7 @@ double dist(double dx, double dy, double dz){
 }
 
 
-void lignin_glue(params& par, vector<bList>& cellu, vector<TList>& Table_cellu, vector<TList>& Table_hemi, TList& Table_lign, vector<double>& chem_entities, int nbr_poly_lign){
+void lignin_glue(params& par, vector<bList>& cellu, vector<TList>& Table_cellu, vector<TList>& Table_hemi, TList& Table_lign, vector<double>& chem_entities, int nbr_poly_lign, int& nbr_Glc_pdt, int& nbr_cellobiose){
     int test1 = 0;
     double propensite = 0;
     double test = 0;
@@ -2781,17 +2893,17 @@ void lignin_glue(params& par, vector<bList>& cellu, vector<TList>& Table_cellu, 
         }
         else if(enzyme_number == 2){
             chem_entities[enzyme_number-1] -=1;// * chem_entities[enzyme_number]/double(par.init_CBH);
-            par.propensities[enzyme_number-1] = prop(par,enzyme_number,chem_entities);
-            par.crystal_propensities[enzyme_number-1] = par.crystal_modifier_cellu * prop(par,enzyme_number,chem_entities);//Since we use pointers for the propensities, this is all we need to change
+            par.propensities[enzyme_number-1] = prop(par,enzyme_number,chem_entities,nbr_Glc_pdt,nbr_cellobiose);
+            par.crystal_propensities[enzyme_number-1] = par.crystal_modifier_cellu * prop(par,enzyme_number,chem_entities,nbr_Glc_pdt,nbr_cellobiose);//Since we use pointers for the propensities, this is all we need to change
             par.N_enzymes_glued++;
             int glued_enzyme = int(drand48()*par.CBH_enzymes.size());
             if(par.CBH_enzymes[glued_enzyme].attached == true){
                 deletereaction(Table_cellu[par.CBH_enzymes[glued_enzyme].poly_attached], Table_cellu, 1, par.CBH_enzymes[glued_enzyme].poly_attached, par.CBH_enzymes[glued_enzyme].bond_attached,2);
-                if(par.free_poly_ends.find(cantor_pair_two(par.CBH_enzymes[glued_enzyme].poly_attached,par.CBH_enzymes[glued_enzyme].bond_attached)) == par.free_poly_ends.end() ){                    
+                if(par.free_poly_ends.find(cantor_pair_two(par.CBH_enzymes[glued_enzyme].poly_attached,par.CBH_enzymes[glued_enzyme].bond_attached)) == par.free_poly_ends.end() ){
                     par.free_poly_ends.insert({cantor_pair_two(par.CBH_enzymes[glued_enzyme].poly_attached,par.CBH_enzymes[glued_enzyme].bond_attached),make_tuple(par.CBH_enzymes[glued_enzyme].poly_attached,par.CBH_enzymes[glued_enzyme].bond_attached)});
                     par.N_free_ends++;
                     if(true){
-                        addreaction(par, false,Table_cellu,par.CBH_enzymes[glued_enzyme].poly_attached,par.CBH_enzymes[glued_enzyme].bond_attached,1,6,prop(par,6,chem_entities),-1);
+                        addreaction(par, false,Table_cellu,par.CBH_enzymes[glued_enzyme].poly_attached,par.CBH_enzymes[glued_enzyme].bond_attached,1,6,prop(par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),-1);
                     }
                 }
                 par.CBH_enzymes.erase(par.CBH_enzymes.begin() + glued_enzyme);
@@ -2799,8 +2911,8 @@ void lignin_glue(params& par, vector<bList>& cellu, vector<TList>& Table_cellu, 
             else{
                 par.CBH_enzymes.erase(par.CBH_enzymes.begin() + glued_enzyme);
                 par.N_free_CBH--;
-                par.propensities[5] = prop(par,6,chem_entities);
-                par.crystal_propensities[5] = par.crystal_modifier_cellu * prop(par,6,chem_entities);//Since we use pointers for the propensities, this is all we need to change
+                par.propensities[5] = prop(par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose);
+                par.crystal_propensities[5] = par.crystal_modifier_cellu * prop(par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose);//Since we use pointers for the propensities, this is all we need to change
 /*                if(propensite > 0){
                     for(int i = 0; i<Table_cellu.size();i++){
                         for(int j=0; j<Table_cellu[i].nbr_element; j++){
@@ -2819,24 +2931,24 @@ void lignin_glue(params& par, vector<bList>& cellu, vector<TList>& Table_cellu, 
                                 j--;
                             }
                         }
-                    }                    
+                    }
                 }*/
             }
         }
         else if(enzyme_number == 3){
             chem_entities[enzyme_number-1] -=1;// * chem_entities[enzyme_number]/double(par.init_BGL);
-            par.propensities[enzyme_number-1] = prop(par,enzyme_number,chem_entities);
-            par.crystal_propensities[enzyme_number-1] = par.crystal_modifier_cellu * prop(par,enzyme_number,chem_entities);//Since we use pointers for the propensities, this is all we need to change
+            par.propensities[enzyme_number-1] = prop(par,enzyme_number,chem_entities,nbr_Glc_pdt,nbr_cellobiose);
+            par.crystal_propensities[enzyme_number-1] = par.crystal_modifier_cellu * prop(par,enzyme_number,chem_entities,nbr_Glc_pdt,nbr_cellobiose);//Since we use pointers for the propensities, this is all we need to change
             par.N_enzymes_glued++;
         }
         else if(enzyme_number == 4){
             chem_entities[enzyme_number-1] -=1;// * chem_entities[enzyme_number]/double(par.init_XYL);
-            par.propensities[enzyme_number-1] = prop(par,enzyme_number,chem_entities);
-            par.crystal_propensities[enzyme_number-1] = par.crystal_modifier_cellu * prop(par,enzyme_number,chem_entities);//Since we use pointers for the propensities, this is all we need to change
+            par.propensities[enzyme_number-1] = prop(par,enzyme_number,chem_entities,nbr_Glc_pdt,nbr_cellobiose);
+            par.crystal_propensities[enzyme_number-1] = par.crystal_modifier_cellu * prop(par,enzyme_number,chem_entities,nbr_Glc_pdt,nbr_cellobiose);//Since we use pointers for the propensities, this is all we need to change
             par.N_enzymes_glued++;
         }
 
-    
+
 
         if(chem_entities[enzyme_number-1] < 0)
             chem_entities[enzyme_number-1] = 0;
@@ -2844,12 +2956,12 @@ void lignin_glue(params& par, vector<bList>& cellu, vector<TList>& Table_cellu, 
         if(enzyme_number != 4){
             for(int i=0;i<Table_cellu.size();i++){
                 Table_cellu[i].calcTableProp();
-            }            
+            }
         }
         else{
             for(int i=0;i<Table_hemi.size();i++){
                 Table_hemi[i].calcTableProp();
-            }            
+            }
         }
 
 
@@ -2883,11 +2995,11 @@ void lignin_glue(params& par, vector<bList>& cellu, vector<TList>& Table_cellu, 
     else{
         chem_entities.at(4)=par.nbr_monolignol - par.nbr_lignin_blocked;//+ chem_entities[0] + chem_entities[1] + chem_entities[2] + chem_entities[3];
     }
-    par.propensities[4] = prop(par,5,chem_entities);
- 
-    Table_lign.prop_sum = par.propensities[4]; 
+    par.propensities[4] = prop(par,5,chem_entities,nbr_Glc_pdt,nbr_cellobiose);
+
+    Table_lign.prop_sum = par.propensities[4];
 //    cout << Table_lign.liste_prop[0] << endl;
-//End of function    
+//End of function
 }
 
 
@@ -2909,13 +3021,13 @@ double box_muller(double sigma, double mu ){
         rnum1 = drand48();//Generates random numbers between 0 and 1
         rnum2 = drand48();
         z0=sqrt(-2*log(rnum1))*cos(2*M_PI*rnum2);
-        z0=(sigma*z0+mu);           
+        z0=(sigma*z0+mu);
     }
 
 
 //    cout << z0 << endl;
     return z0;
-//End of function    
+//End of function
 }
 
 int find_poly(const vector<bList>& polyList, const int x, const int y, const int z){
@@ -2935,7 +3047,7 @@ int find_poly(const vector<bList>& polyList, const int x, const int y, const int
         }
     }
     return -1;//This is the case if there is a lignin polymer at the searched position layer or the searched position is outside the range of possible positions (for example when a hole is created at a corner of the hull)
-//End of function    
+//End of function
 }
 
 
@@ -2955,7 +3067,7 @@ int find_bond(const bList& poly, int z_selected){
 
     cout << "In function find_bond(): z_selected is not contained in the argument polymer; z_selected = " << z_selected << "; z[0] = " << poly.z[0] << "; z[len_poly-1] = " << poly.z[poly.len_poly-1] << endl;
     return -1;
-//End of function    
+//End of function
 }
 
 void hole_cutter(std::vector<bList>& polyList, std::vector<TList>& Table_hemi, params& par, int& difference_monomers, int& nbr_poly, int material){
@@ -3002,7 +3114,7 @@ void hole_cutter(std::vector<bList>& polyList, std::vector<TList>& Table_hemi, p
         //============================= Make a copy of the polymer that is shortened ====================================
 
         polyList.push_back(bList());
-        nbr_poly++;            
+        nbr_poly++;
         new_poly_index = polyList.size()-1;
 
 
@@ -3013,7 +3125,7 @@ void hole_cutter(std::vector<bList>& polyList, std::vector<TList>& Table_hemi, p
 
         if(material == 2){
             Table_hemi.push_back(TList());//Make the new reaction list associated to the new polymer, if it is a hemicellulose polymer
-            initTList(Table_hemi[new_poly_index], new_poly_index);//Initialize it                        
+            initTList(Table_hemi[new_poly_index], new_poly_index);//Initialize it
         }
 
         for(int i=0; i<polyList[poly_selected].len_poly; i++)//Make the new polymer into a copy of the old one before tayloring
@@ -3042,244 +3154,6 @@ void hole_cutter(std::vector<bList>& polyList, std::vector<TList>& Table_hemi, p
 
 }
 
-/*
-void hole_cutter(vector<bList>& celluList, vector<bList>& hemiList, vector<bList>& lignList, vector<TList>& Table_hemi, params& par, int& difference_hemi, int& difference_lign, int& nbr_poly_hemi, int& nbr_poly_lign, bool& error_bool, int material){
-
-
-
-    if(difference_hemi == 0 and difference_lign == 0){
-        return;
-    }
-
-    unordered_map<int,vector<int>> possible_coordinates;
-    vector<int> keys;
-    vector<int> coordinates_to_add;
-    coordinates_to_add.push_back(0);
-    coordinates_to_add.push_back(0);
-    int key_to_add = 0;
-
-    for(int i=0; i < nbr_poly_hemi; i++){
-        key_to_add = cantor_pair_two(hemiList[i].x, hemiList[i].y);
-        if(possible_coordinates.count(key_to_add) == 0){
-            keys.push_back(key_to_add);
-            coordinates_to_add[0] = hemiList[i].x;
-            coordinates_to_add[1] = hemiList[i].y;
-            possible_coordinates.insert(make_pair(key_to_add, coordinates_to_add));
-        }
-    }
-    for(int i=0; i < nbr_poly_lign; i++){
-        key_to_add = cantor_pair_two(lignList[i].x, lignList[i].y);
-        if(possible_coordinates.count(key_to_add) == 0){
-            keys.push_back(key_to_add);
-            coordinates_to_add[0] = lignList[i].x;
-            coordinates_to_add[1] = lignList[i].y;
-            possible_coordinates.insert(make_pair(key_to_add, coordinates_to_add));
-        }
-    }
-
-
-    int max_hole_size = int(0.1*par.length_fibril);
-    if(max_hole_size < 2*par.enzyme_radius)
-        max_hole_size = 2*par.enzyme_radius;
-    int z_hole_bottom = 0;
-    int x_hole, y_hole;
-    int z_min = 0;
-    int z_max = par.length_fibril - 1;
-    int hole_center_diameter = 0;
-    int coordinate_index = 0;
-    int diameter = 0;
-    int left_right_dist = 0;
-    vector<vector<int>> hole_coordinates;    
-
-    int max_loop_count = 1000*par.length_fibril*nbr_poly_hemi;
-    int loop_count = 0;
-    while(difference_hemi > 0 or difference_lign > 0){
-        if(loop_count >= max_loop_count){
-            cout << "In function hole_cutter: Too many loops. Stopping" << endl;
-            exit(1);
-        }
-        if(par.verbose == true){
-            cout << "hole cutting" << endl;
-            cout << "difference_hemi = " << difference_hemi << "; difference_lign = " << difference_lign << endl;
-        }
-        //Specify location of hole
-        hole_coordinates.clear();
-        z_hole_bottom = int(drand48() * (par.length_fibril-1));
-        if(z_max - z_hole_bottom < max_hole_size){
-            hole_center_diameter = z_max - z_hole_bottom;
-        }
-        else{
-            hole_center_diameter = int(drand48() * max_hole_size);
-        }
-
-        coordinate_index = int(drand48() * keys.size());
-        x_hole = possible_coordinates[keys[coordinate_index]][0];
-        y_hole = possible_coordinates[keys[coordinate_index]][1];        
-
-
-
-        //Build the vector containing the possible positions of bonds to be erased
-        for(int i = 0; i < hole_center_diameter; i++){
-            hole_coordinates.push_back(vector<int>());
-            hole_coordinates[i].push_back(x_hole);
-            hole_coordinates[i].push_back(y_hole);
-            hole_coordinates[i].push_back(z_hole_bottom+i);
-        }
-        diameter = hole_center_diameter - 2;
-        left_right_dist = 0;
-         while(diameter > 0){
-            left_right_dist++;
-            for(int i=left_right_dist; i < diameter; i++){
-            hole_coordinates.push_back(vector<int>());
-            hole_coordinates[hole_coordinates.size()-1].push_back(x_hole+left_right_dist);
-            hole_coordinates[hole_coordinates.size()-1].push_back(y_hole);
-            hole_coordinates[hole_coordinates.size()-1].push_back(z_hole_bottom+i);
-            hole_coordinates.push_back(vector<int>());
-            hole_coordinates[hole_coordinates.size()-1].push_back(x_hole-left_right_dist);
-            hole_coordinates[hole_coordinates.size()-1].push_back(y_hole);
-            hole_coordinates[hole_coordinates.size()-1].push_back(z_hole_bottom+i);
-            hole_coordinates.push_back(vector<int>());
-            hole_coordinates[hole_coordinates.size()-1].push_back(x_hole);
-            hole_coordinates[hole_coordinates.size()-1].push_back(y_hole+left_right_dist);
-            hole_coordinates[hole_coordinates.size()-1].push_back(z_hole_bottom+i);
-            hole_coordinates.push_back(vector<int>());
-            hole_coordinates[hole_coordinates.size()-1].push_back(x_hole);
-            hole_coordinates[hole_coordinates.size()-1].push_back(y_hole-left_right_dist);
-            hole_coordinates[hole_coordinates.size()-1].push_back(z_hole_bottom+i);
-            }
-            diameter -= 2;
-        }
-
-
-        //Cut the hole
-
-        int material = 0;
-        int poly_index = 0;
-        int z_index = 0;
-        int new_poly_index = 0;
-        for(int i=0;i<hole_coordinates.size();i++){
-            if(find_specific_bond(celluList, hemiList, lignList,hole_coordinates[i][0], hole_coordinates[i][1], hole_coordinates[i][2], poly_index, z_index, material) == true){
-                if(material == 2 and difference_hemi > 0){
-                    if(z_index == hemiList[poly_index].len_poly-1){
-                        taylorOldPoly(hemiList[poly_index],z_index);
-                        difference_hemi--;
-                    }
-                    else if (z_index == 0)
-                    {
-                        taylorNewPoly(hemiList[poly_index],z_index);
-                        difference_hemi--;
-                    }
-                    else{
-                        hemiList.push_back(bList());
-                        nbr_poly_hemi++;
-                        new_poly_index = hemiList.size()-1;
-                        hemiList[new_poly_index].x = hemiList[poly_index].x;
-                        hemiList[new_poly_index].y = hemiList[poly_index].y;
-                        hemiList[new_poly_index].set_z(hemiList[poly_index].z[z_index]);
-                        Table_hemi.push_back(TList());
-                        initTList(Table_hemi[Table_hemi.size()-1],Table_hemi.size()-1);        
-                        //cout << Table_hemi.size() << endl;
-                        hemiList[new_poly_index].reactionTable = Table_hemi.size() - 1;
-
-
-                        for(int j = 0;j<hemiList[poly_index].len_poly;j++){
-                            addbond(hemiList[new_poly_index],j,1,1,0);
-                            hemiList[new_poly_index].z[j] = hemiList[poly_index].z[j];
-                            hemiList[new_poly_index].status[j] = hemiList[poly_index].status[j];
-                            hemiList[new_poly_index].bond_type[j] = hemiList[poly_index].bond_type[j];
-                            hemiList[new_poly_index].crystalline[j] = hemiList[poly_index].crystalline[j];
-                            hemiList[new_poly_index].N_blocked_positions[j] = hemiList[poly_index].N_blocked_positions[j];
-                        }
-                        taylorOldPoly(hemiList[poly_index],z_index);
-                        taylorNewPoly(hemiList[new_poly_index],z_index);
-                    }
-
-                }
-                else if(material == 3 and difference_lign > 0){
-                    if(z_index == lignList[poly_index].len_poly-1){
-                        taylorOldPoly(lignList[poly_index],z_index);
-                        difference_lign--;
-                    }
-                    else if (z_index == 0)
-                    {
-                        taylorNewPoly(lignList[poly_index],z_index);
-                        difference_lign--;
-                    }
-                    else{
-                        lignList.push_back(bList());
-                        nbr_poly_lign++;
-                        new_poly_index = lignList.size()-1;
-                        lignList[new_poly_index].x = lignList[poly_index].x;
-                        lignList[new_poly_index].y = lignList[poly_index].y;
-                        lignList[new_poly_index].set_z(lignList[poly_index].z[z_index]);
-
-
-                        for(int j = 0;j<lignList[poly_index].len_poly;j++){
-                            addbond(lignList[new_poly_index],j,1,1,0);
-                            lignList[new_poly_index].z[j] = lignList[poly_index].z[j];
-                            lignList[new_poly_index].status[j] = lignList[poly_index].status[j];
-                            lignList[new_poly_index].bond_type[j] = lignList[poly_index].bond_type[j];
-                            lignList[new_poly_index].crystalline[j] = lignList[poly_index].crystalline[j];
-                            lignList[new_poly_index].N_blocked_positions[j] = lignList[poly_index].N_blocked_positions[j];
-                        }
-                        taylorOldPoly(lignList[poly_index],z_index);
-                        taylorNewPoly(lignList[new_poly_index],z_index);
-                    }
-                }
-            }
-
-        }
-
-
-        if(difference_hemi < 0){
-            difference_hemi = 0;
-        }
-        if(difference_lign < 0){
-            difference_lign = 0;
-        }
-
-        loop_count++;
-    }
-
-    //In case the above was not sufficient in removing all required bonds:
-    while(difference_hemi > 0){
-        int poly_to_cut = int(drand48()*(hemiList.size()-1));
-        if(drand48()< 0.5){//50 percent chance each for removing the first bond or the last bond of the polymer
-            taylorOldPoly(hemiList[poly_to_cut], hemiList[poly_to_cut].len_poly-1);//Erase last bond of polymer
-        }
-        else{
-            taylorNewPoly(hemiList[poly_to_cut], 0);//Erase first bond of polymer
-        }
-        difference_hemi--;
-    }
-    while(difference_lign > 0){
-        int poly_to_cut = int(drand48()*(lignList.size()-1));
-        if(drand48()< 0.5){//50 percent chance each for removing the first bond or the last bond of the polymer
-            taylorOldPoly(lignList[poly_to_cut], lignList[poly_to_cut].len_poly-1);//Erase last bond of polymer
-        }
-        else{
-            taylorNewPoly(lignList[poly_to_cut], 0);//Erase first bond of polymer
-        }
-        difference_lign--;
-    }
-
-cout << "End of hole-cutter function; difference_hemi = " << difference_hemi << "; difference_lign = " << difference_lign << endl;
-//END OF FUNCTION
-
-}
-
-
-
-int free_bonds(int enzyme_radius, int mode_code){
-    if(enzyme_radius == 0)
-        return 1;
-    int square_diameter = 2*enzyme_radius + 1;
-    int nbr_holes_per_plane = square_diameter * enzyme_radius;//We only need half of bonds free
-    return(0.5*nbr_holes_per_plane * square_diameter);
-
-//End of function    
-}*/
-
 
 
 
@@ -3294,7 +3168,7 @@ bool is_valid_pos(const vector<bList>& celluList, const vector<bList>& hemiList,
     for(int i=0;i<hemiList.size();i++){
         if(hemiList[i].x == x_pos and hemiList[i].y == y_pos){
             return true;
-        }  
+        }
     }
     for(int i=0;i<lignList.size();i++){
         if(lignList[i].x == x_pos and lignList[i].y == y_pos){
@@ -3304,7 +3178,7 @@ bool is_valid_pos(const vector<bList>& celluList, const vector<bList>& hemiList,
 
 
     return false;
-//End of function    
+//End of function
 }
 
 //Returns true if a bond exists at the specified x-, y- and z coordinates
@@ -3326,7 +3200,7 @@ bool bond_exists(const vector<bList>& celluList, const vector<bList>& hemiList, 
                     return true;
                 }
             }
-        }  
+        }
     }
     for(int i=0;i<lignList.size();i++){
         if(lignList[i].x == x_pos and lignList[i].y == y_pos){
@@ -3340,7 +3214,7 @@ bool bond_exists(const vector<bList>& celluList, const vector<bList>& hemiList, 
 
 
     return false;
-//End of function    
+//End of function
 
 }
 
@@ -3367,7 +3241,7 @@ void min_max_cellu_hemi_lign(const vector<bList>& celluList, params& par){
 int cantor_pair_three(int a, int b, int c){
     int offset = 10;
     int two_pair = .5*(a+offset + b+offset)*(a+offset + b+offset + 1) + b+offset;
-    return .5*(two_pair + c+offset)*(two_pair + c+offset + 1) + c+offset;    
+    return .5*(two_pair + c+offset)*(two_pair + c+offset + 1) + c+offset;
 //End of function
 }
 
@@ -3436,14 +3310,14 @@ bool CBH_enzyme_attached(params& par, int poly, int bond){
 }
 
 
-void update_attachment_reactions(params& par, std::vector<bList>& cellu, std::vector<TList>& Table_cellu, std::vector<double>& chem_entities){
-    par.propensities[5] = prop(par,6,chem_entities);
-    par.crystal_propensities[5] = par.crystal_modifier_cellu * prop(par,6,chem_entities);
+void update_attachment_reactions(params& par, std::vector<bList>& cellu, std::vector<TList>& Table_cellu, std::vector<double>& chem_entities, int& nbr_Glc_pdt, int& nbr_cellobiose){
+    par.propensities[5] = prop(par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose);
+    par.crystal_propensities[5] = par.crystal_modifier_cellu * prop(par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose);
     for(int i=0;i<Table_cellu.size();i++){
         Table_cellu[i].calcTableProp();
     }
     int reaction_type = 2;
-    double propensite = prop(par, reaction_type,chem_entities);
+    double propensite = prop(par, reaction_type,chem_entities,nbr_Glc_pdt,nbr_cellobiose);
     for(int i=0;i<par.CBH_enzymes.size();i++){
         if(par.CBH_enzymes[i].attached == true){
             deletereaction(Table_cellu[par.CBH_enzymes[i].poly_attached],Table_cellu, 1, par.CBH_enzymes[i].poly_attached, par.CBH_enzymes[i].bond_attached,6);
@@ -3452,7 +3326,7 @@ void update_attachment_reactions(params& par, std::vector<bList>& cellu, std::ve
 
         }
     }
- 
+
 
 //End of function
 }
@@ -3508,7 +3382,7 @@ void distribute_lignin_covering(params& par,std::vector<bList>& lign){
                 if(count_covered > N_covered_bonds){
                     if(lower_index < covering_lower and lower_index != upper_index){
                         lign[i].covering[lower_index] = false;
-                        count_covered--;                    
+                        count_covered--;
                         lower_index++;
                     }
                 }
@@ -3536,7 +3410,7 @@ void check_for_blocked_ends(std::vector<bList>& cellu, std::vector<TList>& Table
             if(Table_cellu[i].indic_action[j] !=2){
                 test = false;
                 bond_selected = Table_cellu[i].num_bond[j];
-                for(int k=0;k<par.CBH_enzymes.size();k++){                    
+                for(int k=0;k<par.CBH_enzymes.size();k++){
                     if(par.CBH_enzymes[k].attached == true){
                         poly_attached = par.CBH_enzymes[k].poly_attached;
                         bond_attached = par.CBH_enzymes[k].bond_attached;

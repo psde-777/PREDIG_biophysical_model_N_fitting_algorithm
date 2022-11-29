@@ -25,8 +25,20 @@
 #include "neighborList.hpp"
 
 
-class CBH_enzyme{//The processive CBH enzymes are implemented as objects with a defined attachment location and duration. They can attach and detach
+class CBH_enzyme{
 
+
+    /**
+     * The processive CBH enzymes are implemented as objects with a defined attachment location and duration. They can attach and detach
+     * 
+     * @param attached Set to true if the enzyme is attached to a bond, and false otherwise
+     * @param attachment_time The time when the enzyme attached
+     * @param attachment_duration The overall time the enzyme should remain attached
+     * @param poly_attached The polymer to which the enzyme is attached
+     * @param bond_attached The bond to which the enzyme is attached
+     * @param radius The radius of the enzyme
+     * @param enzyme_neighbors The bonds around the enzyme which are closer to bond_attached than the radius of the enzyme
+     * **/
     public:
         bool attached;
         double attachment_time;
@@ -75,8 +87,32 @@ class CBH_enzyme{//The processive CBH enzymes are implemented as objects with a 
             this->bond_attached = -1;
             this->enzyme_neighbors = neighborList();            
         }
-        void init_neighbors(double x, double y, double z, double r_sphere, const double mid_x, const double mid_y, double r_monomer,
-                     const std::vector<bList>& celluList, const std::vector<bList>& hemiList, const std::vector<bList>& lignList)
+
+        /**
+         * Initializes the bonds neighboring the enzymes
+         * @param x The x-coordinate of the bond to which the enzymne is attached
+         * @param y The y-coordinate of the bond to which the enzymne is attached
+         * @param z The z-coordinate of the bond to which the enzymne is attached
+         * @param r_sphere The radius around which to build the neighbors TODO: this is redundant with the radius of the enzyme!
+         * @param mid_x The x-coordinate of the center of the microfibril
+         * @param mid_y The x-coordinate of the center of the microfibril
+         * @param r_monomer The radius of a single monomer (set in params)
+         * @param celluList The vector containing all cellu polymers
+         * @param hemiList The vector containing all hemi polymers
+         * @param lignList The vector containing all lign polymers
+         * 
+         * @return void
+         * **/
+        void init_neighbors(double x,
+                            double y,
+                            double z,
+                            double r_sphere,
+                            const double mid_x,
+                            const double mid_y,
+                            double r_monomer, 
+                            const std::vector<bList>& celluList,
+                            const std::vector<bList>& hemiList,
+                            const std::vector<bList>& lignList)
         {
               this->enzyme_neighbors = neighborList(x,y,z,r_sphere,r_monomer,celluList);
 //            this->enzyme_neighbors = neighborList(x,y,z,r_sphere,mid_x,mid_y,r_monomer,celluList,hemiList,lignList);

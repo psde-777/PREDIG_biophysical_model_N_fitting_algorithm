@@ -23,21 +23,30 @@ def gradient():
 
     keywords = np.loadtxt("keywords.txt",dtype=str)
 
+    #Maximum values of each parameter
+    max_vals_kin = np.loadtxt("max_kin_vals.txt")
+    max_vals_init = np.loadtxt("max_init_vals.txt")
+
+    #Relative minimum values of each parameter
+    rel_min_vals_kin = np.loadtxt("min_kin_vals.txt")
+    rel_min_vals_kin[:] /= max_vals_kin[:] 
+    rel_min_vals_init = np.loadtxt("min_init_vals.txt")
+    rel_min_vals_init[:] /= max_vals_init[:]
 
 
     #Generation N-2
     old_var = np.loadtxt("old_smallest_var.txt");
     old_kin_data = np.loadtxt("old_best_kin_specs.txt")#//
-    old_init_data = [np.loadtxt("old_best_init_specs_" + keyword + ".txt") for keyword in keywords];
+    old_kin_data[:] /= max_vals_kin[:]
+    old_init_data = [np.loadtxt("old_best_init_specs_" + keyword + ".txt")/max_vals_init[:] for keyword in keywords];
 
     #Generation N-1
     new_var = np.loadtxt("smallest_var.txt");
     new_kin_data = np.loadtxt("best_kin_specs.txt")
-    new_init_data = [np.loadtxt("best_init_specs_" + keyword + ".txt") for keyword in keywords];
+    new_kin_data[:] /= max_vals_kin[:]
+    new_init_data = [np.loadtxt("best_init_specs_" + keyword + ".txt")/max_vals_init[:] for keyword in keywords];
 
-    #Maximum values of each parameter
-    max_vals_kin = np.loadtxt("max_kin_vals.txt")
-    max_vals_init = np.loadtxt("max_init_vals.txt")
+
 
     #Denotes which parameters should be varied
     variation_bools_kin = np.loadtxt("kin_params_to_randomize.txt",dtype = int)#Contains boolean values for which parameters are varied
@@ -59,7 +68,6 @@ def gradient():
                 init_gradients[i][j] = ((new_var - old_var) / (new_init_data[i][j]-old_init_data[i][j]))
 
 
-
     out_kin_data = np.full(N_kin_vals,0.)
     out_init_data = [np.full(N_init_vals,0.) for keyword in keywords]
 
@@ -68,38 +76,40 @@ def gradient():
         step_size = delta;
         for i in range(N_kin_vals):
             if variation_bools_kin[i] == 1:
-                value_to_set = new_kin_data[i] - step_size * kin_gradient[i];
-                if value_to_set > 0 and value_to_set <= max_vals_kin[i]:
+                value_to_set = new_kin_data[i] - step_size;
+                if value_to_set > rel_min_vals_kin[i] and value_to_set <= 1.:
                     out_kin_data[i] = value_to_set
                 else:
-                    print("Not changing kin param " + str(i) + " from " + str(new_kin_data[i])+ " to " + str(value_to_set))
+                    print("Not changing kin param %d from %1.4f to %1.4f" % (i,new_kin_data[i],value_to_set))
                     out_kin_data[i] = new_kin_data[i]
             else:
                 out_kin_data[i] = new_kin_data[i]
         with open("family_" + parent_folder + "/Generation_" + str(generation) + "/Run_" + str(j+1) + "/Params/kinetic_parameters.txt","w") as f:
             for k,data_point in enumerate(out_kin_data):
-                if k == 4:
-                    f.write("%d\t" % data_point)
+                val = data_point * max_vals_kin[k]
+                if k == 4 or k == 13:
+                    f.write("%d\t" % val)
                 else:
-                    f.write("%1.8f\t" % data_point)
+                    f.write("%1.8f\t" % val)
 
         for i,keyword in enumerate(keywords):
             for k in range(N_init_vals):
                 if variation_bools_init[k] == 1:
-                    value_to_set = new_init_data[i][k] - step_size * init_gradients[i][k];
-                    if value_to_set > 0 and value_to_set <= max_vals_init[k]:
+                    value_to_set = new_init_data[i][k] - step_size;
+                    if value_to_set > rel_min_vals_init[k] and value_to_set <= 1.:
                         out_init_data[i][k] = value_to_set
                     else:
-                        print("Not changing init param " + str(k) + " from " + str(new_init_data[i][k])+ " to " + str(value_to_set))
+                        print("Not changing init param %d from %1.4f to %1.4f" % (k,new_init_data[i][k],value_to_set))
                         out_init_data[i][k] = new_init_data[i][k]
                 else:
                     out_init_data[i][k] = new_init_data[i][k]
             with open("family_" + parent_folder + "/Generation_" + str(generation) + "/Run_" + str(j+1) + "/Params/initial_configuration_parameters_" + keyword + ".txt","w") as f:
                 for k,data_point in enumerate(out_init_data[i]):
-                    if k < 6:
-                        f.write("%d\t" % data_point)
+                    val = data_point * max_vals_init[k]
+                    if k < 6 or k == 11 or k == 12:
+                        f.write("%d\t" % val)
                     else:
-                        f.write("%1.8f\t" % data_point)
+                        f.write("%1.8f\t" % val)
 ################################################################################################################
 
 
@@ -108,14 +118,20 @@ def random_sampling():
 
     keywords = np.loadtxt("keywords.txt",dtype=str)
 
-    #Generation N-1
-    new_var = np.loadtxt("smallest_var.txt");
-    new_kin_data = np.loadtxt("best_kin_specs.txt")
-    new_init_data = [np.loadtxt("best_init_specs_" + keyword + ".txt") for keyword in keywords];
-
     #Maximum values of each parameter
     max_vals_kin = np.loadtxt("max_kin_vals.txt")
     max_vals_init = np.loadtxt("max_init_vals.txt")
+
+    #Relative minimum values of each parameter
+    rel_min_vals_kin = np.loadtxt("min_kin_vals.txt")
+    rel_min_vals_kin[:] /= max_vals_kin[:] 
+    rel_min_vals_init = np.loadtxt("min_init_vals.txt")
+    rel_min_vals_init[:] /= max_vals_init[:]
+
+    #Generation N-1
+    new_var = np.loadtxt("smallest_var.txt");
+    new_kin_data = np.loadtxt("best_kin_specs.txt") / max_vals_kin[:]
+    new_init_data = [np.loadtxt("best_init_specs_" + keyword + ".txt") / max_vals_init[:] for keyword in keywords];
 
     #Denotes which parameters should be varied
     variation_bools_kin = np.loadtxt("kin_params_to_randomize.txt",dtype = int)#Contains boolean values for which parameters are varied
@@ -134,39 +150,41 @@ def random_sampling():
         for i in range(N_kin_vals):
             step_size = rnum()*delta;
             if variation_bools_kin[i] == 1:
-                value_to_set = new_kin_data[i] + step_size * new_kin_data[i];
-                if value_to_set > 0 and value_to_set <= max_vals_kin[i]:
+                value_to_set = new_kin_data[i] + step_size;
+                if value_to_set > rel_min_vals_kin[i] and value_to_set <= 1.:
                     out_kin_data[i] = value_to_set
                 else:
-                    print("Not changing kin param " + str(i) + " from " + str(new_kin_data[i])+ " to " + str(value_to_set))
+                    print("Not changing kin param %d from %1.4f to %1.4f" % (i,new_kin_data[i],value_to_set))
                     out_kin_data[i] = new_kin_data[i]
             else:
                 out_kin_data[i] = new_kin_data[i]
         with open("family_" + parent_folder + "/Generation_" + str(generation) + "/Run_" + str(j+1) + "/Params/kinetic_parameters.txt","w") as f:
             for k,data_point in enumerate(out_kin_data):
-                if k == 4:
-                    f.write("%d\t" % data_point)
+                val = data_point * max_vals_kin[k]
+                if k == 4 or k == 13:
+                    f.write("%d\t" % val)
                 else:
-                    f.write("%1.8f\t" % data_point)
+                    f.write("%1.8f\t" % val)
 
         for i,keyword in enumerate(keywords):
             for k in range(N_init_vals):
                 step_size = rnum()*delta;
                 if variation_bools_init[k] == 1:
-                    value_to_set = new_init_data[i][k] + step_size * new_init_data[i][k];
-                    if value_to_set > 0 and value_to_set <= max_vals_init[k]:
+                    value_to_set = new_init_data[i][k] + step_size;
+                    if value_to_set > rel_min_vals_init[k] and value_to_set <= 1.:
                         out_init_data[i][k] = value_to_set
                     else:
-                        print("Not changing init param " + str(k) + " from " + str(new_init_data[i][k])+ " to " + str(value_to_set))
+                        print("Not changing init param %d from %1.4f to %1.4f" % (k,new_init_data[i][k],value_to_set))
                         out_init_data[i][k] = new_init_data[i][k]
                 else:
                     out_init_data[i][k] = new_init_data[i][k]
             with open("family_" + parent_folder + "/Generation_" + str(generation) + "/Run_" + str(j+1) + "/Params/initial_configuration_parameters_" + keyword + ".txt","w") as f:
                 for k,data_point in enumerate(out_init_data[i]):
-                    if k < 6:
-                        f.write("%d\t" % data_point)
+                    val = data_point * max_vals_init[k]
+                    if k < 6 or k == 11 or k == 12:
+                        f.write("%d\t" % val)
                     else:
-                        f.write("%1.8f\t" % data_point)
+                        f.write("%1.8f\t" % val)
 ################################################################################################################
 
 

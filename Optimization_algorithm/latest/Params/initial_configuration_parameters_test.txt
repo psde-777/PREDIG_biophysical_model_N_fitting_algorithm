@@ -1,5 +1,7 @@
-0	0	0	0	0 	0	0	0	0	0	1	1	1	1	0
+20	52	15	61	200		1 	1	0.25	0.15		0.00000000	 0.67		  0.1514230		0 		0 		0.60000
 
 
-#If set to 0, the corresponding value in initial_parameters_foo.txt will not be varied
+
+
+
 #>>init_EG >> init_CBH >> init_BGL >> init_XYL >> length_fibril >> boolean_Xyl_or_MLG >> pct_xyl >> pct_hemi >> pct_lign >> pct_acetyl_hemi >> pct_crystalline_cellu >> pct_crystalline_hemi >> Mean_defect_size >> Nbr_of_defects >>r_monomer

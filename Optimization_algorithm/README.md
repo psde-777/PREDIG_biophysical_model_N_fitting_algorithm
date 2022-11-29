@@ -42,6 +42,10 @@ the names of the experimental data sets, and therefore it needs to contain AT LE
 
 - Open the files "max_kin_vals" and "max_init_vals.txt". Here, you can specify the maximum value for each parameter.
 
+- Open the files "min_kin_vals" and "min_init_vals.txt". Here, you can specify the minimum value for each parameter. (Added by Jasmin)
+
+- The script "evo_save_best_gens.sh" saves the top 5 generations with the lowest variances
+
 ### Running the algorithm
 
 - Once the setup is complete, you may run the algorithm. For this, you need to specify the following five parameters:

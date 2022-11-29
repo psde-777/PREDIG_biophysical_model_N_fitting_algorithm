@@ -1,3 +1,4 @@
+##### Added initial guess for test function parameters :partho
 import numpy as np
 import sys
 import os.path
@@ -74,6 +75,9 @@ for keyword in keywords:
         if os.path.isfile(expe_glc_file):
             expe_data_glc = np.loadtxt(expe_glc_file)
             final_time = expe_data_glc[-1,0];
+        else:
+            print("file doesn't exist") 
+
         if os.path.isfile(expe_xyl_file):
             expe_data_xyl = np.loadtxt(expe_xyl_file)
     #        final_time = expe_data_xyl[-1,0];
@@ -89,12 +93,15 @@ for keyword in keywords:
 
         x = np.linspace(0,final_time,max_size)
         fitdata_glc[:,0] = x[:]
-        fitdata_xyl[:,0] = x[:] 
+        fitdata_xyl[:,0] = x[:]
+ 
 
-        params_glc, params_covariance_glc = optimize.curve_fit(test_func, expe_data_glc[:,0], expe_data_glc[:,1]);
-        params_xyl, params_covariance_xyl = optimize.curve_fit(test_func, expe_data_xyl[:,0], expe_data_xyl[:,1]);
+        params_glc, params_covariance_glc = optimize.curve_fit(test_func, expe_data_glc[:,0], expe_data_glc[:,1]);  #magic_numbers for initial guess ;)
+        params_xyl, params_covariance_xyl = optimize.curve_fit(test_func, expe_data_xyl[:,0], expe_data_xyl[:,1]);  #magic_numbers for initial guess ;)
         fitdata_glc[:,1] = test_func(fitdata_glc[:,0],params_glc[0],params_glc[1])
         fitdata_xyl[:,1] = test_func(fitdata_xyl[:,0],params_xyl[0],params_xyl[1])
+
+        np.savetxt(sys.argv[1]+'myFile-'+keyword+'.txt', fitdata_glc)  #### edit partho
 
 
         print(x[-1])
@@ -107,12 +114,15 @@ for keyword in keywords:
                 outFile[:,0] += x[:];
                 for j in range(1,data[1,:].size):
                     outFile[:,j] += np.interp(x,data[:,0],data[:,j])
+#                    np.savetxt(sys.argv[1]+'interpol-'+keyword+'.txt', outFile)  #### edit partho
 
 
         #        outFile[1:,:]/=N_files
 
 
         outFile[:,:]/=countFound
+        np.savetxt(sys.argv[1]+'interpol-'+keyword+'.txt', outFile)  #### edit partho
+
 
 
         var_glc_dict[keyword] = np.sum((fitdata_glc[:,1] - outFile[:,1]) * (fitdata_glc[:,1] - outFile[:,1]))/max_size;
@@ -123,7 +133,7 @@ for keyword in keywords:
     #    np.savetxt(sys.argv[1] + sys.argv[2] + keyword + ".txt", outFile[:,:], delimiter="    ")
     else:
         with open(sys.argv[1] + "var.txt","w") as f:
-            f.write(str(9999))
+            f.write(str(999999999999999))
             exit()
     #    np.savetxt(sys.argv[1] + sys.argv[2] + keyword + ".txt", outFile[:,:], delimiter="    ") 
 
@@ -133,9 +143,10 @@ for keyword in keywords:
     var_glc += var_glc_dict[keyword]
     var_xyl += var_xyl_dict[keyword]
 
-var_glc/=3.
-var_xyl/=3.
-var = 0.5*(var_glc+var_xyl)
+var_glc/=len(keywords)
+var_xyl/=len(keywords)
+var = 0.5*(var_glc+var_xyl)    ##comment if no Xyl but MLG
+#var=var_glc     ##uncomment if only glucose relevant MLG or Xyl
     
 print("var = " + str(var))
 with open(sys.argv[1] + "var.txt","w") as f:
