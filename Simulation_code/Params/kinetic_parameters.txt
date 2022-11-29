@@ -1,1 +1,7 @@
-1  1  1  1  1  0.00900000  0.09000000  0.09000000  0.5	0.5
+1779.79109188  2000.00000000  3323.22450127  0.00591008  55.00000000  0.00198093	0.007	0.007	0.007	0.007	0.007		0.03020739  0.04281501		5.0  ## values from Bura fitting data
+
+
+
+
+
+##>>EG rxn rate >>CBH rxn rate >>BGL rxn rate >>XYL rxn rate >>Lignin adhesion rate >>CBH attachment rate >>binding affinity of cellobiose to EG >>binding affinity of cellobiose to CBH >>binding affinity of glucose to EG >>binding affinity of glucose to CBH >>binding affinity of glucose to BGL >>digestibility ratio of "crystalline" and "amorphous" cellulose >>digestibility ratio of "crystalline" and "amorphous" hemicellulose >> Enzyme size: radius

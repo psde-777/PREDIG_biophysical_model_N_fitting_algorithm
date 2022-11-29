@@ -1,8 +1,0 @@
-# Composition: 54.3% Glucan, 3.6% Xylan, 29.9% Lignin
-#hours	#Xylan to xylose conversion (%)
-0	0
-3.08	12.9	
-10.15	17.8
-28.1	27.8
-49	39.6
-70	49.5

@@ -1,18 +1,22 @@
-200000  200000  400000  100000	10  1  1  2  2  -1  1  1	-1  100  2.9
+200000  200000	400000		100000000		1		4	5	2	2	1	1	1	1	0.5		0.2
 
 
-#T >> Transient >> Nbr_picts >> max_time >> pict_3D_freq  >> Run_number >> mode_code >> mode_hemi >> mode_lign >> mode_inhib >> mode_lignin_glue >> mode_hemi_structure >> mode_enzyme_size >> Nruns >> enzyme_radius
+
+#>> T >> Transient >> Nbr_picts >> max_time >> pict_3D_freq  >> Hemi/Lign layers >> mode_code >> mode_hemi >> mode_lign >> mode_inhib >> mode_lignin_glue >> mode_enzyme_size >> Nruns >> mu_lignin_covering >> sigma_lignin_covering
+
+#T : T+Transient = Max number of steps
 #Transient : T+Transient = Max number of steps
 #Nbr_picts : maximum number of snapshots taken
 #max_time : maximum real_time value
-#Run_number : Currently unused
+#pict_3D_freq : interval of snapshot of microfibril
+#Hemi/Lign layers : Maximum number of hemicellulose/lignin layers around the cellulose core
 #mode_code : Determines structure of microfibril (i.e. 24 vs 18 cellulose polymers / rectangular vs crystalline shape)
 #mode_hemi : Determines, on which sides hemicellulose can anchor
 #mode_lign : Determines, on which sides lignin can anchor
 #mode_inhib : Determines, whether inhibition is active (1) or inactive (-1)
 #mode_lignin_glue : Determines, whether the lignin gluing effect is active (1) or inactive (-1)
-#mode_hemi_structure : Currently unused
 #mode_enzyme_size : Determines, whether the enzyme size is included (1) or inactive (-1)
 #Nruns : Determines, how many simulation runs will be done
 #enzyme_radius : Denotes the radius of the enzyme in bonds
-
+#mu_lignin_covering: Determines the average fraction of lignin polymers which acts as a structural barrier. Set this to a value between 0 and 1
+#sigma_lignin_covering: : Determines the standard deviation around mu_lignin_covering. Set this to a value between 0 and 1

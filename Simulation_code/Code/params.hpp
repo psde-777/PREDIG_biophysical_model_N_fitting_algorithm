@@ -45,15 +45,15 @@ struct params {//Struct containing some parameters which are read-in from file
     //====================== These parameters are assigned via input files ============================
 
 
-    int Nruns;
-    int N_layers;
+    int Nruns;//The number of times the whole simulation is supposed to be repeated
+    int N_layers;//The number of hemi/lignin layers around the cellulose core
     int mode_code;//This selects the configuration of the substrate: 24 Glc rectangle (1), 24 Glc diamond (2), 18 Glc rectangle (3), 18 Gls diamond (4), or test, which is 42
     int mode_hemi;//This value is 1 if hemicellulose prefers hydrophilic surfaces -1 if it prefers hydrophobic surfaces
     int mode_lign;//This value is 1 if lignin prefers hydrophilic surfaces -1 if it prefers hydrophobic surfaces
     int mode_inhib;// This value is 1 if inhibition of enzymes by glucose is included, and -1 if not
     int DP_print_Freq;//Defines, how often a snapshot of the DP distribution in the system is made
     int mode_lignin_glue;// Determines, whether the lignin gluing effect is active (1) or inactive (-1)
-    int mode_hemi_structure;//Determines, whether the initial hemicellulose distribution can have holes (1) or not (-1)
+    //int mode_hemi_structure;//Determines, whether the initial hemicellulose distribution can have holes (1) or not (-1)
     int mode_enzyme_size;//Determines, whether the enzyme size is included as an effect
     int min_x_outer;//Boundaries of fibril
     int max_x_outer;
@@ -62,8 +62,8 @@ struct params {//Struct containing some parameters which are read-in from file
     int pict_3D_Freq; //Defines, how often a 3D structure picture is taken during gillespie loop
     int N_free_ends; //Number of cellulose polymer ends in the system, which are attackable by CBH
 
-    int nbr_hemi_monomer;
-    int nbr_monolignol;
+    int nbr_hemi_monomer; //The number of hemicellulose monomers
+    int nbr_monolignol; //The number of lignin monomers
     int nbr_lignin_blocked;//Number of lignin monomers blocked by enzymes adhered to it
 
 
@@ -91,8 +91,8 @@ struct params {//Struct containing some parameters which are read-in from file
     unsigned long int T;//Number of iterations for the stationnary phase of the simulation
     unsigned long int Transient;//Number of iterations for transient
     unsigned long int Nbr_picts;//Number of pictures of the fibril to be taken
-    double real_time;
-    double max_time; 
+    double real_time;//The time as calculated via the gillespie algorithm
+    double max_time;//The maximum gillespie time (simulation stops, if this is exceeded)
 
 
     //CBH speed and association time. Data from Brady et al. 2015, nature communications
@@ -111,6 +111,8 @@ struct params {//Struct containing some parameters which are read-in from file
     double pct_glc;//Percentage of cellulose. Calculated from given hemi/lignin values
     double pct_crystalline_cellu;//Percentage of crystalline cellulose
     double pct_crystalline_hemi;//Percentage of crystalline hemicellulose
+    double dfct_size; // Percentage of total amorphous cellulose surrounded by crystalline
+    int N_amor_core; // Number of amorphous cores hidden in the crystalline
 
 
     double k1;//Rate of reaction for EG
@@ -121,9 +123,12 @@ struct params {//Struct containing some parameters which are read-in from file
     double k6;//CBH attachment rate
     
 
-    double inhib_cellobiose_EG;//Inhibition weight for EG
-    double inhib_cellobiose_CBH;//Inhibition weight for CBH
+    double inhib_cellobiose_EG;//Inhibition weight for EG :cellobiose
+    double inhib_cellobiose_CBH;//Inhibition weight for CBH :cellobiose
+    double inhib_glucose_EG;//Inhibition weight for EG :glucose
+    double inhib_glucose_CBH;//Inhibition weith for CBH :glucose
     double inhib_glucose_BGL;//Inhibition weight for BGL
+//    double inhib_XYL;//Inhibition weight for XYL
     double crystal_modifier_cellu;//Modification factor for proṕensity of crystalline cellulose
     double crystal_modifier_hemi;//Modification factor for proṕensity of crystalline hemicellulose
 
@@ -149,9 +154,10 @@ struct params {//Struct containing some parameters which are read-in from file
     bool print_CBH_positions = false;//If this is set to true, the positions of all attached CBH enzymes will be tracked
     bool toy_model = false;//If this is set to true, every bond will be accessible from the beginning. This resembles the situation of all polymers freely floating in space
     bool print_time = false;//If this is set to true, the computation time of each run will be printed to a file
+    bool xyl_or_mlg = true; //If this is set to true then Xylose in outer shell, if false then MLGs in outer shell
 
-    std::vector<double> propensities;
-    std::vector<double> crystal_propensities;
+    std::vector<double> propensities; //The vector containing the propensities for each reaction type. ALL REACTIONS IN THE REACTION TABLES CONTAIN POINTERS TO THESE VALUES
+    std::vector<double> crystal_propensities; //The vector containing the crystalline propensities for each reaction type. ALL REACTIONS IN THE REACTION TABLES CONTAIN POINTERS TO THESE VALUES
 
     //Vectors for tracking glucose/cellobiose/xylose release
     std::vector<double> amount_glc_mean;
@@ -183,11 +189,11 @@ struct params {//Struct containing some parameters which are read-in from file
     std::vector<double> XYL_fraction;   
     std::vector<double> lign_fraction; 
 
-    std::vector<double> timestamp;
+    std::vector<double> timestamp;//Times at which the fractions of reactions are stored
 
-    std::vector<CBH_enzyme> CBH_enzymes;
-    std::vector<double> average_ends_occupied_by_CBH;
-    std::vector<double> number_of_attached_CBH;
+    std::vector<CBH_enzyme> CBH_enzymes;//The vector containing all CBH_enzyme objects
+    std::vector<double> average_ends_occupied_by_CBH; //The vector containing the average number of ends occupied by a CBH enzyme
+    std::vector<double> number_of_attached_CBH; //The vector containing the number of attached CBH enzymes at each step
     std::unordered_map<int,std::tuple<int,int>> free_poly_ends;//Stores the polymer and position of polymer ends which are not yet blocked by CBH
 //    std::vector<double> CBH_clocks;//Tracks the attachment times of the enzymes
 //    std::vector<bool> clock_used;
