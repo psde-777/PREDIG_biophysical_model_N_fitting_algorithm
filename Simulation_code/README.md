@@ -180,7 +180,7 @@ You can skip the compiling step, if you are using 64-bit linux and already have 
 
 13.) Percentage of "crystalline" hemicellulose. [Fitting parameter. Can also come from user data, if available. Range 0-1.]
 
-14.) Mean size of defect/damaged section of Crystalline cellulose. [Implemented for all mode_codes. Takes value 0-0.5. It signfies the fraction of amorphous cellulose contained in the defects.]
+14.) Mean size of defect/damaged section of Crystalline cellulose. [Implemented for all mode_codes. Takes value 0-0.5. It signfies the fraction of amorphous cellulose (out of len_poly) contained in the defects.]
 
 15.) Number of defects/damaged sections of Crystalline cellulose. [Implemented for all mode_codes. Takes value 0-1. It signfies the fraction of the number of outer cellulose polymers which have defects.]
 

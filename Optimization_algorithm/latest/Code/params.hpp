@@ -112,7 +112,7 @@ struct params {//Struct containing some parameters which are read-in from file
     double pct_crystalline_cellu;//Percentage of crystalline cellulose
     double pct_crystalline_hemi;//Percentage of crystalline hemicellulose
     double dfct_size; // Percentage of total amorphous cellulose surrounded by crystalline
-    int N_amor_core; // Number of amorphous cores hidden in the crystalline
+    double N_amor_core; // Number of amorphous cores hidden in the crystalline
 
 
     double k1;//Rate of reaction for EG
