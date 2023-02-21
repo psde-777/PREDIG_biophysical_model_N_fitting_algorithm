@@ -23,7 +23,7 @@ countFound = 0
 lastCount = 0#number of lines in previous file
 max_size = 0
 simu_params = np.loadtxt("latest/Params/simulation_parameters.txt");
-N_files = int(simu_params[-4])
+N_files = int(simu_params[-3])
 print("N_files = " + str(N_files))
 
 #N_files = int(sys.argv[1]);#Number of files
