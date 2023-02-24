@@ -5,7 +5,7 @@ Within this repository, you can find the code of our model for the saccharificat
 
 ## Content
 
-The repository is split into three folders, each of which are summarized below.
+The repository is split into two folders, each of which are summarized below.
 
 ### Folder "Simulation_code"
 

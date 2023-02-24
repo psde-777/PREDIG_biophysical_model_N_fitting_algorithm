@@ -30,8 +30,8 @@ echo "unset xtics" >> tempgnuplot.sh
 echo "unset ytics" >> tempgnuplot.sh
 echo "unset ztics" >> tempgnuplot.sh
 
-echo "set xr[2:7]" >> tempgnuplot.sh
-echo "set yr[2:7]" >> tempgnuplot.sh
+echo "set xr[-5:9]" >> tempgnuplot.sh
+echo "set yr[-4:8]" >> tempgnuplot.sh
 
 echo "set key above" >> tempgnuplot.sh
 echo "set key font ',24'" >> tempgnuplot.sh
@@ -47,9 +47,9 @@ echo "j=j+1" >> tempgnuplot.sh
 
 echo 'set output sprintf("frames/frame%05.0f.png",j)
 
-  splot "Output/3D/visualisation_cellu_1_".i.".txt" pt 7 ps 3.0  lc rgb "green" title "cellulose",\
-	"Output/3D/visualisation_hemi_1_".i.".txt" pt 5 ps 3.0 lc rgb "red" title "hemicellulose",\
-	"Output/3D/visualisation_lignin_1_".i.".txt" pt 9 ps 3.0 lc rgb "blue" title "lignin"
+  splot "Output/3D/visualisation_cellu_1_".i.".txt" pt 7 ps 1.5  lc rgb "green" title "cellulose",\
+	"Output/3D/visualisation_hemi_1_".i.".txt" pt 5 ps 1.5 lc rgb "red" title "hemicellulose",\
+	"Output/3D/visualisation_lignin_1_".i.".txt" pt 9 ps 1.5 lc rgb "blue" title "lignin"
 }' >> tempgnuplot.sh 
 
 echo "Gnuplot is creating frames"

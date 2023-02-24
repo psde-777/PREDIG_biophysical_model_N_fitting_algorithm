@@ -2777,6 +2777,44 @@ double run(bool verbose, bool randomSeed, bool vid, bool heatmap_bool, long int 
                         file82.close();
                     }
 
+                        // Record all the polymers in a single output file
+                        if(nbr_poly_cellu > 0){
+					    par.output_file = "Output/3D/visualisation_total_" + to_string(current_run) + "_" + to_string(nbr_pict_taken) + ".txt";
+	                    cout << par.output_file << endl;
+	                    ofstream file99(par.output_file);
+	                    //Output the structure of remaining cellulose
+	                    for(int i=0; i<nbr_poly_cellu; i++)
+	                    {
+                            if(cellu[i].len_poly >= 1){ //partho all cellu including cbs are in video
+    	                        for(int j=0; j<cellu[i].len_poly; j++)
+    	                        {
+    	                            if((cellu[i].status[j]==-1) or(cellu[i].status[j]==1))
+    	                                file99<<cellu[i].x<<'\t'<<cellu[i].y<<'\t'<<cellu[i].z[j]<<'\t'<< '2' <<endl;
+    	                        }
+                            }
+	                    }
+	                    
+	                    //Output the structure of remaining hemicellulose
+	                    for(int i=0; i<nbr_poly_hemi; i++)
+                        {
+                            if(hemi[i].len_poly >= 1){  //partho all hemi including cbs are in video
+                                for(int j=0; j<hemi[i].len_poly; j++)
+                                    file99<<hemi[i].x<<'\t'<<hemi[i].y<<'\t'<<hemi[i].z[j]<<'\t'<< '1' <<endl;
+                            }
+                        }
+                        
+                        //Output the structure of remaining lignin
+                        for(int i=0; i<nbr_poly_lign; i++)
+                        {
+                            for(int j=0; j<lign[i].len_poly; j++)
+                            	if(lign[i].covering[j] == true){
+	                                file99<<lign[i].x<<'\t'<<lign[i].y<<'\t'<<lign[i].z[j]<<'\t' <<'0' << endl;
+                            	}
+                        }
+
+	                    file99.close();
+	                }
+
                     nbr_pict_taken++;
 
 
