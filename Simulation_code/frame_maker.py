@@ -29,7 +29,7 @@ print("""
 
 
 # Define custom color map
-colors = ['#0000FF', '#FFFF00', '#008000']
+colors = ['#0000FF', '#FFFF00', '#00FF00']
 cmap = mcolors.ListedColormap(colors)
 
 # Set the path for the files
@@ -87,7 +87,7 @@ for file_name in tqdm(file_list, desc='Creating frames', unit='file'):
     ax.view_init(elev=10, azim=i*0.6)
     # Set title
 
-    plt.title(f'Time = {timer} hours',fontsize=16)
+    plt.title(f'Time = {timer} hours',fontsize=20)
     plt.tight_layout()
     fig.savefig(f'frames_py/frame_{i+1:03d}.png', dpi=100)
     i=i+1
