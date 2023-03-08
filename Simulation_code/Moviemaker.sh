@@ -16,7 +16,7 @@ output_file="animation.mp4"
 # Use FFmpeg to create the video
 ffmpeg -framerate 30 -pattern_type glob -i "$input_pattern" -c:v libx264 -preset medium -crf 23 -pix_fmt yuv420p -y "$output_file"
 
-pyfiglet "Cleaning up ..."
+pyfiglet "Cleaning up . . ."
 
 rm -r frames_py
 rm -r Output/3D/*
