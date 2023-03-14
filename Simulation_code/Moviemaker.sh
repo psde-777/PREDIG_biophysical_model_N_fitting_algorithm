@@ -1,4 +1,5 @@
 #!/bin/bash
+
 rm -r Output/3D/* >> /dev/null
 
 pyfiglet "Running your simulation"
