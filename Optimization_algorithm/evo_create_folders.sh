@@ -1,3 +1,5 @@
+#!/bin/bash
+
 #$1 : family
 #$2 : Number of this generation
 #$3 : number of folders in each generation
