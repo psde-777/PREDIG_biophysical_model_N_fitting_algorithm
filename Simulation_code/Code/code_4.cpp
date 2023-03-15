@@ -175,7 +175,7 @@ int main(int argc, char *argv[]){
     {
         getline(file0,myline);
         istringstream in(myline);
-        in >> place_holder >> place_holder >> place_holder >> place_holder >> place_holder >> place_holder >> place_holder >> place_holder >> place_holder >> place_holder >> place_holder >> place_holder >> Nruns >> place_holder;
+        in >> place_holder >> place_holder >> place_holder >> place_holder >> place_holder >> place_holder >> place_holder >> place_holder >> place_holder >> place_holder >> place_holder >> Nruns >> place_holder >> place_holder;
     }
     else{
         cout << "simulation_parameters.txt does not exist in the folder Params/ . Exiting." << endl;
@@ -234,9 +234,8 @@ int main(int argc, char *argv[]){
             getline(file0,line);
             istringstream in(line);
             in >> par.T >> par.Transient >> par.Nbr_picts >> par.max_time
-            >> par.pict_3D_Freq >> par.N_layers >> par.mode_code >> par.mode_hemi
+            >> par.pict_3D_Freq >> par.N_layers >> par.mode_hemi
             >> par.mode_lign >> par.mode_inhib >> par.mode_lignin_glue
-            //>> par.mode_hemi_structure 
             >> par.mode_enzyme_size
             >> par.Nruns >> par.mu_lignin_covering >> par.sigma_lignin_covering;
         }
@@ -286,10 +285,10 @@ int main(int argc, char *argv[]){
         {
             getline(file2,line);
             istringstream in(line);
-            in >> par.init_EG >> par.init_CBH >> par.init_BGL >> par.init_XYL >> par.length_fibril >> par.xyl_or_mlg >> par.pct_xyl >> par.pct_hemi >> par.pct_lign >> par.pct_acetyl_hemi >> par.pct_crystalline_cellu >> par.pct_crystalline_hemi >> par.dfct_size >> par.N_amor_core >> par.r_monomer;  // partho_added paramter for small amount of amorphous core surrounded by cellulose
+            in >> par.mode_code >> par.init_EG >> par.init_CBH >> par.init_BGL >> par.init_XYL >> par.length_fibril >> par.xyl_or_mlg >> par.pct_xyl >> par.pct_hemi >> par.pct_lign >> par.pct_acetyl_hemi >> par.pct_crystalline_cellu >> par.pct_crystalline_hemi >> par.dfct_size >> par.N_amor_core >> par.r_monomer;  // partho_added paramter for small amount of amorphous core surrounded by cellulose
 
             if(par.verbose == true){
-                cout << par.init_EG << "\t" << par.init_CBH << "\t" << par.init_BGL << "\t" << par.init_XYL << "\t" << par.length_fibril << "\t" << par.xyl_or_mlg << "\t" << par.pct_xyl << "\t" << par.pct_hemi << "\t" << par.pct_lign << "\t" << par.pct_acetyl_hemi << "\t" << par.pct_crystalline_cellu << "\t" << par.pct_crystalline_hemi << "\t" << par.dfct_size << "\t" << par.N_amor_core << "\t" << par.r_monomer << endl;
+                cout << par.mode_code << "\t" << par.init_EG << "\t" << par.init_CBH << "\t" << par.init_BGL << "\t" << par.init_XYL << "\t" << par.length_fibril << "\t" << par.xyl_or_mlg << "\t" << par.pct_xyl << "\t" << par.pct_hemi << "\t" << par.pct_lign << "\t" << par.pct_acetyl_hemi << "\t" << par.pct_crystalline_cellu << "\t" << par.pct_crystalline_hemi << "\t" << par.dfct_size << "\t" << par.N_amor_core << "\t" << par.r_monomer << endl;
             }
 
             for(int i=0;i<par.init_CBH;i++)
@@ -1591,27 +1590,78 @@ double run(bool verbose, bool randomSeed, bool vid, bool heatmap_bool, long int 
 
 
 
-    // ========================  Set crystallinity ===================================
+    // ========================  Set crystallinity =================================== //
 
-    int non_crystal_zone = int(par.length_fibril * par.dfct_size * (1 - par.pct_crystalline_cellu)); //partho : calculating total length of amorphous zones hidden in crystalling cellu
+
     int count_crystalline = 0;
     int count_cellu = countGlc(cellu,1);
     int z_crystal_lower = 0;
-//    int z_crystal_lower2 = int((par.length_fibril + non_crystal_zone)/2); // Partho added range for crystalline part 
     int z_crystal_upper = 0;
-
-
     int defect_size;
-    double defect_sum_extra = 0;
+    double defect_sum_extra = 0;    
+    int defect_ctr = 0;
+    int defect_sub_ctr = 0;
+    double dist_ij = 0.0;
 
-    int N_amor_core2 = int(par.N_amor_core);
-    int dfct_size2 = par.dfct_size;
 
+    int nearest_neighbor_cellu = 0;
+
+    double nhbr_dist;
+
+    
     std::vector<int> defects;                   // partho: vector for saving the sizes of defects 
 
     std::vector<int> outer_cellulose;           // partho: vector for indexes of outer cellu polymers
  
     std::vector<int> outer_cellu_neighbors;     // partho: vector for cellu neighbors of outer cellu poly 
+    
+    // Finding Outer cellulose polymers : partho
+    if (par.pct_crystalline_cellu > 0.0 and par.pct_crystalline_cellu < 1){
+        
+        defect_ctr = 0;
+        defect_sub_ctr = 0;
+        dist_ij = 0.0;
+
+
+        nearest_neighbor_cellu = 0;
+        
+        // Conditions of nearest neighbor distance for different Mode_codes : partho
+        nhbr_dist = 0.84;    // For Mode_code: 1,2,3,4,5
+
+
+        for (int i=0;i<nbr_poly_cellu;i++){
+            nearest_neighbor_cellu = 0;
+            for (int j=0;j<nbr_poly_cellu;j++){
+                if (i != j){
+                    
+                    dist_ij= pow((abs(cellu[i].x - cellu[j].x)),1) + pow((abs(cellu[i].y - cellu[j].y)),1);
+                    
+                    if (dist_ij <= nhbr_dist){
+                        nearest_neighbor_cellu++;
+                    }                    
+                }
+            }
+
+            if (nearest_neighbor_cellu <= 5){
+                outer_cellulose.push_back(i); // partho: stores index of Outer cellu polymers
+            }
+        }
+    }
+
+    int N_amor_core2 = int (par.N_amor_core * outer_cellulose.size());  // finding number of defects that is a fraction (file input) of the total number of outer cellu polys : partho   
+    int dfct_size2 = int (par.dfct_size * par.length_fibril * (1 - par.pct_crystalline_cellu));     // finding mean size of a defect depending on input parameter which describes the fraction of amorphous cellulose in these defects : partho
+
+
+    /// Printing outer bond index_poly : partho
+
+    if (par.verbose == true){
+        cout << "***** Outer cellu polymer chain index *****" << endl;
+        for (auto it = outer_cellulose.begin(); it != outer_cellulose.end(); ++it){
+            cout << "** Outer polymer =  " << *it << endl;
+        }
+        cout << "------------------------------------------------" << endl;
+        cout << "------------------------------------------------" << endl;
+    }
 
 
 
@@ -1671,42 +1721,10 @@ double run(bool verbose, bool randomSeed, bool vid, bool heatmap_bool, long int 
 
 
 
-        //****************testing************//
-
         // placing amorphous parts in the crystalline core : partho
 
-        int defect_ctr = 0;
-        int defect_sub_ctr = 0;
-
-        int nearest_neighbor_cellu = 0;        
-
-        for (int i=0;i<nbr_poly_cellu;i++){
-            nearest_neighbor_cellu = 0;
-            for (int j=0;j<nbr_poly_cellu;j++){
-                if (i != j){
-                    if ((abs(cellu[i].x - cellu[j].x) < 0.84 and abs(cellu[i].y - cellu[j].y) < 0.01) or (abs(cellu[i].x - cellu[j].x) < 0.42 and abs(cellu[i].y - cellu[j].y) < 0.42) or (abs(cellu[i].x - cellu[j].x) < 0.01 and abs(cellu[i].y - cellu[j].y) < 0.84) ){
-                        nearest_neighbor_cellu++;
-                    }
-                }
-            }
-
-            if (nearest_neighbor_cellu <= 5){
-                outer_cellulose.push_back(i); // partho: stores index of Outer cellu polymers
-            }
-        }
-
-
-
-       /// Printing outer bond index_poly
-
-
-
-/*        cout << "***** Partho Outer cellu index *****" << endl;
-
-        for (auto it = outer_cellulose.begin(); it != outer_cellulose.end(); ++it){
-            cout << "Out polymer =  " << *it << endl;
-        } */
-
+       
+       
         std::random_shuffle(outer_cellulose.begin(), outer_cellulose.end());
         std::random_shuffle(defects.begin(), defects.end());
 
@@ -1716,35 +1734,7 @@ double run(bool verbose, bool randomSeed, bool vid, bool heatmap_bool, long int 
 
         int random_outer;
 
-/*        for (int k=0; k <18; ++k){
-            random_index = rand()%outer_cellulose.size();
 
-            random_outer = outer_cellulose[k];
-
-            cout << "Selected random Cellu Poly: " << random_outer << endl;
-
-            outer_cellu_neighbors.clear();
-
-            for (int k1=0; k1<nbr_poly_cellu; ++k1){
-                if (k1 != random_outer){
-                    if ( (abs(cellu[random_outer].x - cellu[k1].x) < 0.84 and abs(cellu[random_outer].y - cellu[k1].y) < 0.01) or (abs(cellu[random_outer].x - cellu[k1].x) < 0.42 and abs(cellu[random_outer].y - cellu[k1].y) < 0.42) or (abs(cellu[random_outer].x - cellu[k1].x) < 0.01 and abs(cellu[random_outer].y - cellu[k1].y) < 0.84) ){
-                        outer_cellu_neighbors.push_back(k1);
-                    }
-
-                }
-            }
-
-            cout << "Its neighbors are:" << endl;
-
-            for (auto it = outer_cellu_neighbors.begin(); it != outer_cellu_neighbors.end(); ++it){
-                cout << "----" << *it << endl;
-            }
-
-            cout << "----------------***************-----------------------" << endl;
-
-        }       */
-
-//      ////
         for (auto it = defects.begin(); it != defects.end(); ++it)
         { // Loop for cutting defects
 
@@ -1783,15 +1773,18 @@ double run(bool verbose, bool randomSeed, bool vid, bool heatmap_bool, long int 
             int defect_bond_num1;
 
             int defect_bond_num2;
+                        
 
             outer_cellu_neighbors.clear();
 
             for (int k1=0; k1<nbr_poly_cellu; ++k1){  // Finding nearest neighbors of selected poly
                 if (k1 != random_outer){
-                    if ( (abs(cellu[random_outer].x - cellu[k1].x) < 0.84 and abs(cellu[random_outer].y - cellu[k1].y) < 0.01) or (abs(cellu[random_outer].x - cellu[k1].x) < 0.42 and abs(cellu[random_outer].y - cellu[k1].y) < 0.42) or (abs(cellu[random_outer].x - cellu[k1].x) < 0.01 and abs(cellu[random_outer].y - cellu[k1].y) < 0.84) ){
+                
+                    dist_ij= pow((abs(cellu[random_outer].x - cellu[k1].x)),1) + pow((abs(cellu[random_outer].y - cellu[k1].y)),1);
+                    
+                    if (dist_ij <= nhbr_dist){
                         outer_cellu_neighbors.push_back(k1);
-                    }
-
+                    }                  
                 }
             }
 
@@ -1849,7 +1842,7 @@ double run(bool verbose, bool randomSeed, bool vid, bool heatmap_bool, long int 
                         
 
                     if (defect_ctr >= defect_size){
-                        goto comehere;   // Loop break if deefct size reached already
+                        goto comehere;   // Loop break if defect size reached already
                     }
 
                     if (cellu[nghbr_2].crystalline[defect_bond_num2] = true){
@@ -2783,6 +2776,44 @@ double run(bool verbose, bool randomSeed, bool vid, bool heatmap_bool, long int 
                         }
                         file82.close();
                     }
+
+                        // Record all the polymers in a single output file
+                        if(nbr_poly_cellu > 0){
+					    par.output_file = "Output/3D/visualisation_total_" + to_string(current_run) + "_" + to_string(nbr_pict_taken) + ".txt";
+	                    cout << par.output_file << endl;
+	                    ofstream file99(par.output_file);
+	                    //Output the structure of remaining cellulose
+	                    for(int i=0; i<nbr_poly_cellu; i++)
+	                    {
+                            if(cellu[i].len_poly >= 1){ //partho all cellu including cbs are in video
+    	                        for(int j=0; j<cellu[i].len_poly; j++)
+    	                        {
+    	                            if((cellu[i].status[j]==-1) or(cellu[i].status[j]==1))
+    	                                file99<<cellu[i].x<<'\t'<<cellu[i].y<<'\t'<<cellu[i].z[j]<<'\t'<< '2' <<'\t' << par.real_time << endl;
+    	                        }
+                            }
+	                    }
+	                    
+	                    //Output the structure of remaining hemicellulose
+	                    for(int i=0; i<nbr_poly_hemi; i++)
+                        {
+                            if(hemi[i].len_poly >= 1){  //partho all hemi including cbs are in video
+                                for(int j=0; j<hemi[i].len_poly; j++)
+                                    file99<<hemi[i].x<<'\t'<<hemi[i].y<<'\t'<<hemi[i].z[j]<<'\t'<< '1' <<'\t' << par.real_time << endl;
+                            }
+                        }
+                        
+                        //Output the structure of remaining lignin
+                        for(int i=0; i<nbr_poly_lign; i++)
+                        {
+                            for(int j=0; j<lign[i].len_poly; j++)
+                            	if(lign[i].covering[j] == true){
+	                                file99<<lign[i].x<<'\t'<<lign[i].y<<'\t'<<lign[i].z[j]<<'\t' <<'0' << '\t' << par.real_time << endl;
+                            	}
+                        }
+
+	                    file99.close();
+	                }
 
                     nbr_pict_taken++;
 

@@ -54,6 +54,14 @@ You can skip the compiling step, if you are using 64-bit linux and already have 
     - "hydro_parameters_2_2_layer_2.txt"
     - "hydro_parameters_2_2_layer_3.txt"
     - "hydro_parameters_2_2_layer_4.txt"
+    - "hydro_parameters_2_3_layer_1.txt"
+    - "hydro_parameters_2_3_layer_2.txt"
+    - "hydro_parameters_2_3_layer_3.txt"
+    - "hydro_parameters_2_3_layer_4.txt"
+    - "hydro_parameters_2_4_layer_1.txt"
+    - "hydro_parameters_2_4_layer_2.txt"
+    - "hydro_parameters_2_4_layer_3.txt"
+    - "hydro_parameters_2_4_layer_4.txt"
     - "hydro_parameters_2_5_layer_1.txt"
     - "hydro_parameters_2_5_layer_2.txt"
     - "hydro_parameters_2_5_layer_3.txt"
@@ -93,25 +101,23 @@ You can skip the compiling step, if you are using 64-bit linux and already have 
 
 5.) Number of steps between system snapshots, if "-vid" command is used (see below). If this is set to 1, a snapshot is taken at every step of the Gillespie algorithm.
 
-6.) Maximum number of hemicellulose/lignin layers around the cellulose core. Currently cannot be set above 4. (This can be fixed to 4 in the interface. The user doesn't need to change it in the majority of the scenario.)
+6.) Maximum number of hemicellulose/lignin layers around the cellulose core. Currently cannot be set above 4. (This can be fixed to 4 in the interface. The user doesn't need to change it in the majority of the scenario.) 
 
-7.) mode_code: Determines the shape of the microfibril. To use the 36 chain microfibril used by Ding et al., set this to 5 (Mung beans, 18 polymers, mode_code = 3 or 4; Spruce wood, 24 polymers, mode_code = 1 or 2; Maize, 36 polymers, mode_code = 5)
+7.) mode_hemi: Determines, on which sides of the microfibril hemicellulose can anchor. Currently to be kept at 2. [User doesn't need to vary it. Can be fixed at 2 in the interface.]
 
-8.) mode_hemi: Determines, on which sides of the microfibril hemicellulose can anchor. Currently to be kept at 2. [User doesn't need to vary it. Can be fixed at 2 in the interface.]
+8.) mode_lign: Determines, on which sides of the microfibril lignin can anchor. Currently to be kept at 2. [User doesn't need to vary it. Can be fixed at 2 in the interface.]
 
-9.) mode_lign: Determines, on which sides of the microfibril lignin can anchor. Currently to be kept at 2. [User doesn't need to vary it. Can be fixed at 2 in the interface.]
+9.) mode_inhib: Determines, whether inhibition is active (1) or inactive (-1). [For user, value 1 is reccommended as end-product inhibition is real.] 
 
-10.) mode_inhib: Determines, whether inhibition is active (1) or inactive (-1). [For user, value 1 is reccommended as end-product inhibition is real.] 
+10.) mode_lignin_glue: Determines, whether the lignin gluing effect is active (1) or inactive (-1). [For user, value 1 is recommended, as Lignin gluing is a known phenomena.]
 
-11.) mode_lignin_glue: Determines, whether the lignin gluing effect is active (1) or inactive (-1). [For user, value 1 is recommended, as Lignin gluing is a known phenomena.]
+11.) mode_enzyme_size : Determines, whether the enzyme size is included for all enzymes (1) or only for CBH (-1). [This can be fixed to 1 in the interface for now.]
 
-12.) mode_enzyme_size : Determines, whether the enzyme size is included for all enzymes (1) or only for CBH (-1). [This can be fixed to 1 in the interface for now.]
+12.) Nruns: Determines the number of simulation runs. [10 runs are good enough for getting a smooth average saccharification curve.]
 
-13.) Nruns: Determines the number of simulation runs. [10 runs are good enough for getting a smooth average saccharification curve.]
+13.) mu_lignin_covering: Determines the average fraction of lignin polymers which acts as a structural barrier. Set this to a value between 0 and 1. [Needs some literature survey before fixing.]
 
-14.) mu_lignin_covering: Determines the average fraction of lignin polymers which acts as a structural barrier. Set this to a value between 0 and 1. [Needs some literature survey before fixing.]
-
-15.) sigma_lignin_covering : Determines the standard deviation around mu_lignin_covering. Set this to a value between 0 and 1. [Needs some literature survey before fixing.]
+14.) sigma_lignin_covering : Determines the standard deviation around mu_lignin_covering. Set this to a value between 0 and 1. [Needs some literature survey before fixing.]
 
 
 ### kinetic_parameters:
@@ -147,36 +153,38 @@ You can skip the compiling step, if you are using 64-bit linux and already have 
 
 
 ### initial_configuration_parameters:
+
+1.) mode_code: Determines the shape of the microfibril. To use the 36 chain microfibril used by Ding et al., set this to 5 (Spruce wood, 24 polymers, mode_code = 1 or 2; Mung beans, 18 polymers, mode_code = 3 or 4; Maize, 36 polymers, mode_code = 5). [To be fixed to value according to plant sample]
  
-1.) initial EG concentration. [Needs some calculation to fixed. Currently set to value used in paper by Eric.]
+2.) initial EG concentration. [Needs some calculation to fixed. Currently set to value used in paper by Eric.]
 
-2.) initial CBH concentration. [Needs some calculation to fixed. Currently set to value used in paper by Eric.]
+3.) initial CBH concentration. [Needs some calculation to fixed. Currently set to value used in paper by Eric.]
 
-3.) initial BGL concentration. [Needs some calculation to fixed. Currently set to value used in paper by Eric.]
+4.) initial BGL concentration. [Needs some calculation to fixed. Currently set to value used in paper by Eric.]
 
-4.) initial XYL concentration. [Needs some calculation to fixed. Currently set to value used in paper by Eric.]
+5.) initial XYL concentration. [Needs some calculation to fixed. Currently set to value used in paper by Eric.]
 
-5.) Length of the microfibril in bonds. [Currently set to 200. But can be increased to 400-500 at the expense of simulation time being longer.]
+6.) Length of the microfibril in bonds. [Currently set to 200. But can be increased to 400-500 at the expense of simulation time being longer.]
 
-6.) Boolean for hemicellulose. Xylose or MLG. [If set to 1, there is Xylans in Hemicellulose (xylose released). If set to 0, there is Mixed-Linkage Glucans (glucose released)]
+7.) Boolean for hemicellulose. Xylose or MLG. [If set to 1, there is Xylans in Hemicellulose (xylose released). If set to 0, there is Mixed-Linkage Glucans (glucose released)]
 
-7.) Percentage of xylose in hemicellulose; currently restricted to a value of 1. [Should be fixed at 1 for now. But can be usedful later when other hemicellulose sugars are implemented simultaneously.]
+8.) Percentage of xylose in hemicellulose; currently restricted to a value of 1. [Should be fixed at 1 for now. But can be usedful later when other hemicellulose sugars are implemented simultaneously.]
 
-8.) Percentage of hemicellulose within the microfibril. [Comes from composition data. User should input. Range 0-1.]
+9.) Percentage of hemicellulose within the microfibril. [Comes from composition data. User should input. Range 0-1.]
 
-9.) Percentage of lignin within the microfibril. [Comes from composition data. User should input. Range 0-1.]
+10.) Percentage of lignin within the microfibril. [Comes from composition data. User should input. Range 0-1.]
 
-10.) Percentage of acetylated hemicellulose within the hemicellulose fraction; currently restricted to a value of 0. [Can be left at 0 for now. Will consult Holger about acetylation effects & could be be useful after that.]
+11.) Percentage of acetylated hemicellulose within the hemicellulose fraction; currently restricted to a value of 0. [Can be left at 0 for now. Will consult Holger about acetylation effects & could be be useful after that.]
 
-11.) Percentage of "crystalline" cellulose. [Fitting parameter. Can also come from user data, if available. Range 0-1.]
+12.) Percentage of "crystalline" cellulose. [Fitting parameter. Can also come from user data, if available. Range 0-1.]
 
-12.) Percentage of "crystalline" hemicellulose. [Fitting parameter. Can also come from user data, if available. Range 0-1.]
+13.) Percentage of "crystalline" hemicellulose. [Fitting parameter. Can also come from user data, if available. Range 0-1.]
 
-13.) Mean size of defect/damaged section of Crystalline cellulose. [Currently only implemented for Mode_Code:5 in simulation_parameters. Should be kept 0 for others, until fixed for all.]
+14.) Mean size of defect/damaged section of Crystalline cellulose. [Implemented for all mode_codes. Takes value 0-0.5. It signfies the fraction of amorphous cellulose (out of len_poly) contained in the defects.]
 
-14.) Number of defects/damaged sections of Crystalline cellulose. [Currently only implemented for Mode_Code:5 in simulation_parameters. Should be kept 0 for others, until fixed for all.]
+15.) Number of defects/damaged sections of Crystalline cellulose. [Implemented for all mode_codes. Takes value 0-1. It signfies the fraction of the number of outer cellulose polymers which have defects.]
 
-15.) Radius around which each bond location is checked for neighbors. To be kept at 0.6 [Fixed for now. No need to vary]
+16.) Radius around which each bond location is checked for neighbors. To be kept at 0.6 [Fixed for now. No need to vary]
 
 
 
@@ -301,6 +309,14 @@ Each of these files contain the coordinates of all bonds of the respective type 
 - second column: y-coordinates
 - third column: z-coordinates
 
+The files named 'visualisation_total_*.txt' contain 5 columns:
+
+- First column: x-coordinates
+- second column: y-coordinates
+- third column: z-coordinates
+- fourth column: polymer type (0: lignin, 1: hemicellulose, 2: cellulose)
+- fifth column: timestamp (real time from Gillespie algorithm)
+
 
 ### Averaging none-3D data and none-heatmap_data
 
@@ -353,9 +369,11 @@ As an example, this would be the command used to calculate the average over 100 
 The averaged files are structured in the same way as the raw data (see above).
 
 
-### Creating Animated GIF of microfibril digestion
+### Creating movie of the microfibril digestion
 
-This is done using the script Gifmaker.sh. It uses gnuplot(must be present on the system) to create the frames from the datafiles generated in Output/3D, when the code is run with command line arguement "-vid". It uses ffmpeg to create the animated GIF from the frames.
+Creating a movie from the simulation is now done simply by running the shell script **Moviemaker.sh** (to use simply make script executable and run ```$chmod +x Moviemaker.sh && ./Moviemaker.sh```). It first runs a single Gillespie simulation run using the parameters from 'Params/initial_configuration_parameters_movie.txt' with the command line argument "-vid".  It then uses python matplotlib via the python script 'frame_maker.py', to generate the frames with rotating camera angle. It finally uses ffmpeg (must be installed on the system) to create a mp4 video from the generated frames. Then it cleans up all the data generated from the simulation to prevent unwanted file storage space shortage.
+
+Requirements: ffmpeg, python libraries (matplotlib, pyfiglet, numpy, glob, os, re, tqdm, imageio)
 
 
 # Code structure

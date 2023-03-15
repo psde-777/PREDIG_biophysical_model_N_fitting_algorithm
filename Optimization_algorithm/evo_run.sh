@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # $1 = family
 # $2 = Generation number
 # $3 = Number of simus in generation

@@ -15,21 +15,21 @@
 
 Check that the "Params" directory, and the "Output" directory exist within the directory "latest"
 
-- create an empty directory called "family_1" in topdir. If the directory already exists, make sure that it is empty
+- create an empty directory called "family_1" in topdir.
 
-- Open the file "best_candidate_specs.txt" and enter those kinetic parameters from which the optimization algorithm should start. This file will be updated continuously during the algorithm
+- Open the file "best_kin_specs.txt" and enter those kinetic parameters from which the optimization algorithm should start. This file will be updated continuously during the algorithm
 
 - IMPORTANT: Within topdir, there is a file "keywords.txt" (if not, you need to create it). From this file the algorithm takes
-the names of the experimental data sets, and therefore it needs to contain AT LEAST ONE keyword.
+the names of the experimental data sets, and therefore it needs to contain AT LEAST ONE keyword. This is now automated and the code writes into the "keywords.txt" file, reading from the experimental data contained in "latest/Output/expe_data/expe_saccharification_keyword_glc.txt" or "latest/Output/expe_data/expe_saccharification_keyword_xyl.txt". If you want to put in the keywords manually you need to comment in evo_all_in_one.sh: line 15: ./evo_keywords.sh.
 
 - Make sure that for each keyword there exists a file "best_init_specs_keyword.txt" in topdir
 
-- In the Output directory, create a directory "expe_data" if it does not exist yet. Within this directory,
+- In the latest/Output directory, create a directory "expe_data" if it does not exist yet. Within this directory,
  the data to be used for the fitting procedure needs to be placed.
  These data need to be contained in .txt files,
  in which the first column is time and the second column is the sugar release percentage.
  If you have data for glucose and xylose, these need to be contained in separate files.
- The end of the filename specifies whether it is a glucose or xylose data file, i.e. expe_saccharification_keyword_glc.txt or expe_saccharification_keyword_xyl_.txt.
+ The end of the filename specifies whether it is a glucose or xylose data file, i.e. expe_saccharification_keyword_glc.txt or expe_saccharification_keyword_xyl.txt.
 
 - You need to have at least one experimental data file (either for glucose or xylose) for each keyword in keywords.txt. For example, if you hava set "data_1"
  and a set "data_2" for which you have glucose and xylose release data, then you need to have the following files in "expe_data":
@@ -44,7 +44,6 @@ the names of the experimental data sets, and therefore it needs to contain AT LE
 
 - Open the files "min_kin_vals" and "min_init_vals.txt". Here, you can specify the minimum value for each parameter. (Added by Jasmin)
 
-- The script "evo_save_best_gens.sh" saves the top 5 generations with the lowest variances
 
 ### Running the algorithm
 
@@ -62,4 +61,6 @@ the names of the experimental data sets, and therefore it needs to contain AT LE
 
 - While the algorithm runs, the files "best_candidate_specs.txt" and "best_init_specs_keyword.txt" for each keyword in keywords.txt are updated if the difference between simulated and experimental data is reduced compared to the previous set of parameters in the file. Furthermore, the current lowest error is contained in the file "smallest_var.txt"
 
-- If you want to visually compare the simulated and experimental data, run the code in a separate folder and use the parameters found in "best_candidate_specs.txt" in "kinetic_parameters.txt" (see Code README at the top of this repository for more detail)
+- The best fitted set of parameters are saved in the directory BEST_FIT/best_run/Params
+
+- If you want to visually compare the simulated and experimental data, run the code in a separate folder and use the parameters found in in the directory BEST_FIT/best_run/Params (see Code README at the top of this repository for more detail)

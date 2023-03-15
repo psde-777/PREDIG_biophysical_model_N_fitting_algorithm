@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # $1 : Family
 # $2 : Generation
 # $3 : Runs in generation

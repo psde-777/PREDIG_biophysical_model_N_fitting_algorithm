@@ -1,7 +1,7 @@
 ##### Added initial guess for test function parameters :partho
 import numpy as np
 import sys
-import os.path
+import os
 from scipy import optimize
 #argv[1] = file path to output
 #argv[2] = Name of mean file
@@ -23,14 +23,19 @@ countFound = 0
 lastCount = 0#number of lines in previous file
 max_size = 0
 simu_params = np.loadtxt("latest/Params/simulation_parameters.txt");
-N_files = int(simu_params[-4])
+N_files = int(simu_params[-3])
 print("N_files = " + str(N_files))
 
 #N_files = int(sys.argv[1]);#Number of files
 #N_files = 20
 var_glc_dict = {}
 var_xyl_dict = {}
-keywords = np.loadtxt("keywords.txt",dtype=str)
+#keywords = np.loadtxt("keywords.txt",dtype=str)
+# Read keywords from keywords.txt file
+with open('keywords.txt', 'r') as f:
+    keywords = [line.strip() for line in f]
+
+
 
 for keyword in keywords:
     countFound = 0
@@ -101,7 +106,7 @@ for keyword in keywords:
         fitdata_glc[:,1] = test_func(fitdata_glc[:,0],params_glc[0],params_glc[1])
         fitdata_xyl[:,1] = test_func(fitdata_xyl[:,0],params_xyl[0],params_xyl[1])
 
-        np.savetxt(sys.argv[1]+'myFile-'+keyword+'.txt', fitdata_glc)  #### edit partho
+        #np.savetxt(sys.argv[1]+'myFile-'+keyword+'.txt', fitdata_glc)  #### edit partho, saves function fit of the experimental data
 
 
         print(x[-1])
@@ -114,14 +119,13 @@ for keyword in keywords:
                 outFile[:,0] += x[:];
                 for j in range(1,data[1,:].size):
                     outFile[:,j] += np.interp(x,data[:,0],data[:,j])
-#                    np.savetxt(sys.argv[1]+'interpol-'+keyword+'.txt', outFile)  #### edit partho
 
 
         #        outFile[1:,:]/=N_files
 
 
         outFile[:,:]/=countFound
-        np.savetxt(sys.argv[1]+'interpol-'+keyword+'.txt', outFile)  #### edit partho
+        np.savetxt(sys.argv[1]+'saccharification/average_saccharification_'+keyword+'.txt', outFile)  #### edit partho, saves average saccharification file
 
 
 

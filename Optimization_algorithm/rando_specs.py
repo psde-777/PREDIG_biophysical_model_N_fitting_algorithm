@@ -3,6 +3,7 @@ import sys
 import numpy as np
 import sys
 import random
+import os
 
 
 def rnum():#return random number between -1 and 1
@@ -21,7 +22,12 @@ def rnum():#return random number between -1 and 1
 def gradient():
 
 
-    keywords = np.loadtxt("keywords.txt",dtype=str)
+    ##keywords = np.loadtxt("keywords.txt",dtype=str)
+
+    # Read keywords from keywords.txt file
+    with open('keywords.txt', 'r') as f:
+        keywords = [line.strip() for line in f]
+
 
     #Maximum values of each parameter
     max_vals_kin = np.loadtxt("max_kin_vals.txt")
@@ -106,7 +112,7 @@ def gradient():
             with open("family_" + parent_folder + "/Generation_" + str(generation) + "/Run_" + str(j+1) + "/Params/initial_configuration_parameters_" + keyword + ".txt","w") as f:
                 for k,data_point in enumerate(out_init_data[i]):
                     val = data_point * max_vals_init[k]
-                    if k < 6 or k == 11 or k == 12:
+                    if k < 7:
                         f.write("%d\t" % val)
                     else:
                         f.write("%1.8f\t" % val)
@@ -116,7 +122,12 @@ def gradient():
 def random_sampling():
 
 
-    keywords = np.loadtxt("keywords.txt",dtype=str)
+    #keywords = np.loadtxt("keywords.txt",dtype=str)
+
+    # Read keywords from keywords.txt file
+    with open('keywords.txt', 'r') as f:
+        keywords = [line.strip() for line in f]
+
 
     #Maximum values of each parameter
     max_vals_kin = np.loadtxt("max_kin_vals.txt")
@@ -181,7 +192,7 @@ def random_sampling():
             with open("family_" + parent_folder + "/Generation_" + str(generation) + "/Run_" + str(j+1) + "/Params/initial_configuration_parameters_" + keyword + ".txt","w") as f:
                 for k,data_point in enumerate(out_init_data[i]):
                     val = data_point * max_vals_init[k]
-                    if k < 6 or k == 11 or k == 12:
+                    if k < 7:
                         f.write("%d\t" % val)
                     else:
                         f.write("%1.8f\t" % val)
