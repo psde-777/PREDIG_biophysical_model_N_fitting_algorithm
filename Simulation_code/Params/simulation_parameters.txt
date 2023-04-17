@@ -1,4 +1,4 @@
-200000  200000	400000		100000000		25		4		2	2	1	1	1	1	0.5		0.2
+200000  200000	400000		1000000000		25		4		2	2	1	1	1	10	0.5		0.2
 
 
 
@@ -16,6 +16,5 @@
 #mode_lignin_glue : Determines, whether the lignin gluing effect is active (1) or inactive (-1)
 #mode_enzyme_size : Determines, whether the enzyme size is included (1) or inactive (-1)
 #Nruns : Determines, how many simulation runs will be done
-#enzyme_radius : Denotes the radius of the enzyme in bonds
 #mu_lignin_covering: Determines the average fraction of lignin polymers which acts as a structural barrier. Set this to a value between 0 and 1
 #sigma_lignin_covering: : Determines the standard deviation around mu_lignin_covering. Set this to a value between 0 and 1

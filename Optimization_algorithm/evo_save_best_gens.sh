@@ -24,7 +24,7 @@ done
 
 touch BEST_FIT/lowest_vars_gen.txt
 
-sort -g -k 3,3 BEST_FIT/var_vs_gen.txt | head -n 1 >> BEST_FIT/lowest_vars_gen.txt
+sort -g -k 3,3 BEST_FIT/var_vs_gen.txt | head -1 >> BEST_FIT/lowest_vars_gen.txt
 
 
 

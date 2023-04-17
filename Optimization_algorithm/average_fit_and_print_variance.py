@@ -125,7 +125,7 @@ for keyword in keywords:
 
 
         outFile[:,:]/=countFound
-        np.savetxt(sys.argv[1]+'saccharification/average_saccharification_'+keyword+'.txt', outFile)  #### edit partho, saves average saccharification file
+        np.savetxt(sys.argv[1]+'saccharification/average_saccharification_'+keyword+'.txt', outFile, delimiter="        ")  #### edit partho, saves average saccharification file
 
 
 

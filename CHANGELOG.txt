@@ -1,0 +1,13 @@
+---------------------------
+Updates 17-04-2023: Partho
+---------------------------
+
+- The major changes in the latest update include the introduction of Michaelis–Menten kinetics in the enzyme action for the main simulation code and the allowing the fitting algorithm to resume after a server restart or any kind of undesired or even intentional interruption.
+
+- Added kinetic parameters in the simulation for Michaelis–Menten kinetics: These parameters include Kcat and Km values for all the diffusive action of the enzymes. 
+
+- Added initial configuration parameters corresponding to enzyme concentration: In contrast to the earlier version, the enzyme numbers have been replaced with fractions (0-1) which represent the percentage composition of enzyme cocktail, and a new parameter (this can be fixed in the interface to avoid complications) which simply states the total number of enzyme molecules in the surrounding volume of the subunit.
+
+- Added composition parameter for fractional composition of cellulose: The sum of the fractions for cellulose, hemicellulose and lignin are normalised in the code.
+
+- Fixed resume fitting after server restart issue: The fitting algorithm is now run by the wrapper script `./evo_wrapper.sh`. It takes the fit settings from the file 'fit_settings.txt'. It saves the status of the runs in 'generations.log'. If the fitting gets interrupted due to any reason, simply run `./evo_wrapper.sh` again and it will resume from the last properly completed generation.

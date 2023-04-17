@@ -4,7 +4,7 @@ This README provides instructions on how to run the simulation code, and a brief
 
 ## System requirements
 
-The "code_4" binary was compiled using GCC version 7.4.0 on 64-bit linux, so it can be run as is on such systems.
+The "code_4" binary was compiled using GCC version 10.2.1 20210110 (Debian 10.2.1-6) on 64-bit linux, so it can be run as is on such systems.
 
 For windows and mac you need to recompile the source code (see below). Please be aware that in this case, file paths in the source code may need to be updated in order to comply with the respective system (e.g. "\" vs "/" for windows vs linux).
 
@@ -115,76 +115,89 @@ You can skip the compiling step, if you are using 64-bit linux and already have 
 
 12.) Nruns: Determines the number of simulation runs. [10 runs are good enough for getting a smooth average saccharification curve.]
 
-13.) mu_lignin_covering: Determines the average fraction of lignin polymers which acts as a structural barrier. Set this to a value between 0 and 1. [Needs some literature survey before fixing.]
+13.) mu_lignin_covering: Determines the average fraction of lignin polymers which acts as a structural barrier. Set this to a value between 0 and 1. [Fix at 0.5]
 
-14.) sigma_lignin_covering : Determines the standard deviation around mu_lignin_covering. Set this to a value between 0 and 1. [Needs some literature survey before fixing.]
+14.) sigma_lignin_covering : Determines the standard deviation around mu_lignin_covering. Set this to a value between 0 and 1. [Fix at 0.2]
 
 
 ### kinetic_parameters:
 
-1.) EG rate of reaction [Needs a range. 10-2000. But needs to be calculated for further precision.]
+1.) EG Kcat (diffusive action)      [units: 1/s. Range: 0.001-1000]
 
-2.) CBH rate of reaction [Needs a range. 10-2000. But needs to be calculated for further precision.]
+2.) EG Km (diffusive action)        [units: mM. Range: 0.001-1000]
 
-3.) BGL rate of reaction [Needs a range. 10-5000. But needs to be calculated for further precision.]
+3.) CBH processive digestion rate   [units: 1/h. Range: 10-10000]
 
-4.) XYL rate of reaction [Needs a range. 0.001-1. But needs to be calculated for further precision.]
+4.) BGL Kcat (diffusive action)     [units: 1/s. Range: 0.001-1000]
 
-5.) Lignin rate of adhesion [Needs a range. 150-350 is good.]
+5.) BGL Km (diffusive action)       [units: mM. Range: 0.001-1000]
 
-6.) CBH rate of attachment [Needs a range. 0.001-1 is good for now.]
+6.) XYL Kcat (diffusive action)     [units: 1/s. Range: 0.001-1000]
 
-7.) Inhibition factor. Binding affinity of cellobiose to EG. [Range should be 0.0-1.0]
+7.) XYL Km (diffusive action)       [units: mM. Range: 0.001-1000]
 
-8.) Inhibition factor. Binding affinity of cellobiose to CBH. [Range should be 0.0-1.0]
+8.) Lignin_adhesion_rate            [Just a number. Range: 150-350]
 
-9.) Inhibition factor. Binding affinity of glucose to EG. [Range should be 0.0-1.0]
+9.) CBH Kcat (attachment rate)      [units: 1/s. Range: 0.001-1000]
 
-10.) Inhibition factor. Binding affinity of glucose to CBH. [Range should be 0.0-1.0]
+10.) CBH Km (attachment rate)       [units: mM. Range: 0.001-1000] 
 
-11.) Inhibition factor. Binding affinity of glucose to BGL. [Range should be 0.0-1.0]
+11.) inhibition binding affinity of cellobiose to EG [dimensionless number. Range: 0-1]
 
-12.) ratio between digestibility of "crystalline" and "amorphous" cellulose. [Range should be 0.00001-0.001]
+12.) inhibition inding affinity of cellobiose to CBH [dimensionless number. Range: 0-1]
 
-13.) ratio between digestibility of "crystalline" and "amorphous" hemicellulose. [Range should be 0.00001-0.001]
+13.) inhibition binding affinity of glucose to EG    [dimensionless number. Range: 0-1]
 
-14.) enzyme radius: Determines the radius of the enzymes. [Range can be 1-10. But can be changed later.]
+14.) inhibition inding affinity of glucose to CBH    [dimensionless number. Range: 0-1]
+
+15.) inhibition inding affinity of glucose to BGL    [dimensionless number. Range: 0-1]
+
+16. digestibility ratio of "crystalline" and "amorphous" cellulose [dimensionless number. Range: 0.00001-0.1]
+
+17.) digestibility ratio of "crystalline" and "amorphous" hemicellulose [dimensionless number. Range: 0.00001-0.1]
+
+18.) Enzyme size: radius   [Units: nm. Can be fixed at 2.5 nm]
 
 
 
 ### initial_configuration_parameters:
 
-1.) mode_code: Determines the shape of the microfibril. To use the 36 chain microfibril used by Ding et al., set this to 5 (Spruce wood, 24 polymers, mode_code = 1 or 2; Mung beans, 18 polymers, mode_code = 3 or 4; Maize, 36 polymers, mode_code = 5). [To be fixed to value according to plant sample]
- 
-2.) initial EG concentration. [Needs some calculation to fixed. Currently set to value used in paper by Eric.]
+1.) mode_code: Determines the shape of the microfibril. To use the 36 chain microfibril used by Ding et al., set this to 5 (Spruce wood, 24 polymers, mode_code = 1 or 2; Mung beans, 18 polymers, mode_code = 3 or 4; Maize, 36 polymers, mode_code = 5). [To take value according to plant sample species]
 
-3.) initial CBH concentration. [Needs some calculation to fixed. Currently set to value used in paper by Eric.]
+2.) pct_EG [fraction of EG in enzyme coctail. Range: 0-1.]
 
-4.) initial BGL concentration. [Needs some calculation to fixed. Currently set to value used in paper by Eric.]
+3.) pct_CBH [fraction of CBH in enzyme coctail. Range: 0-1.]
 
-5.) initial XYL concentration. [Needs some calculation to fixed. Currently set to value used in paper by Eric.]
+4.) pct_BGL [fraction of BGL in enzyme coctail. Range: 0-1.] 
 
-6.) Length of the microfibril in bonds. [Currently set to 200. But can be increased to 400-500 at the expense of simulation time being longer.]
+5.) pct_XYL [fraction of XYL in enzyme coctail. Range: 0-1.]
 
-7.) Boolean for hemicellulose. Xylose or MLG. [If set to 1, there is Xylans in Hemicellulose (xylose released). If set to 0, there is Mixed-Linkage Glucans (glucose released)]
+6.) total_enz_molecules [Total number of enzyme molecules in the surrounding volume of a subunit. Fix at 50. But can be varied in the range: 50-150, resulting in faster saccharification.]
 
-8.) Percentage of xylose in hemicellulose; currently restricted to a value of 1. [Should be fixed at 1 for now. But can be usedful later when other hemicellulose sugars are implemented simultaneously.]
+7.) length_fibril [Fix at 200. Can be increased to higher values to simulate longer microfibril at the expense of increased simulation time.]
 
-9.) Percentage of hemicellulose within the microfibril. [Comes from composition data. User should input. Range 0-1.]
+8.) boolean_Xyl_or_MLG [Fix it to 1. If set to 1, there is Xylans in Hemicellulose (xylose released). If set to 0, there is Mixed-Linkage Glucans (glucose released)]
 
-10.) Percentage of lignin within the microfibril. [Comes from composition data. User should input. Range 0-1.]
+9.) pct_xyl: Percentage of xylose in hemicellulose; currently restricted to a value of 1. [Should be fixed at 1 for now. But can be useful later when other hemicellulose sugars are implemented simultaneously.]
 
-11.) Percentage of acetylated hemicellulose within the hemicellulose fraction; currently restricted to a value of 0. [Can be left at 0 for now. Will consult Holger about acetylation effects & could be be useful after that.]
+10.) pct_cellu: Percentage of cellulose in microfibril composition [Comes from composition data. User should input. Range 0-1.]
 
-12.) Percentage of "crystalline" cellulose. [Fitting parameter. Can also come from user data, if available. Range 0-1.]
+11.) pct_hemi: Percentage of hemicellulose within the microfibril. [Comes from composition data. User should input. Range 0-1.] 
 
-13.) Percentage of "crystalline" hemicellulose. [Fitting parameter. Can also come from user data, if available. Range 0-1.]
+12.) pct_lign: Percentage of lignin within the microfibril. [Comes from composition data. User should input. Range 0-1.] 
 
-14.) Mean size of defect/damaged section of Crystalline cellulose. [Implemented for all mode_codes. Takes value 0-0.5. It signfies the fraction of amorphous cellulose (out of len_poly) contained in the defects.]
+13.) pct_acetyl_hemi: Percentage of acetylated hemicellulose within the hemicellulose fraction; currently restricted to a value of 0. [Fix it at 0 for now. Allows an extra option if acetylation of hemicellulose is considered and modified later.]
 
-15.) Number of defects/damaged sections of Crystalline cellulose. [Implemented for all mode_codes. Takes value 0-1. It signfies the fraction of the number of outer cellulose polymers which have defects.]
+14.) pct_crystalline_cellu: Percentage of "crystalline" cellulose. [Fitting parameter. Can also come from user data, if available. Range 0-1.]
 
-16.) Radius around which each bond location is checked for neighbors. To be kept at 0.6 [Fixed for now. No need to vary]
+15.) pct_crystalline_hemi: Percentage of "crystalline" hemicellulose. [Fitting parameter. Can also come from user data, if available. Range 0-1.]
+
+16.) Mean_defect_size: Mean size of defect/damaged section of Crystalline cellulose. [Implemented for all mode_codes. Takes value 0-0.5. It signfies the fraction of amorphous cellulose (out of len_poly) contained in the defects.]
+
+17.) Nbr_of_defects: Number of defects/damaged sections of Crystalline cellulose. [Implemented for all mode_codes. Takes value 0-1. It signfies the fraction of the number of outer cellulose polymers which have defects.]
+
+18.) r_monomer: Radius around which each bond location is checked for neighbors. To be kept at 0.6 [Fixed for now. No need to vary]
+
 
 
 

@@ -87,7 +87,14 @@ struct params {//Struct containing some parameters which are read-in from file
     double init_CBH_save;//Initial number of CBH = cellobiohydrolases = exoglucanases
     double init_BGL_save;//Initial number of BGL = beta-glucosidase
     double init_XYL_save;//Initial number of XYL = xylanase
-
+    // added params for varying enzyme cocktail composition by % values
+    int N_enz_total; // Initial total number of enzyme molecules in subunit volume
+    double pct_EG; // fractional compsotion 0f EG in the cocktail mix
+    double pct_CBH; // fractional compsotion of CBH in the cocktail mix
+    double pct_BGL; // fractional compsotion of BGL in the cocktail mix
+    double pct_XYLA; // fractional compsotion if XYL in the cocktail mix
+    
+    
     unsigned long int T;//Number of iterations for the stationnary phase of the simulation
     unsigned long int Transient;//Number of iterations for transient
     unsigned long int Nbr_picts;//Number of pictures of the fibril to be taken
@@ -102,15 +109,18 @@ struct params {//Struct containing some parameters which are read-in from file
     double average_CBH_association_time = 90./3600.;//average time IN HOURS a processive CBH stays attached. In seconds it is 90
     double CBH_reaction_rate = average_CBH_step_number / average_CBH_association_time;
     //v_CBH = (0.25 +- 0.16) nm/s
-    double pct_xyl;//percentage of xylose in hemicellulose polymers
-    double pct_lign;//Percentage of lignin in microfibril
-    double pct_lign_subset;//Percentage of lignin in outer layer
-    double pct_hemi;//Percentage of hemicellulose in microfibril
-    double pct_hemi_subset;//Percentage of hemicellulose in outer layer
-    double pct_acetyl_hemi;//Percentage of acetylated hemicellulose bonds in hemicellulose polymers
-    double pct_glc;//Percentage of cellulose. Calculated from given hemi/lignin values
-    double pct_crystalline_cellu;//Percentage of crystalline cellulose
-    double pct_crystalline_hemi;//Percentage of crystalline hemicellulose
+    double pct_xyl;// Percentage of xylose in hemicellulose polymers
+    double pct_lign_uns; //Percentage of lignin input (unscaled)
+    double pct_lign;// Percentage of lignin in microfibril
+    double pct_lign_subset; //Percentage of lignin in outer layer
+    double pct_hemi_uns; //Percentage of hemicellulose input (unscaled)
+    double pct_hemi; //Percentage of hemicellulose in microfibril
+    double pct_hemi_subset; //Percentage of hemicellulose in outer layer
+    double pct_acetyl_hemi; //Percentage of acetylated hemicellulose bonds in hemicellulose polymers
+    double pct_cellu_uns; //Percentage of cellulose input (unscaled)
+    double pct_glc; //Percentage of cellulose. Calculated from given hemi/lignin values
+    double pct_crystalline_cellu; //Percentage of crystalline cellulose
+    double pct_crystalline_hemi ;//Percentage of crystalline hemicellulose
     double dfct_size; // Percentage of total amorphous cellulose surrounded by crystalline
     double N_amor_core; // Number of amorphous cores hidden in the crystalline
 
@@ -155,6 +165,27 @@ struct params {//Struct containing some parameters which are read-in from file
     bool toy_model = false;//If this is set to true, every bond will be accessible from the beginning. This resembles the situation of all polymers freely floating in space
     bool print_time = false;//If this is set to true, the computation time of each run will be printed to a file
     bool xyl_or_mlg = true; //If this is set to true then Xylose in outer shell, if false then MLGs in outer shell
+    
+    int number_of_cellu = 0; // Parameter to save number of cellulose
+
+
+    // Michaelis Menten enzyme parameters
+    double Kcat_EG = 1e-16; // Units (1/s)
+    double Km_EG = 1e-16; // Units (mM)
+    double KcatKm_EG = 1e-16; // Units (1/M.hr)
+    double Kcat_CBH = 1e-16; // Units (1/s)
+    double Km_CBH = 1e-16;  // Units (mM)
+    double KcatKm_CBH = 1e-16;  // Units 1/M.hr)
+    double Kcat_BGL = 1e-16;    // Units (1/s)
+    double Km_BGL = 1e-16;  // Units (mM)
+    double KcatKm_BGL = 1e-16; // Units (1/M.hr)
+    double Kcat_XYL = 1e-16;    // Units (1/s)
+    double Km_XYL = 1e-16;  // Units (mM)
+    double KcatKm_XYL = 1e-16;  // Units (1/M.hr)
+
+    double box_volume = 4.4e-23; // Units (meter cubed)
+    double N_avogadro = 6.022e23; // Avogadro number
+
 
     std::vector<double> propensities; //The vector containing the propensities for each reaction type. ALL REACTIONS IN THE REACTION TABLES CONTAIN POINTERS TO THESE VALUES
     std::vector<double> crystal_propensities; //The vector containing the crystalline propensities for each reaction type. ALL REACTIONS IN THE REACTION TABLES CONTAIN POINTERS TO THESE VALUES

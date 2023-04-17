@@ -1,8 +1,7 @@
 #!/bin/bash
 
 # Remove contents of keywords.txt file
-unlink keywords.txt
-touch keywords.txt
+echo -n "" > keywords.txt
 
 # Loop through matching file names
 for file in latest/Output/expe_data/expe_saccharification_*_glc.txt; do
