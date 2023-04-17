@@ -5,7 +5,7 @@
 # $3 = Number to save
 echo "Cleaning house";
 cd family_$1
-#rm Generation_$2/Run_$3/Output/saccharification/saccharification_*
+rm Generation_$2/Run_$3/Output/saccharification/saccharification_*
 rm Generation_$2/Run_$3/Output/enzyme_fraction/enzyme_fraction_*
 rm Generation_$2/Run_$3/Output/enzyme_activity/enzyme_activity_*
 #rm Generation_$2/Run_$3/Output/Nbr_reactions/Nbr_reactions_*

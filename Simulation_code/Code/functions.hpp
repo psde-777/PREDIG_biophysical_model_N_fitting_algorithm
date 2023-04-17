@@ -120,6 +120,7 @@ void taylorNewPoly(
  * @return void
  **/
 void addreaction(
+    const std::vector<TList>& Table_cellu,
 	params& par,
     bool confidence,
     std::vector<TList>& list,
@@ -161,6 +162,9 @@ void clear_table(
  * @return void
  **/
 void fill_table(
+    const std::vector<TList>& Table_cellu,
+    std::vector<bList>& cellu, 
+    std::vector<bList>& hemi,    
 	params& par,
     std::vector<TList>& allTables,
     std::vector<bList>& polyList,
@@ -227,6 +231,8 @@ void deleteAllreaction(
  * @return The propensity of the reaction
  **/
 double prop(
+    std::vector<bList>& cellu, 
+    std::vector<bList>& hemi,
 	params& par,
     double act,
     std::vector<double> chem_entities,int& nbr_Glc_pdt, int& nbr_cellobiose); //partho changed added inhib in prop function
@@ -381,6 +387,9 @@ int findIndex(
  * @return void
  **/
 void EG_digest(
+    const std::vector<TList>& Table_cellu,
+    std::vector<bList>& cellu, 
+    std::vector<bList>& hemi,
 	params& par,
     std::vector<TList>& allTables,
     std::vector<bList>& polyList,
@@ -421,7 +430,10 @@ void EG_digest(
  * @return void
  **/
 void CBH_digest(
-	params& par,
+    const std::vector<TList>& Table_cellu,
+    std::vector<bList>& cellu, 
+    std::vector<bList>& hemi,
+    params& par,
     std::vector<TList>& allTables,
     std::vector<bList>& polyList,
     int& nbr_poly,
@@ -502,6 +514,9 @@ void BGL_digest(
  * @return void
  **/
 void XYL_digest(
+    const std::vector<TList>& Table_cellu,
+    std::vector<bList>& cellu, 
+    std::vector<bList>& hemi,
 	params& par,
     std::vector<TList>& allTables,
     std::vector<TList>& allCelluTables,
@@ -542,6 +557,9 @@ void XYL_digest(
  * @return void
  **/
 void CBH_attachment(
+    const std::vector<TList>& Table_cellu,
+    std::vector<bList>& cellu, 
+    std::vector<bList>& hemi,
 	params& par,
     std::vector<TList>& allTables,
     std::vector<bList>& celluList,
@@ -762,6 +780,7 @@ double dist(double dx, double dy, double dz);
 void lignin_glue(
 	params& par,
     std::vector<bList>& cellu,
+    std::vector<bList>& hemi,
     std::vector<TList>& Table_cellu,
     std::vector<TList>& Table_hemi,
     TList& Table_lign,
@@ -963,6 +982,7 @@ bool CBH_enzyme_attached(
 void update_attachment_reactions(
 	params& par,
     std::vector<bList>& cellu,
+    std::vector<bList>& hemi,
     std::vector<TList>& Table_cellu,
     std::vector<double>& chem_entities, int& nbr_Glc_pdt, int& nbr_cellobiose);
 

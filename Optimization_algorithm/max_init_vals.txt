@@ -1,5 +1,24 @@
-5	1000	1000	1000	1000	1000	1 	1	1	1	1	1	1	0.5		1	    1
+5	1 	1 	1 	1 	100 	1000 	1 	1 	1 	1 	1 	1 	1 	1 	1 	0.5 	1
 
 
 
-#>> mode_code >> init_EG >> init_CBH >> init_BGL >> init_XYL >> length_fibril >> boolean_Xyl_or_MLG >> pct_xyl >> pct_hemi >> pct_lign >> pct_acetyl_hemi >> pct_crystalline_cellu >> pct_crystalline_hemi >> Mean_defect_size >> Nbr_of_defects >> r_monomer
+
+
+# mode_code 
+# pct_EG 
+# pct_CBH 
+# pct_BGL 
+# pct_XYL 
+# total_enz_molecules 
+# length_fibril 
+# boolean_Xyl_or_MLG 
+# pct_xyl 
+# pct_cellu 
+# pct_hemi 
+# pct_lign 
+# pct_acetyl_hemi 
+# pct_crystalline_cellu 
+# pct_crystalline_hemi 
+# Mean_defect_size 
+# Nbr_of_defects 
+# r_monomer
