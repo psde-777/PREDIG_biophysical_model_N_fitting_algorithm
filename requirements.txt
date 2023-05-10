@@ -1,3 +1,3 @@
 The "code_4" binary was compiled using GCC version 10.2.1 20210110 (Debian 10.2.1-6) on 64-bit linux, so it can be run as is on such systems. On other OS please compile the source using the compiler script provided.
 
-Requirements: ffmpeg (for making digestion animation), python libraries(python3: version used Python 3.9.2) (matplotlib, scipy, pyfiglet, numpy, glob, os, re, tqdm, imageio, sys, random)
+Requirements: ffmpeg (for making digestion animation), python libraries(python3: version used Python 3.9.2) (matplotlib, scipy, pyfiglet, numpy, glob, os, re, tqdm, imageio, sys, random, math, PIL)

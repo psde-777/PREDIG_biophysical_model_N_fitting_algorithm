@@ -5,7 +5,7 @@ import glob
 import os
 import re
 from tqdm import tqdm
-import imageio.v2 as imageio
+
 
 
 
@@ -49,15 +49,15 @@ file_list = sorted(glob.glob('Output/3D/visualisation_total_*.txt'), key=lambda 
 
 
 # Set figure size and resolution
-fig_size = (8, 6)
-width=1600
-height=1200
+width=1080
+height=1080
 dpi = 100
 
 i = int(0)
 
+print("Making digestion frames")
 # Loop over files and create frames
-for file_name in tqdm(file_list, desc='Creating frames', unit='file'):
+for file_name in tqdm(file_list, unit='file'):
     # Load data from file
     data = np.loadtxt(file_name, usecols=(0, 1, 2, 3, 4))
 
@@ -72,7 +72,7 @@ for file_name in tqdm(file_list, desc='Creating frames', unit='file'):
     fig = plt.figure(figsize=(width/dpi, height/dpi),dpi=dpi)
     ax = fig.add_subplot(projection='3d')
 
-    ax.scatter(z, x, y, c=color_val, s=250, cmap=cmap, marker='h', edgecolor='black')
+    ax.scatter3D(z, x, y, c=color_val, s=300, cmap=cmap, depthshade=True, marker='H', edgecolor='black')
 
     ax.set_xlim(-5, 205)
     ax.set_ylim(-5, 9)
@@ -84,14 +84,14 @@ for file_name in tqdm(file_list, desc='Creating frames', unit='file'):
     ax.set_yticks([])
     ax.set_zticks([])
     # Rotate the plot and set the camera angle
-    ax.view_init(elev=10, azim=i*0.6)
+    ax.view_init(elev=10, azim=i*0.25)
     # Set title
 
-    plt.title(f'Time = {timer} hours',fontsize=20)
+    plt.title(f'Time = {timer} hours',fontsize=22)
     plt.tight_layout()
-    fig.savefig(f'frames_py/frame_{i+1:03d}.png', dpi=100)
+    fig.savefig(f'frames_py/frame_{i+1:05d}.png', dpi=100)
     i=i+1
      # Save frame
     frame_num = int(os.path.splitext(os.path.basename(file_name))[0].split('_')[-1])
-    file_path = os.path.join(output_dir, f'frame_{frame_num:04d}.png')
+    file_path = os.path.join(output_dir, f'frame_{frame_num:05d}.png')
     plt.close(fig)

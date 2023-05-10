@@ -164,7 +164,9 @@ void clear_table(
 void fill_table(
     const std::vector<TList>& Table_cellu,
     std::vector<bList>& cellu, 
-    std::vector<bList>& hemi,    
+    std::vector<bList>& hemi,
+    std::unordered_map<std::tuple<double,double,int>, neighborList>& bond_neighbors_cellu,
+    std::unordered_map<std::tuple<double,double,int>, neighborList>& bond_neighbors_hemi,    
 	params& par,
     std::vector<TList>& allTables,
     std::vector<bList>& polyList,
@@ -233,6 +235,8 @@ void deleteAllreaction(
 double prop(
     std::vector<bList>& cellu, 
     std::vector<bList>& hemi,
+    std::unordered_map<std::tuple<double,double,int>, neighborList>& bond_neighbors_cellu,
+    std::unordered_map<std::tuple<double,double,int>, neighborList>& bond_neighbors_hemi,
 	params& par,
     double act,
     std::vector<double> chem_entities,int& nbr_Glc_pdt, int& nbr_cellobiose); //partho changed added inhib in prop function
@@ -403,7 +407,7 @@ void EG_digest(
     std::vector<double>& chem_entities,
     const int substrate,
     std::unordered_map<std::tuple<double,double,int>, neighborList>& bond_neighbors_cellu,
-    std::unordered_map<std::tuple<double,double,int>,neighborList>& bond_neighbors_hemi,
+    std::unordered_map<std::tuple<double,double,int>, neighborList>& bond_neighbors_hemi,
     const bool verbose,
     bool& error);
 
@@ -781,6 +785,8 @@ void lignin_glue(
 	params& par,
     std::vector<bList>& cellu,
     std::vector<bList>& hemi,
+    std::unordered_map<std::tuple<double,double,int>, neighborList>& bond_neighbors_cellu,
+    std::unordered_map<std::tuple<double,double,int>, neighborList>& bond_neighbors_hemi,
     std::vector<TList>& Table_cellu,
     std::vector<TList>& Table_hemi,
     TList& Table_lign,
@@ -983,6 +989,8 @@ void update_attachment_reactions(
 	params& par,
     std::vector<bList>& cellu,
     std::vector<bList>& hemi,
+    std::unordered_map<std::tuple<double,double,int>, neighborList>& bond_neighbors_cellu,
+    std::unordered_map<std::tuple<double,double,int>, neighborList>& bond_neighbors_hemi,
     std::vector<TList>& Table_cellu,
     std::vector<double>& chem_entities, int& nbr_Glc_pdt, int& nbr_cellobiose);
 
@@ -1012,5 +1020,19 @@ void distribute_lignin_covering(
 void check_for_blocked_ends(std::vector<bList>& cellu,
                             std::vector<TList>& Table_cellu,
                             params& par);
+
+
+
+int CountOutercellu(
+    std::vector<bList>& cellu, 
+    std::unordered_map<std::tuple<double,double,int>, neighborList>& bond_neighbors_cellu);
+
+
+int CountOuterhemi(
+    std::vector<bList>& hemi, 
+    std::unordered_map<std::tuple<double,double,int>, neighborList>& bond_neighbors_hemi);
+
+
+
 
 #endif

@@ -288,18 +288,20 @@ int main(int argc, char *argv[]){
             // in >> par.mode_code >> par.init_EG >> par.init_CBH >> par.init_BGL >> par.init_XYL >> par.length_fibril >> par.xyl_or_mlg >> par.pct_xyl >> par.pct_cellu_uns>> par.pct_hemi_uns >> par.pct_lign_uns >> par.pct_acetyl_hemi >> par.pct_crystalline_cellu >> par.pct_crystalline_hemi >> par.dfct_size >> par.N_amor_core >> par.r_monomer;  // partho_added paramter for small amount of amorphous core surrounded by cellulose
             
             
-            in >> par.mode_code >> par.pct_EG >> par.pct_CBH >> par.pct_BGL >> par.pct_XYLA >> par.N_enz_total >> par.length_fibril >> par.xyl_or_mlg >> par.pct_xyl >> par.pct_cellu_uns>> par.pct_hemi_uns >> par.pct_lign_uns >> par.pct_acetyl_hemi >> par.pct_crystalline_cellu >> par.pct_crystalline_hemi >> par.dfct_size >> par.N_amor_core >> par.r_monomer; // partho added params for varying enzyme coctail composition and params for defects in crystalline cellu core 
+            in >> par.mode_code >> par.pct_EG >> par.pct_CBH >> par.pct_BGL >> par.pct_XYLA >> par.N_enz_total >> par.length_fibril >> par.xyl_or_mlg >> par.pct_xyl >> par.pct_cellu_uns >> par.pct_hemi_uns >> par.pct_lign_uns >> par.pct_acetyl_hemi >> par.pct_crystalline_cellu >> par.pct_crystalline_hemi >> par.dfct_size >> par.N_amor_core >> par.r_monomer; // partho added params for varying enzyme coctail composition and params for defects in crystalline cellu core 
             
             par.init_EG = (int)(par.N_enz_total * (par.pct_EG/(par.pct_EG + par.pct_CBH + par.pct_BGL + par.pct_XYLA)) + 0.5);
             par.init_CBH = (int)(par.N_enz_total * (par.pct_CBH/(par.pct_EG + par.pct_CBH + par.pct_BGL + par.pct_XYLA)) + 0.5);
             par.init_BGL = (int)(par.N_enz_total * (par.pct_BGL/(par.pct_EG + par.pct_CBH + par.pct_BGL + par.pct_XYLA)) + 0.5);            
             par.init_XYL = (int)(par.N_enz_total * (par.pct_XYLA/(par.pct_EG + par.pct_CBH + par.pct_BGL + par.pct_XYLA)) + 0.5);
             
-            cout << par.init_EG << "\t" << par.init_CBH << "\t" << par.init_BGL << "\t" << par.init_XYL << endl;
             
             if(par.verbose == true){
+                cout << "initial configutation paramters input" << endl;
                 cout << par.mode_code << "\t" << par.pct_EG << "\t" << par.pct_CBH << "\t" << par.pct_BGL << "\t" << par.pct_XYLA << "\t" << par.N_enz_total << "\t" << par.length_fibril << "\t" << par.xyl_or_mlg << "\t" << par.pct_xyl << "\t" << par.pct_cellu_uns<< "\t" << par.pct_hemi_uns << "\t" << par.pct_lign_uns << "\t" << par.pct_acetyl_hemi << "\t" << par.pct_crystalline_cellu << "\t" << par.pct_crystalline_hemi << "\t" << par.dfct_size << "\t" << par.N_amor_core << "\t" << par.r_monomer << endl;
+                cout << "Number of enzyme molecules (EG : CBH : BGl : XYL)- \t" << par.init_EG << "\t" << par.init_CBH << "\t" << par.init_BGL << "\t" << par.init_XYL << endl;
             }
+
 
             for(int i=0;i<par.init_CBH;i++)
                 par.CBH_enzymes.push_back(CBH_enzyme());
@@ -432,7 +434,7 @@ int main(int argc, char *argv[]){
         //================= Here the run() function is called an the Gillespie algorithm actually takes place ===================================
 		//=========================================================================================================================================
 //        mean += (run(verbose,randomSeed,vid,heatmap_bool, xyl_or_mlg, seed48, current_run, outputBoundary, DP_distrib, par))/double(par.Nruns);
-	mean += (run(verbose,randomSeed,vid,heatmap_bool, seed48, current_run, outputBoundary, DP_distrib, par))/double(par.Nruns);
+	    mean += (run(verbose,randomSeed,vid,heatmap_bool, seed48, current_run, outputBoundary, DP_distrib, par))/double(par.Nruns);
 
 
         cout << "====================================" << endl;
@@ -885,9 +887,17 @@ double run(bool verbose, bool randomSeed, bool vid, bool heatmap_bool, long int 
 
     par.pct_hemi = par.pct_hemi_uns / (par.pct_cellu_uns + par.pct_hemi_uns + par.pct_lign_uns);
     par.pct_lign = par.pct_lign_uns / (par.pct_cellu_uns + par.pct_hemi_uns + par.pct_lign_uns);
+    par.pct_glc = par.pct_cellu_uns / (par.pct_cellu_uns + par.pct_hemi_uns + par.pct_lign_uns);
 
+    //par.pct_glc = 1. - par.pct_lign - par.pct_hemi;//Calculated cellulose percentage from hemicellulose and lignin percentages provided in parameter files
+    if (par.verbose == true){
+        cout << "----------------------------------------------------------------------------------" << endl;
+        cout << "Unscaled composition (cellu:hemi:lign) - \t" << par.pct_cellu_uns << " : " << par.pct_hemi_uns << " : " << par.pct_lign_uns << endl;
+        cout << "----------------------------------------------------------------------------------" << endl;
+        cout << "Rescaled composition (cellu:hemi:lign) - \t" << par.pct_glc << " : " << par.pct_hemi << " : " << par.pct_lign << endl;
+        cout << "----------------------------------------------------------------------------------" << endl;
+    }
 
-    par.pct_glc = 1. - par.pct_lign - par.pct_hemi;//Calculated cellulose percentage from hemicellulose and lignin percentages provided in parameter files
 
 
     //This file defines the configuration of the fibril withOUT regard to the availability of the bonds (conditioned by the positioning and amounts of lignin and hemicellulose)
@@ -1596,12 +1606,12 @@ double run(bool verbose, bool randomSeed, bool vid, bool heatmap_bool, long int 
 
     //Fill propensities and crystal_propensities vectors. These contain the values for the propensities of reactions of each possible type. The reactions themselves will contain pointers to these vectors
     for(int i=1;i<7;i++){
-    	par.propensities.push_back(prop(cellu,hemi,par,i,chem_entities,nbr_Glc_pdt,nbr_cellobiose));
+    	par.propensities.push_back(prop(cellu,hemi,bond_neighbors_cellu,bond_neighbors_hemi,par,i,chem_entities,nbr_Glc_pdt,nbr_cellobiose));
     	if(i!=4){
-	    	par.crystal_propensities.push_back(par.crystal_modifier_cellu*prop(cellu,hemi,par,i,chem_entities,nbr_Glc_pdt,nbr_cellobiose));
+	    	par.crystal_propensities.push_back(par.crystal_modifier_cellu*prop(cellu,hemi,bond_neighbors_cellu,bond_neighbors_hemi,par,i,chem_entities,nbr_Glc_pdt,nbr_cellobiose));
     	}
     	else{
-    		par.crystal_propensities.push_back(par.crystal_modifier_hemi * prop(cellu,hemi,par,i,chem_entities,nbr_Glc_pdt,nbr_cellobiose));
+    		par.crystal_propensities.push_back(par.crystal_modifier_hemi * prop(cellu,hemi,bond_neighbors_cellu,bond_neighbors_hemi,par,i,chem_entities,nbr_Glc_pdt,nbr_cellobiose));
     	}
     }
 
@@ -1681,7 +1691,7 @@ double run(bool verbose, bool randomSeed, bool vid, bool heatmap_bool, long int 
 
 
     /// Printing outer bond index_poly : partho
-
+    /*
     if (par.verbose == true){
         cout << "***** Outer cellu polymer chain index *****" << endl;
         for (auto it = outer_cellulose.begin(); it != outer_cellulose.end(); ++it){
@@ -1689,7 +1699,7 @@ double run(bool verbose, bool randomSeed, bool vid, bool heatmap_bool, long int 
         }
         cout << "------------------------------------------------" << endl;
         cout << "------------------------------------------------" << endl;
-    }
+    }*/
 
 
 
@@ -1783,16 +1793,16 @@ double run(bool verbose, bool randomSeed, bool vid, bool heatmap_bool, long int 
             random_outer = outer_cellulose[random_index];  // Random Outer Cellu Poly number of defect start from outer Polys
 
             int zcu = z_crystal_upper - int((defect_size+2)/2);
-            int zcl = z_crystal_lower + 5;
+            int zcl = z_crystal_lower + int((defect_size+2)/2);
 
-            int v_rand = rand()%((zcu- zcl) + 1) + zcl;
+            int v_rand = rand()%((zcu - zcl) + 1) + zcl;
         //    int v_rand2;
 
             int defect_org_bond = v_rand;
 
             int defect_bond_num = defect_org_bond;  // Random bond of defect start on Outer poly
 
-            int defect_poly_num = random_outer;
+            int defect_poly_num = random_outer;  // seclect random outer cellulose polymer
 
             int nghbr_1;
 
@@ -1834,11 +1844,11 @@ double run(bool verbose, bool randomSeed, bool vid, bool heatmap_bool, long int 
                         defect_sub_ctr++;
                         defect_bond_num++;
                     }
-
+                    /*
                     if (par.verbose ==  true){
                         cout << "defect poly num = " << defect_poly_num << "    defect bond = " << defect_bond_num << "--size Now--"<< defect_ctr << endl;
                         cout << "--------------"<< endl;
-                    }
+                    }*/
                 } 
                 else if (cellu[defect_poly_num].crystalline[defect_bond_num] = false){
                     defect_bond_num--;
@@ -1858,10 +1868,10 @@ double run(bool verbose, bool randomSeed, bool vid, bool heatmap_bool, long int 
                         count_crystalline--;
                         defect_ctr++;
                         defect_bond_num1++;
-
+                        /*
                         if (par.verbose == true){
                             cout << "Defect cellu poly neighbor#1 = " << nghbr_1 <<"--bond = "<< defect_bond_num1 << "--size Now--"<< defect_ctr << endl;
-                        }
+                        } */
                     }
                     else if (cellu[nghbr_1].crystalline[defect_bond_num1] = false){
                         defect_bond_num1--;
@@ -1878,10 +1888,10 @@ double run(bool verbose, bool randomSeed, bool vid, bool heatmap_bool, long int 
                         count_crystalline--;
                         defect_ctr++;
                         defect_bond_num2++;
-
+                        /*
                         if (par.verbose == true){
                             cout << "Defect cellu poly neighbor#2 = " << nghbr_2 << "--bond = " << defect_bond_num2 << "--size Now--"<< defect_ctr << endl;
-                        }
+                        }*/
                     }
                     else if (cellu[nghbr_2].crystalline[defect_bond_num2] = false){
                         defect_bond_num2--;
@@ -1893,11 +1903,7 @@ double run(bool verbose, bool randomSeed, bool vid, bool heatmap_bool, long int 
                 comehere:
 
                 if (par.verbose == true){
-                    cout << "--------------"<< endl;
-                    cout << "--------------"<< endl;
-                    cout << "--------------"<< endl;
                 }    
-            // }
 
             }
         }
@@ -1920,8 +1926,8 @@ double run(bool verbose, bool randomSeed, bool vid, bool heatmap_bool, long int 
 
 
         if(par.verbose == true){
-            cout << "Crystallinity percentage parameter input from file is  " << par.pct_crystalline_cellu << endl;
-            cout << "this amounts to a percentage of  " << double(count_crystalline)/double(count_cellu) << endl;
+            cout << "User input cellulose crystallinity percentage =  " << par.pct_crystalline_cellu << endl;
+            cout << "From code implementation, cellulose crystallinity percentage =  " << double(count_crystalline)/double(count_cellu) << endl;
         }
     }
     count_crystalline = 0;
@@ -1940,17 +1946,22 @@ double run(bool verbose, bool randomSeed, bool vid, bool heatmap_bool, long int 
         if(par.pct_crystalline_cellu > 0 and par.pct_crystalline_cellu <= 1){
     	    for(int i=0;i<nbr_poly_hemi;i++){
     	    	for(int j=0;j<hemi[i].len_poly;j++){
-                //    if(bond_neighbors_hemi[make_tuple(hemi[i].x,hemi[i].y,hemi[i].z[j])].has_neighbor_material(1) == true and hemi[i].z[j] >= z_crystal_lower and hemi[i].z[j] < z_crystal_upper){ //partho comment
-                    if(bond_neighbors_hemi[make_tuple(hemi[i].x,hemi[i].y,hemi[i].z[j])].has_neighbor_material(1) == true and cellu[i].crystalline[j]== true){ // hemi crystalline if cellu neighbor crystal : partho
+                    if(bond_neighbors_hemi[make_tuple(hemi[i].x,hemi[i].y,hemi[i].z[j])].has_neighbor_material(1) == true and hemi[i].z[j] >= z_crystal_lower and hemi[i].z[j] < z_crystal_upper and cellu[i].crystalline[j]== true){ //partho comment
     	    			hemi[i].crystalline[j] = true;
     	    			count_crystalline++;
     	    		}
                     if(double(count_crystalline)/double(count_hemi) >= par.pct_crystalline_hemi){
                         break;
                     }
+                    if(double(count_crystalline)/double(count_hemi) >= par.pct_crystalline_cellu){
+                        break;
+                    } 
     //    			count_hemi++;
     	    	}
                 if(double(count_crystalline)/double(count_hemi) >= par.pct_crystalline_hemi){
+                    break;
+                }
+                if(double(count_crystalline)/double(count_hemi) >= par.pct_crystalline_cellu){
                     break;
                 }
     	    }
@@ -1962,7 +1973,8 @@ double run(bool verbose, bool randomSeed, bool vid, bool heatmap_bool, long int 
         }
 
         if(par.verbose == true){
-    	    cout << "Hemi crystalline percentage = " << double(count_crystalline)/double(count_hemi) << "; the parameter given in the file reads: " << par.pct_crystalline_hemi << endl;
+            cout << "User input hemi crystalline percentage = " << par.pct_crystalline_hemi << endl;
+    	    cout << "From code implementation, hemi crystalline percentage = " << double(count_crystalline)/double(count_hemi) << endl;
         }
         double diff_epsilon = 0.01;
         if (abs(double(count_crystalline)/double(count_hemi)-par.pct_crystalline_hemi)/par.pct_crystalline_hemi > diff_epsilon and par.verbose == true){
@@ -1989,13 +2001,13 @@ double run(bool verbose, bool randomSeed, bool vid, bool heatmap_bool, long int 
                     cellu[i].status[j] = 1;
                     if(j == 1){
                         par.free_poly_ends.insert({cantor_pair_two(i,1), make_tuple(i,1)});
-                        addreaction(Table_cellu,par,0,Table_cellu,i,1,1,6,prop(cellu,hemi,par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),cellu[i].crystalline[1]);//This already adds the corresponding reaction
+                        addreaction(Table_cellu,par,0,Table_cellu,i,1,1,6,prop(cellu,hemi,bond_neighbors_cellu,bond_neighbors_hemi,par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),cellu[i].crystalline[1]);//This already adds the corresponding reaction
 
                         par.N_free_ends++;
                     }
                     else if(j == cellu[i].len_poly-2){
                         par.free_poly_ends.insert({cantor_pair_two(i,cellu[i].len_poly-2), make_tuple(i,cellu[i].len_poly-2)});
-                        addreaction(Table_cellu,par,0,Table_cellu,i,cellu[i].len_poly-2,1,6,prop(cellu,hemi,par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),cellu[i].crystalline[cellu[i].len_poly-2]);//This already adds the corresponding reaction
+                        addreaction(Table_cellu,par,0,Table_cellu,i,cellu[i].len_poly-2,1,6,prop(cellu,hemi,bond_neighbors_cellu,bond_neighbors_hemi,par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),cellu[i].crystalline[cellu[i].len_poly-2]);//This already adds the corresponding reaction
                         par.N_free_ends++;
                     }
                 }
@@ -2018,8 +2030,8 @@ double run(bool verbose, bool randomSeed, bool vid, bool heatmap_bool, long int 
 
 
 
-    par.propensities[5] = prop(cellu,hemi,par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose);
-    par.crystal_propensities[5] = par.crystal_modifier_cellu * prop(cellu,hemi,par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose);
+    par.propensities[5] = prop(cellu,hemi,bond_neighbors_cellu,bond_neighbors_hemi,par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose);
+    par.crystal_propensities[5] = par.crystal_modifier_cellu * prop(cellu,hemi,bond_neighbors_cellu,bond_neighbors_hemi,par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose);
 
     for(int i=0;i<Table_cellu.size();i++){
         Table_cellu[i].calcTableProp();
@@ -2033,7 +2045,7 @@ double run(bool verbose, bool randomSeed, bool vid, bool heatmap_bool, long int 
 
     //Fill cellu tables
     for(int i=0;i<Table_cellu.size();i++){
-        fill_table(Table_cellu,cellu,hemi,par,Table_cellu, cellu, i, 1, error_bool,chem_entities,nbr_Glc_pdt,nbr_cellobiose);
+        fill_table(Table_cellu,cellu,hemi,bond_neighbors_cellu,bond_neighbors_hemi,par,Table_cellu, cellu, i, 1, error_bool,chem_entities,nbr_Glc_pdt,nbr_cellobiose);
         if(par.verbose == true){
             for(int j=0;j<Table_cellu[i].nbr_element;j++){
                 if(Table_cellu[i].num_bond[j] == 0 or Table_cellu[i].num_bond[j] == 1 or Table_cellu[i].num_bond[j] == cellu[i].len_poly-1 or Table_cellu[i].num_bond[j] == cellu[i].len_poly-2){
@@ -2048,7 +2060,7 @@ double run(bool verbose, bool randomSeed, bool vid, bool heatmap_bool, long int 
 
     //Fill hemi tables
     for(int i=0;i<Table_hemi.size();i++){
-        fill_table(Table_cellu,cellu,hemi,par,Table_hemi, hemi, i, 2,error_bool,chem_entities,nbr_Glc_pdt,nbr_cellobiose);
+        fill_table(Table_cellu,cellu,hemi,bond_neighbors_cellu,bond_neighbors_hemi,par,Table_hemi, hemi, i, 2,error_bool,chem_entities,nbr_Glc_pdt,nbr_cellobiose);
         if(par.verbose == true){
             for(int j=0;j<Table_hemi[i].nbr_element;j++){
                 if(Table_hemi[i].num_bond[j] >= hemi[i].len_poly){
@@ -2202,7 +2214,7 @@ double run(bool verbose, bool randomSeed, bool vid, bool heatmap_bool, long int 
         Table_lign.prop_uninhib.push_back(&par.propensities[4]);
         Table_lign.crystalline.push_back(0);
         Table_lign.covered.push_back(false);
-        Table_lign.addProp(prop(cellu,hemi,par,5,chem_entities,nbr_Glc_pdt,nbr_cellobiose));
+        Table_lign.addProp(prop(cellu,hemi,bond_neighbors_cellu,bond_neighbors_hemi,par,5,chem_entities,nbr_Glc_pdt,nbr_cellobiose));
         Table_lign.nbr_element++;
         Table_lign.calcTableProp();
         if(par.verbose == true){
@@ -2218,7 +2230,7 @@ double run(bool verbose, bool randomSeed, bool vid, bool heatmap_bool, long int 
         Table_lign.prop_uninhib.push_back(&par.propensities[4]);
         Table_lign.covered.push_back(false);
         Table_lign.crystalline.push_back(0);
-        Table_lign.addProp(prop(cellu,hemi,par,5,chem_entities,nbr_Glc_pdt,nbr_cellobiose));
+        Table_lign.addProp(prop(cellu,hemi,bond_neighbors_cellu,bond_neighbors_hemi,par,5,chem_entities,nbr_Glc_pdt,nbr_cellobiose));
         Table_lign.nbr_element++;
         Table_lign.prop_sum = 0;
     }
@@ -2513,7 +2525,7 @@ double run(bool verbose, bool randomSeed, bool vid, bool heatmap_bool, long int 
             }
             cout << "Lignin remaining in the fibril: " << remain_lignin << endl; // partho lignin remain print
 
-            if(non_cellobiose_glucose > 0 and par.N_free_CBH > 0 and par.crystal_modifier_cellu > 0.0 and prop(cellu,hemi,par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose) > 0){
+            if(non_cellobiose_glucose > 0 and par.N_free_CBH > 0 and par.crystal_modifier_cellu > 0.0 and prop(cellu,hemi,bond_neighbors_cellu,bond_neighbors_hemi,par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose) > 0){
                 bool status_bool = false;
                 for(int i=0;i<cellu.size();i++){
                     for(int j=0;j<cellu[i].len_poly;j++){
@@ -2525,7 +2537,7 @@ double run(bool verbose, bool randomSeed, bool vid, bool heatmap_bool, long int 
                     }
                 }
                 if(status_bool == true){
-                	cout << "Non-cellobiose glucose remains, even though there are " << par.N_free_CBH << " free CBH enzymes around that should be able to digest it, and crystalline bonds should be digestible. The number of free ends is: " << par.N_free_ends << ", and the propensity of an attachment reaction woud be " << prop(cellu,hemi,par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose) << ". Stopping program" << endl;
+                	cout << "Non-cellobiose glucose remains, even though there are " << par.N_free_CBH << " free CBH enzymes around that should be able to digest it, and crystalline bonds should be digestible. The number of free ends is: " << par.N_free_ends << ", and the propensity of an attachment reaction woud be " << prop(cellu,hemi,bond_neighbors_cellu,bond_neighbors_hemi,par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose) << ". Stopping program" << endl;
                     cout << "Reaction table dump: " << endl;
                     for(int i=0;i<Table_cellu.size();i++){
                         cout << "Length of polymer: " << cellu[i].len_poly << endl;
@@ -2728,7 +2740,7 @@ double run(bool verbose, bool randomSeed, bool vid, bool heatmap_bool, long int 
                     for(int i=0; i<cellu.size(); i++){
                         for(int j=0; j<cellu[i].z.size(); j++){
                             current_key = std::make_tuple(cellu[i].x,cellu[i].y,cellu[i].z[j]);
-//                            cout << "(" << cellu[i].x << ", " << cellu[i].y << ", " << cellu[i].z[j] << "): " << bond_neighbors_cellu[current_key].N_neighbors << endl;
+                            // cout << "(" << cellu[i].x << ", " << cellu[i].y << ", " << cellu[i].z[j] << "): " << bond_neighbors_cellu[current_key].N_neighbors << endl;
                             bond_neighbor_file << cellu[i].x << "\t" << cellu[i].y << "\t" << cellu[i].z[j] << "\t" << bond_neighbors_cellu[current_key].N_neighbors << endl;
                         }
                         bond_neighbor_file << "\n" << endl;
@@ -2807,8 +2819,8 @@ double run(bool verbose, bool randomSeed, bool vid, bool heatmap_bool, long int 
                         file82.close();
                     }
 
-                        // Record all the polymers in a single output file
-                        if(nbr_poly_cellu > 0){
+                    // Record all the polymers in a single output file
+                    if(nbr_poly_cellu > 0){
 					    par.output_file = "Output/3D/visualisation_total_" + to_string(current_run) + "_" + to_string(nbr_pict_taken) + ".txt";
 	                    cout << par.output_file << endl;
 	                    ofstream file99(par.output_file);
@@ -2845,9 +2857,22 @@ double run(bool verbose, bool randomSeed, bool vid, bool heatmap_bool, long int 
 	                    file99.close();
 	                }
 
+
+                    // Print saccharification data progressively
+                    if(nbr_poly_cellu > 0){
+                        par.output_file = "Output/3D/conversion_" + to_string(current_run) + "_" + to_string(nbr_pict_taken) + ".txt";
+                        cout << par.output_file << endl;
+                        ofstream file666(par.output_file);
+                        for(int i=0;i<par.time_mean.size();i++){
+                            if(i<par.amount_glc_mean.size()){
+                            file666 << par.time_mean[i] << "\t" << par.amount_glc_mean[i] << "\t" << par.amount_cellobiose_mean[i] << "\t" << par.amount_xylose_mean[i] << endl;
+                            }
+                        }    
+                        file666.close();
+                    }
+
+                    
                     nbr_pict_taken++;
-
-
                 }
             }
         }
@@ -3088,7 +3113,7 @@ double run(bool verbose, bool randomSeed, bool vid, bool heatmap_bool, long int 
         if(par.mode_lignin_glue == 1){
             if(action_mu1 == 5){
                 count_lignin_glue++;
-                lignin_glue(par, cellu,hemi, Table_cellu, Table_hemi,Table_lign, chem_entities, nbr_poly_lign,nbr_Glc_pdt,nbr_cellobiose);
+                lignin_glue(par, cellu,hemi, bond_neighbors_cellu, bond_neighbors_hemi, Table_cellu, Table_hemi,Table_lign, chem_entities, nbr_poly_lign,nbr_Glc_pdt,nbr_cellobiose);
 
             }
         }
@@ -3170,7 +3195,7 @@ double run(bool verbose, bool randomSeed, bool vid, bool heatmap_bool, long int 
             if(cellu[poly_selected].len_poly == 3){
                 if(par.free_poly_ends.find(cantor_pair_two(poly_selected,1)) == par.free_poly_ends.end() and CBH_enzyme_attached(par,poly_selected,1) == false){
                     par.free_poly_ends.insert({cantor_pair_two(poly_selected,1),make_tuple(poly_selected,1)});
-                    addreaction(Table_cellu,par,0,Table_cellu,poly_selected,1,1,6,prop(cellu,hemi,par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),cellu[poly_selected].crystalline[1]);//This already adds the corresponding reaction
+                    addreaction(Table_cellu,par,0,Table_cellu,poly_selected,1,1,6,prop(cellu,hemi,bond_neighbors_cellu,bond_neighbors_hemi,par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),cellu[poly_selected].crystalline[1]);//This already adds the corresponding reaction
                     par.N_free_ends++;
                 }
             }
@@ -3178,7 +3203,7 @@ double run(bool verbose, bool randomSeed, bool vid, bool heatmap_bool, long int 
                 if(cellu[cellu.size()-1].len_poly == 3){
                     if(par.free_poly_ends.find(cantor_pair_two(cellu.size()-1,1)) == par.free_poly_ends.end() and CBH_enzyme_attached(par,cellu.size()-1,1) == false){
                         par.free_poly_ends.insert({cantor_pair_two(cellu.size()-1,1),make_tuple(cellu.size()-1,1)});
-                        addreaction(Table_cellu,par,0,Table_cellu,cellu.size()-1,1,1,6,prop(cellu,hemi,par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),cellu[cellu.size()-1].crystalline[1]);//This already adds the corresponding reaction
+                        addreaction(Table_cellu,par,0,Table_cellu,cellu.size()-1,1,1,6,prop(cellu,hemi,bond_neighbors_cellu,bond_neighbors_hemi,par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),cellu[cellu.size()-1].crystalline[1]);//This already adds the corresponding reaction
                         par.N_free_ends++;
                     }
                 }
@@ -3201,13 +3226,13 @@ double run(bool verbose, bool randomSeed, bool vid, bool heatmap_bool, long int 
                         if(par.free_poly_ends.find(cantor_pair_two(cellu[i].index,1)) != par.free_poly_ends.end()){
                             par.free_poly_ends.erase(cantor_pair_two(cellu[i].index,1));
                             par.free_poly_ends.insert({cantor_pair_two(i,1),std::make_tuple(i,1)});
-                            addreaction(Table_cellu,par,0,Table_cellu,i,1,1,6,prop(cellu,hemi,par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),cellu[i].crystalline[1]);//This already adds the corresponding reaction
+                            addreaction(Table_cellu,par,0,Table_cellu,i,1,1,6,prop(cellu,hemi,bond_neighbors_cellu,bond_neighbors_hemi,par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),cellu[i].crystalline[1]);//This already adds the corresponding reaction
 
                         }
                         if(par.free_poly_ends.find(cantor_pair_two(cellu[i].index,cellu[i].len_poly-2)) != par.free_poly_ends.end()){
                             par.free_poly_ends.erase(cantor_pair_two(cellu[i].index,cellu[i].len_poly-2));
                             par.free_poly_ends.insert({cantor_pair_two(i,cellu[i].len_poly-2),std::make_tuple(i,cellu[i].len_poly-2)});
-                            addreaction(Table_cellu,par,0,Table_cellu,i,cellu[i].len_poly-2,1,6,prop(cellu,hemi,par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),cellu[i].crystalline[cellu[i].len_poly-2]);//This already adds the corresponding reaction
+                            addreaction(Table_cellu,par,0,Table_cellu,i,cellu[i].len_poly-2,1,6,prop(cellu,hemi,bond_neighbors_cellu,bond_neighbors_hemi,par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),cellu[i].crystalline[cellu[i].len_poly-2]);//This already adds the corresponding reaction
                         }
                         cellu[i].index = i;
                         Table_cellu[i].index_poly = i;
@@ -3315,7 +3340,7 @@ double run(bool verbose, bool randomSeed, bool vid, bool heatmap_bool, long int 
                     par.free_poly_ends.insert({cantor_pair_two(par.CBH_enzymes[i].poly_attached,par.CBH_enzymes[i].bond_attached), make_tuple(par.CBH_enzymes[i].poly_attached,par.CBH_enzymes[i].bond_attached)});
                     par.N_free_CBH++;
                     if(true){
-	                    addreaction(Table_cellu,par,0,Table_cellu,par.CBH_enzymes[i].poly_attached,par.CBH_enzymes[i].bond_attached,1,6,prop(cellu,hemi,par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),cellu[par.CBH_enzymes[i].poly_attached].crystalline[par.CBH_enzymes[i].bond_attached]);//This already adds the corresponding reaction
+	                    addreaction(Table_cellu,par,0,Table_cellu,par.CBH_enzymes[i].poly_attached,par.CBH_enzymes[i].bond_attached,1,6,prop(cellu,hemi,bond_neighbors_cellu,bond_neighbors_hemi,par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),cellu[par.CBH_enzymes[i].poly_attached].crystalline[par.CBH_enzymes[i].bond_attached]);//This already adds the corresponding reaction
                     }
                     par.N_free_ends++;
                 //    }
@@ -3340,7 +3365,7 @@ double run(bool verbose, bool randomSeed, bool vid, bool heatmap_bool, long int 
                 }
                 else{
                 	if(true){
-                		addreaction(Table_cellu,par,0,Table_cellu,get<0>(it->second),get<1>(it->second),1,6,prop(cellu,hemi,par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),cellu[Table_cellu,get<0>(it->second)].crystalline[Table_cellu,get<1>(it->second)]);
+                		addreaction(Table_cellu,par,0,Table_cellu,get<0>(it->second),get<1>(it->second),1,6,prop(cellu,hemi,bond_neighbors_cellu,bond_neighbors_hemi,par,6,chem_entities,nbr_Glc_pdt,nbr_cellobiose),cellu[Table_cellu,get<0>(it->second)].crystalline[Table_cellu,get<1>(it->second)]);
                 	}
                 }
             }
@@ -3402,7 +3427,7 @@ double run(bool verbose, bool randomSeed, bool vid, bool heatmap_bool, long int 
         //=========================================================================================================
 
 
-        update_attachment_reactions(par, cellu,hemi, Table_cellu, chem_entities, nbr_Glc_pdt,nbr_cellobiose);
+        update_attachment_reactions(par, cellu, hemi, bond_neighbors_cellu, bond_neighbors_hemi, Table_cellu, chem_entities, nbr_Glc_pdt,nbr_cellobiose);
 
         if(par.N_free_CBH < 0){
         	cout << "N_free_CBH < 0. This should never happen. Stopping..." << endl;
