@@ -125,7 +125,7 @@ for keyword in keywords:
 
 
         outFile[:,:]/=countFound
-        np.savetxt(sys.argv[1]+'saccharification/average_saccharification_'+keyword+'.txt', outFile, delimiter="        ")  #### edit partho, saves average saccharification file
+        np.savetxt(sys.argv[1]+'saccharification/average_saccharification_'+keyword+'.txt', outFile, delimiter="\t")  #### edit partho, saves average saccharification file
 
 
 
@@ -141,15 +141,27 @@ for keyword in keywords:
             exit()
     #    np.savetxt(sys.argv[1] + sys.argv[2] + keyword + ".txt", outFile[:,:], delimiter="    ") 
 
-var_glc = 0.
-var_xyl = 0.
+var_glc = 0.0
+var_xyl = 0.0
+data_num = 1.0
 for keyword in keywords:
-    var_glc += var_glc_dict[keyword]
-    var_xyl += var_xyl_dict[keyword]
+    if os.path.exists(sys.argv[1] + "expe_data/expe_saccharification_" + keyword + "_xyl.txt") and os.path.exists(sys.argv[1] + "expe_data/expe_saccharification_" + keyword + "_glc.txt"):
+        var_glc += var_glc_dict[keyword]
+        var_xyl += var_xyl_dict[keyword]
+        data_num = 0.5
+    elif os.path.exists(sys.argv[1] + "expe_data/expe_saccharification_" + keyword + "_xyl.txt") and not os.path.exists(sys.argv[1] + "expe_data/expe_saccharification_" + keyword + "_glc.txt"):
+        var_glc += 0
+        var_xyl += var_xyl_dict[keyword]
+        data_num = 1.0
+    elif os.path.exists(sys.argv[1] + "expe_data/expe_saccharification_" + keyword + "_glc.txt") and not os.path.exists(sys.argv[1] + "expe_data/expe_saccharification_" + keyword + "_xyl.txt"):
+        var_glc += var_glc_dict[keyword]
+        var_xyl += 0.0
+        data_num = 1.0
+
 
 var_glc/=len(keywords)
 var_xyl/=len(keywords)
-var = 0.5*(var_glc+var_xyl)    ##comment if no Xyl but MLG
+var = data_num * (var_glc + var_xyl)    ##comment if no Xyl but MLG
 #var=var_glc     ##uncomment if only glucose relevant MLG or Xyl
     
 print("var = " + str(var))

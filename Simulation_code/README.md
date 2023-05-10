@@ -180,7 +180,7 @@ You can skip the compiling step, if you are using 64-bit linux and already have 
 
 9.) pct_xyl: Percentage of xylose in hemicellulose; currently restricted to a value of 1. [Should be fixed at 1 for now. But can be useful later when other hemicellulose sugars are implemented simultaneously.]
 
-10.) pct_cellu: Percentage of cellulose in microfibril composition [Comes from composition data. User should input. Range 0-1.]
+10.) pct_cellu: Percentage of cellulose in microfibril composition [Comes from composition data. User should input. Range 0.01-1.]
 
 11.) pct_hemi: Percentage of hemicellulose within the microfibril. [Comes from composition data. User should input. Range 0-1.] 
 
@@ -227,10 +227,10 @@ You can skip the compiling step, if you are using 64-bit linux and already have 
     "-verbose": This will cause more detailed information of what is happening during the individual simulation runs to be written to the terminal.
 
     "-heatmap": this enables the Output of files documenting the distribution of glucose within cellulose polymers of all lengths within the "DP_distrib" folder.
-    As this is somewhat computationally expensive, it was chosen as an optional component
+    As this is somewhat computationally expensive, it was chosen as an optional component.
 
     "-vid": This causes the first simulation run to document the 3D positioning of all cellulose, hemicellulose and lignin bonds at step intervals, which are determined by a parameter in "simulation_parameters.txt" (see above).
-    They are saved in the folder "3D" and can be used to create a visualization of the microfibril digestion
+    They are saved in the folder "3D" and can be used to create a visualization of the microfibril digestion.
 
     "-fixed_seed": This fixes the seed of the pseudo-random number generator used within the simulation. The seed which will be set is currently specified within the source code, in the file "code_4.cpp"
     
@@ -384,9 +384,17 @@ The averaged files are structured in the same way as the raw data (see above).
 
 ### Creating movie of the microfibril digestion
 
-Creating a movie from the simulation is now done simply by running the shell script **Moviemaker.sh** (to use simply make script executable and run ```$chmod +x Moviemaker.sh && ./Moviemaker.sh```). It first runs a single Gillespie simulation run using the parameters from 'Params/initial_configuration_parameters_movie.txt' with the command line argument "-vid".  It then uses python matplotlib via the python script 'frame_maker.py', to generate the frames with rotating camera angle. It finally uses ffmpeg (must be installed on the system) to create a mp4 video from the generated frames. Then it cleans up all the data generated from the simulation to prevent unwanted file storage space shortage.
+Creating a movie from the simulation is now done simply by running the shell script **Moviemaker.sh** (to use simply make script executable and run ```$chmod +x Moviemaker.sh && ./Moviemaker.sh```). 
 
-Requirements: ffmpeg, python libraries (matplotlib, pyfiglet, numpy, glob, os, re, tqdm, imageio)
+The `Moviemaker.sh` script has a choice of 2 modes (Mode 1, Mode 2). The user is prompted to enter the choice (1,2) on running the script.
+
+Mode 1: Make animation for a theoretical simulation NOT comparing to any experimental data. Simulation runs till all substrate is digested.
+
+Mode 1: Make animation for a simulation WITH comparison to experimental glucose data. Experimental data to be compared, must be saved in the path `Output/expe_data/expe_saccharification_movie_glc.txt`, file must be named `expe_saccharification_movie_glc.txt`. Simulation runs till the maximim time in the data file.
+
+It first runs a single Gillespie simulation run using the parameters from `Params/initial_configuration_parameters_movie.txt` with the command line argument "-vid".  It then uses python matplotlib via the pythons scripts in the path  `scripts_for_movie/frame_*.py`, to generate the frames with rotating camera angle. It finally uses ffmpeg (must be installed on the system) to create a mp4 video from the generated frames. Then it cleans up all the data generated from the simulation to prevent unwanted file storage space shortage.
+
+Requirements: ffmpeg, python libraries (matplotlib, pyfiglet, math, numpy, glob, os, re, tqdm, PIL)
 
 
 # Code structure
