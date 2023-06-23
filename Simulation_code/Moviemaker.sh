@@ -30,7 +30,7 @@ done
 
 # copying the scripts from the folder to main directory
 cp scripts_for_movie/frame_*.py .
-
+cp scripts_for_movie/frame_copier.sh .
 
 
 # backing up simulation_parameters if mode 2 is selected
@@ -54,6 +54,8 @@ pyfiglet "Running your simulation"
 
 
 # Making the frames
+
+./frame_copier.sh
 
 python3 frame_maker_1.py
 
@@ -89,3 +91,5 @@ rm -r Output/enzyme_concentration/*movie*.txt
 rm -r Output/enzyme_fraction/enzyme_fraction_movie_*.txt
 rm -r Output/saccharification/saccharification_movie_*.txt
 rm -r frame_*.py
+rm frame_copier.sh
+

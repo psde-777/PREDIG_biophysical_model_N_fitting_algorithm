@@ -600,7 +600,7 @@ int exposed_hemi_num = CountOuterhemi(hemi,bond_neighbors_hemi);
 
     // pluggung MMenten numbers in k1,k3,k4 & k6.
 
-    par.k1 = par.KcatKm_EG * EG_subs_conc * 5e-9;
+    par.k1 = par.KcatKm_EG * EG_subs_conc * 5e-6;
     par.k3 = par.KcatKm_BGL * BGL_subs_conc * 1e-9;
     par.k4 = par.KcatKm_XYL * XYL_subs_conc * 1e-10;
     par.k6 = par.KcatKm_CBH * CBH_subs_conc * 5e-9;

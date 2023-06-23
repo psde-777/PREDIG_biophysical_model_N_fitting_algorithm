@@ -18,12 +18,15 @@ last_gen=$(tail -1 "generations.log" | awk '{print $2}')
 param6=`expr $last_gen + 1`
 #param6=$(cut -f2 generations.log)
 
-# print the values of the input eters
+# print the values of the input parameters
+echo "--------------------------------------------"
 echo "number of families: $param1"
 echo "Generations per family: $param2"
 echo "Sub-folders per generation: $param3"
 echo "DELTA: $param4"
 echo "cores to be used: $param5"
+echo "--------------------------------------------"
+
 
 if [[ $last_gen -gt 0 ]]
 then
@@ -34,3 +37,8 @@ else
 	./evo_all_in_one.sh $param1 $param2 $param3 $param4 $param5 1
 fi
 
+
+./evo_janitor.sh
+
+
+echo "ALL DONE"

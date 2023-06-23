@@ -144,7 +144,7 @@ for keyword in keywords:
 var_glc = 0.0
 var_xyl = 0.0
 data_num = 1.0
-for keyword in keywords:
+for keyword in keywords:  #Checks if either or both of glucose and xylose sacchartification data are present 
     if os.path.exists(sys.argv[1] + "expe_data/expe_saccharification_" + keyword + "_xyl.txt") and os.path.exists(sys.argv[1] + "expe_data/expe_saccharification_" + keyword + "_glc.txt"):
         var_glc += var_glc_dict[keyword]
         var_xyl += var_xyl_dict[keyword]
@@ -162,7 +162,7 @@ for keyword in keywords:
 var_glc/=len(keywords)
 var_xyl/=len(keywords)
 var = data_num * (var_glc + var_xyl)    ##comment if no Xyl but MLG
-#var=var_glc     ##uncomment if only glucose relevant MLG or Xyl
+
     
 print("var = " + str(var))
 with open(sys.argv[1] + "var.txt","w") as f:

@@ -11,7 +11,7 @@ with open('Params/simulation_parameters.txt', 'r') as f:
     lines = f.readlines()
 
 lines[0] = lines[0].split()
-lines[0][3] = str(T_int+4)
+lines[0][3] = str(T_int+1)
 lines[0][4] = "16"
 lines[0][11] = "1"
 lines[0] = '    '.join(lines[0]) + '\n'
