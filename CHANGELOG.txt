@@ -22,4 +22,18 @@ Updates 10-05-2023: Partho
 
 - Fixes bug with segmentation fault with non-normalised value of substrate composition percentages.
 
-- Updates to Moviemaker script. Adds progressive plotting of saccharification timecourse. Offers 2 modes (1 & 2). Mode 1: runs theoretical simulation until all substrate digested, NO comparison to experimental data. Mode 2: runs model simulation WITH comparision to experimental data in Output/expe_data/expe_saccharification_movie_glc.txt. 
+- Updates to Moviemaker script. Adds progressive plotting of saccharification timecourse. Offers 2 modes (1 & 2). Mode 1: runs theoretical simulation until all substrate digested, NO comparison to experimental data. Mode 2: runs model simulation WITH comparision to experimental data in Output/expe_data/expe_saccharification_movie_glc.txt.
+
+
+
+---------------------------
+Updates 23-06-2023: Partho
+---------------------------
+
+- Fixes in simulation code for correct enzyme activities.
+
+- Cosmetic changes to animation scripts, including extended last frame.
+
+- Added script in fitting algo to clean up unnecessary files after fitting run, for storage space.
+
+- Fixed a few file permissions.

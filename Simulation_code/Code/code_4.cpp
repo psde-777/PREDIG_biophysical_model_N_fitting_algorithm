@@ -2728,9 +2728,7 @@ double run(bool verbose, bool randomSeed, bool vid, bool heatmap_bool, long int 
 
         //=================== Optional: take picture of the whole system =========================
         if(current_run != 0){
-
-
-            if(t0<= par.T + par.Transient and int(t0)%par.pict_3D_Freq == 0)
+            if(countGlc(cellu,1) <= 4 or (t0<= par.T + par.Transient and int(t0)%par.pict_3D_Freq == 0))
             {
                 // ================= 3D structure snapshot ===================
                 if(vid == true and current_run == 1){

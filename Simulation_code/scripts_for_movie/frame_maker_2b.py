@@ -53,11 +53,11 @@ with tqdm(total=len(filepaths), unit='file') as pbar:
 
         # plot the glucose data on the first subplot
         axs[0].plot(x, y1, linewidth=4, label='simulated', color='green')
-        axs[0].scatter(x_glc, y_glc, label='experimental', color='green', marker='o', s=150)
+        axs[0].scatter(x_glc, y_glc, label='experimental', color='green', marker='o', s=150, edgecolor='black', clip_on=False)
         axs[0].set_xlabel('time (hours)', fontsize=18)
         axs[0].set_ylabel('cellulose hydrolysed %', fontsize=18)
-        axs[0].legend(loc='upper left', fontsize=18)
-        axs[0].set_xlim(0, T_int+4)
+        axs[0].legend(loc='lower right', fontsize=18)
+        axs[0].set_xlim(0, T_int+1)
         axs[0].set_ylim(0, 100)
         axs[0].tick_params(axis='both', which='major', labelsize=16)
 
@@ -65,8 +65,8 @@ with tqdm(total=len(filepaths), unit='file') as pbar:
         axs[1].plot(x, y2, linewidth=4, label='simulated', color='orange')
         axs[1].set_xlabel('time (hours)', fontsize=18)
         axs[1].set_ylabel('xylose hydrolysed %', fontsize=18)
-        axs[1].legend(loc='upper left', fontsize=18)
-        axs[1].set_xlim(0, T_int+4)
+        axs[1].legend(loc='lower right', fontsize=18)
+        axs[1].set_xlim(0, T_int+1)
         axs[1].set_ylim(0, 100)
         axs[1].tick_params(axis='both', which='major', labelsize=16)
 
