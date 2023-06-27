@@ -10,7 +10,7 @@ The repository is split into two folders, each of which are summarised below.
 
 ### Folder "Simulation_code"
 
-This folder contains the newest release version of our biophysical model's code, written in C++. It also contains scripts for averaging the output data & generating animations of the saccharification process, written in Python (version used 3.9.2). A further README for running all of these codes is provided within the folder.
+This folder contains the newest release version of our biophysical model's code, written in C++. It also contains scripts for averaging the output data & generating animations of the saccharification process, written in Python 3. A further README for running all of these codes is provided within the folder.
 
 ### Folder "Optimization_algorithm"
 
