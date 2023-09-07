@@ -21,7 +21,7 @@ test_shape = np.full((1,2),0.)
 noise_range = 0.;
 if vardata.size == 2:
     mini_posi = np.full(1,1)
-    np.savetxt("best_candidate.txt", mini_posi, delimiter = "   ", fmt = "%1i")    
+    np.savetxt("best_candidate.txt", mini_posi, delimiter = "\t", fmt = "%1i")    
 else:
     mini_nr = vardata[0,0]
     mini = vardata[0,1]
@@ -63,7 +63,7 @@ else:
         new_kin_data = np.loadtxt("family_" + str(sys.argv[1]) + "/Generation_" + str(sys.argv[2]) + "/Run_" + str(int(mini_nr)) + "/Params/kinetic_parameters.txt")
         new_kin_data_out = np.full((1,new_kin_data[:].size),0.)
         new_kin_data_out[0,:] = new_kin_data[:]
-        np.savetxt("best_kin_specs.txt", new_kin_data_out, delimiter = "  ", fmt = "%1.8f")
+        np.savetxt("best_kin_specs.txt", new_kin_data_out, delimiter = "\t", fmt = "%1.8f")
 
         new_init_data = [np.loadtxt("family_" + str(sys.argv[1]) + "/Generation_" + str(sys.argv[2]) + "/Run_" + str(int(mini_nr)) + "/Params/initial_configuration_parameters_" + keyword + ".txt") for keyword in keywords]
         for j,keyword in enumerate(keywords):
@@ -106,7 +106,7 @@ else:
     #print(new_kin_data_out.size)
     #print("======")
     mini_posi_and_var = np.full(1,mini_nr)
-    np.savetxt("best_candidate.txt", mini_posi_and_var, delimiter = "   ", fmt = "%1i")
+    np.savetxt("best_candidate.txt", mini_posi_and_var, delimiter = "\t", fmt = "%1i")
 
 
 

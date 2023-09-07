@@ -67,4 +67,6 @@ the names of the experimental data sets, and therefore it needs to contain AT LE
 
 - The best fitted set of parameters are saved in the directory BEST_FIT/best_run/Params. The average saccharification values are saved in "BEST_FIT/best_Run/Output/saccharification/average_saccharification_keyword.txt".
 
-- If you want to visually compare the simulated and experimental data, run the code in a separate folder and use the parameters found in in the directory BEST_FIT/best_run/Params (see Code README at the top of this repository for more detail)
+- If you want to visually compare the simulated and experimental data, run the code in a separate folder and use the parameters found in in the directory BEST_FIT/best_run/Params (see Code README at the top of this repository for more detail).
+
+- The 'goodness' of the fit is determined by taking the R-squared value comparing the model output and experimental data. The stats are stored in the 'BEST_FIT/fit-stats_*.txt', for glucose and xylose for each fitted sample.
