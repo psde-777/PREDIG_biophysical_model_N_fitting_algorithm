@@ -40,5 +40,10 @@ fi
 
 ./evo_janitor.sh
 
+python3 fix_hemi_crys.py
 
-echo "ALL DONE"
+echo -e '\033[1m\033[37mChecking goodness of fit... \033[0m'
+python3 stats_r2.py
+
+echo -e '\033[1m\033[39mALL DONE!! \033[0m'
+echo -e 'Find results in the folder >>\033[1m\033[35m BEST_FIT \033[0m'
